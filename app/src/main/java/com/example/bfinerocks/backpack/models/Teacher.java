@@ -32,6 +32,10 @@ public class Teacher implements android.os.Parcelable {
     public Teacher() {
     }
 
+    public Teacher(String userName){
+        this.userName = userName;
+    }
+
     private Teacher(Parcel in) {
         this.userName = in.readString();
         this.userClassification = in.readString();
