@@ -7,6 +7,9 @@ import android.view.MenuItem;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.fragments.PlaceholderFragment;
+import com.firebase.client.Firebase;
+import com.parse.Parse;
+import com.parse.ParseObject;
 
 
 public class MainActivity extends Activity {
@@ -15,8 +18,13 @@ public class MainActivity extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      //  Parse.initialize(this, "K7x39gpZ124odhnnoxMGj4B9TzrIoTNZfGRl1djm", "E4kpb79zcWQ63uWaEQFjzH0lLsEhd2QAFD9xfA4O");
+        Parse.initialize(this, "K7x39gpZ124odhnnoxMGj4B9TzrIoTNZfGRl1djm", "E4kpb79zcWQ63uWaEQFjzH0lLsEhd2QAFD9xfA4O");
 
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
+
+        Firebase.setAndroidContext(getApplicationContext());
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new PlaceholderFragment())
