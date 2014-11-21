@@ -1,56 +1,35 @@
 package com.example.bfinerocks.backpack.models;
 
-import android.os.Parcel;
-
 import java.util.ArrayList;
 
 /**
  * Created by BFineRocks on 11/14/14.
  */
-public class Teacher implements android.os.Parcelable {
+public class Teacher  {
     private String userName;
-    private String userClassification;
-    private ArrayList<Student> myStudents;
-    private ArrayList<Guardian> studentGuardians;
-    private ArrayList<LessonPlans> myLessonPlans;
-
-
-    @Override
-    public int describeContents() {
-        return 0;
-    }
-
-    @Override
-    public void writeToParcel(Parcel dest, int flags) {
-        dest.writeString(this.userName);
-        dest.writeString(this.userClassification);
-        dest.writeSerializable(this.myStudents);
-        dest.writeSerializable(this.studentGuardians);
-        dest.writeSerializable(this.myLessonPlans);
-    }
-
-    public Teacher() {
-    }
+    private ArrayList<ClassSection> myClassSections;
 
     public Teacher(String userName){
         this.userName = userName;
     }
 
-    private Teacher(Parcel in) {
-        this.userName = in.readString();
-        this.userClassification = in.readString();
-        this.myStudents = (ArrayList<Student>) in.readSerializable();
-        this.studentGuardians = (ArrayList<Guardian>) in.readSerializable();
-        this.myLessonPlans = (ArrayList<LessonPlans>) in.readSerializable();
+    public String getUserName(){
+        return userName;
     }
 
-    public static final Creator<Teacher> CREATOR = new Creator<Teacher>() {
-        public Teacher createFromParcel(Parcel source) {
-            return new Teacher(source);
-        }
+    public void addNewClassRoom(ClassSection classSection){
+        myClassSections.add(classSection);
+    }
 
-        public Teacher[] newArray(int size) {
-            return new Teacher[size];
+    public ClassSection getClassSectionFromArray(String classSectionTitle){
+        ClassSection classSection = null;
+        for(int i = 0; i < myClassSections.size(); i++){
+            if(myClassSections.get(i).getClassSectionName().equals(classSectionTitle)){
+                classSection = myClassSections.get(i);
+            }
+
         }
-    };
+        return classSection;
+    }
+
 }

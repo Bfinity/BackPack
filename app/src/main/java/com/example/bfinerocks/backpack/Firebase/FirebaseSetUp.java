@@ -16,8 +16,8 @@ public class FirebaseSetUp {
 
     }
 
-    public void addTeacherToFirebase(Map<String, String> lessonPlan){
-        Firebase teacherRef = new Firebase("https://dazzling-heat-5107.firebaseio.com/classroom/one");
+    public void addTeacherToFirebase(String userName, Map<String, String> lessonPlan){
+        Firebase teacherRef = new Firebase("https://dazzling-heat-5107.firebaseio.com/classroom/one" + "/" + userName);
         teacherRef.setValue(lessonPlan);
 
     }
