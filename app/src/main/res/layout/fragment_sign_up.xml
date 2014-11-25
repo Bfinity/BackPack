@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <EditText
+        android:id="@+id/sign_up_user_name"
+        android:hint="@string/user_name_request"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+    <EditText
+        android:id="@+id/sign_up_password"
+        android:hint="@string/password_request"
+        android:layout_below="@id/sign_up_user_name"
+
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="@string/user_type_request"
+        android:layout_below="@id/sign_up_password"
+        android:layout_margin="@dimen/text_margin"
+        android:padding="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+
+    <Spinner
+        android:id="@+id/spnr_user_type"
+        android:layout_below="@id/sign_up_password"
+        android:layout_alignParentRight="true"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"></Spinner>
+
+
+
+</RelativeLayout>

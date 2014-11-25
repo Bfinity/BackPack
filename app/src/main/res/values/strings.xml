@@ -4,5 +4,8 @@
     <string name="app_name">BackPack</string>
     <string name="hello_world">Hello world!</string>
     <string name="action_settings">Settings</string>
+    <string name="user_name_request">Enter Your User Name</string>
+    <string name="password_request">Enter Your Password</string>
+    <string name="user_type_request">I am a:</string>
 
 </resources>
