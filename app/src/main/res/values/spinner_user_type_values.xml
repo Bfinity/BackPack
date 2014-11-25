@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinner_user_type_values">
+        <item>Teacher</item>
+        <item>Student</item>
+        <item>Parent</item>
+    </string-array>
+    
+</resources>
