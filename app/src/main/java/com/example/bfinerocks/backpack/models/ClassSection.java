@@ -1,33 +1,40 @@
 package com.example.bfinerocks.backpack.models;
 
-import java.util.ArrayList;
-
 /**
  * Created by BFineRocks on 11/20/14.
  */
 public class ClassSection {
     private String classSectionName;
-    private ArrayList<LessonPlan> sectionLessonPlans;
+    private String classSectionSubject;
+    private int classSectionGradeLevel;
 
-    public ClassSection(String classSectionName){
+    public ClassSection(String classSectionName, String classSectionSubject, int classSectionGradeLevel){
         this.classSectionName = classSectionName;
+        this.classSectionSubject = classSectionSubject;
+        this.classSectionGradeLevel = classSectionGradeLevel;
     }
 
-    public String getClassSectionName(){
+    public String getClassSectionName() {
         return classSectionName;
     }
 
-    public void addNewLessonPlanToArrayList(LessonPlan lessonPlan){
-        sectionLessonPlans.add(lessonPlan);
+    public void setClassSectionName(String classSectionName) {
+        this.classSectionName = classSectionName;
     }
 
-    public LessonPlan getLessonPlanFromArrayList(String lessonPlanTitle){
-       LessonPlan lessonPlan = null;
-        for(int i = 0; i < sectionLessonPlans.size(); i++){
-            if(sectionLessonPlans.get(i).getLessonPlanTitle().equals(lessonPlanTitle)){
-                lessonPlan = sectionLessonPlans.get(i);
-            }
-        }
-        return lessonPlan;
+    public String getClassSectionSubject() {
+        return classSectionSubject;
+    }
+
+    public void setClassSectionSubject(String classSectionSubject) {
+        this.classSectionSubject = classSectionSubject;
+    }
+
+    public int getClassSectionGradeLevel() {
+        return classSectionGradeLevel;
+    }
+
+    public void setClassSectionGradeLevel(int classSectionGradeLevel) {
+        this.classSectionGradeLevel = classSectionGradeLevel;
     }
 }
