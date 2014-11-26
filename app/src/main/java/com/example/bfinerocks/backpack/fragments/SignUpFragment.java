@@ -27,7 +27,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
     Spinner userTypeSelector;
     Button btnFinished;
     private String userType;
-    SharedPreferences sharedPref;
+    public static String USER_NAME_KEY = "userName";
 
 
 
@@ -35,8 +35,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
-            sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            SharedPreferences.Editor editor = sharedPref.edit();
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            final SharedPreferences.Editor editor = sharedPref.edit();
             edtUserName = (EditText) rootView.findViewById(R.id.sign_up_user_name);
             edtUserPassword = (EditText) rootView.findViewById(R.id.sign_up_password);
             btnFinished = (Button) rootView.findViewById(R.id.btn_done);
@@ -51,7 +51,10 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject();
                     user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
-                    if()
+                    if(user.getLoginResponse()){
+                        editor.putString(USER_NAME_KEY, edtUserName.getText().toString());
+                        editor.commit();
+                    }
                 }
             });
 
