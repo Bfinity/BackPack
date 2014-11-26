@@ -4,6 +4,8 @@ import java.util.ArrayList;
 
 /**
  * Created by BFineRocks on 11/14/14.
+ *
+ * Might not need this class at all
  */
 public class Student {
     private String userName;
