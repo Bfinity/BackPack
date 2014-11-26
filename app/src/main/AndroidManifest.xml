@@ -20,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name="com.example.bfinerocks.backpack.HomePageActivity"
+            android:name=".activities.HomePageActivity"
             android:label="@string/title_activity_home_page" >
         </activity>
     </application>
