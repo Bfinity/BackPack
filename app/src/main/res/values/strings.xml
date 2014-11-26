@@ -17,5 +17,6 @@
     <string name="enter_class_title">Enter Classroom Name</string>
     <string name="enter_class_subject">Enter Classroom Subject</string>
     <string name="enter_class_grade">Select Classroom Grade Level</string>
+    <string name="btn_create_class">Create New Classroom</string>
 
 </resources>

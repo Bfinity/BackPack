@@ -1,12 +1,47 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
 
     <EditText
-        android:hint=""
+        android:id="@+id/enter_class_title"
+        android:hint="@string/enter_class_title"
+        android:layout_margin="@dimen/text_margin"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+    <EditText
+        android:id="@+id/enter_class_subject"
+        android:hint="@string/enter_class_subject"
+        android:layout_below="@id/enter_class_title"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:text="@string/enter_class_grade"
+        android:textSize="@dimen/text_view_size"
+        android:layout_margin="@dimen/text_margin"
+        android:gravity="center_vertical"
+        android:layout_below="@id/enter_class_subject"
+        android:layout_alignBottom="@id/enter_class_grade"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <NumberPicker
+        android:id="@+id/enter_class_grade"
+        android:layout_below="@id/enter_class_subject"
+        android:layout_alignParentRight="true"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"></NumberPicker>
+
+    <Button
+        android:id="@+id/btn_create_class"
+        android:text="@string/btn_create_class"
+        android:layout_below="@id/enter_class_grade"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</RelativeLayout>
