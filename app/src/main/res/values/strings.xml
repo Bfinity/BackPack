@@ -13,5 +13,6 @@
     <string name="add_class">Add New Class</string>
     <string name="lesson_plan_list">My Lesson Plans</string>
     <string name="add_lesson_plan">Add New Lesson Plan</string>
+    <string name="add_assignment">Add New Assignment</string>
 
 </resources>
