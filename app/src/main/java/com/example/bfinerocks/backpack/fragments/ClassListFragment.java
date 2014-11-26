@@ -9,6 +9,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
+import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
 import com.example.bfinerocks.backpack.models.ClassSection;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class ClassListFragment extends Fragment{
     ListView classListView;
     TextView addClassText;
     List<ClassSection> myClassList;
+    ClassroomListViewAdapter classroomListAdapter;
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
