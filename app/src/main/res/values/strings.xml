@@ -8,5 +8,6 @@
     <string name="password_request">Enter Your Password</string>
     <string name="user_type_request">I am a:</string>
     <string name="done">Finished</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
 
 </resources>
