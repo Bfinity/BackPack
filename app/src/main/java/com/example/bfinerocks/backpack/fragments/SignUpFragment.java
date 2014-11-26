@@ -28,6 +28,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
     Button btnFinished;
     private String userType;
     public static String USER_NAME_KEY = "userName";
+    public static String USER_TYPE_KEY = "userType";
 
 
 
@@ -53,6 +54,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                     user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
                     if(user.getLoginResponse()){
                         editor.putString(USER_NAME_KEY, edtUserName.getText().toString());
+                        editor.putString(USER_TYPE_KEY, userType);
                         editor.commit();
                     }
                 }
