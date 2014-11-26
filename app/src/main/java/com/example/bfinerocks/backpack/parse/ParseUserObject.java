@@ -34,10 +34,10 @@ public class ParseUserObject {
     }
 
     public void signInExistingUser(String userName, String password){
-        user.logInInBackground(userName, password, new LogInCallback() {
+        ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
-                if(user != null){
+                if(parseUser != null){
                     Log.i("signIn", "Success");
                 }
                 else{
