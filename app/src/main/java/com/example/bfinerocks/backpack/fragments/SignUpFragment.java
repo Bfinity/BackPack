@@ -40,8 +40,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                     android.R.layout.simple_spinner_item);
             userTypeAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
             userTypeSelector.setAdapter(userTypeAdapter);
-
-
+            userTypeSelector.setOnItemSelectedListener(this);
             btnFinished.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -56,7 +55,12 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        
+        userType = (String) adapterView.getSelectedItem();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        userType = "Teacher";
     }
 }
 
