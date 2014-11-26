@@ -10,7 +10,7 @@ import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
-import com.example.bfinerocks.backpack.models.ClassSection;
+import com.example.bfinerocks.backpack.models.Classroom;
 
 import java.util.List;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class ClassListFragment extends Fragment{
     ListView classListView;
     TextView addClassText;
-    List<ClassSection> myClassList;
+    List<Classroom> myClassList;
     ClassroomListViewAdapter classroomListAdapter;
 
         @Override

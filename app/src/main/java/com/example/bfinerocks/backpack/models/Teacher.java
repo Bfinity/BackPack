@@ -9,7 +9,7 @@ import java.util.ArrayList;
  */
 public class Teacher  {
     private String userName;
-    private ArrayList<ClassSection> myClassSections;
+    private ArrayList<Classroom> mMyClassrooms;
 
     public Teacher(String userName){
         this.userName = userName;
@@ -19,19 +19,19 @@ public class Teacher  {
         return userName;
     }
 
-    public void addNewClassRoom(ClassSection classSection){
-        myClassSections.add(classSection);
+    public void addNewClassRoom(Classroom classroom){
+        mMyClassrooms.add(classroom);
     }
 
-    public ClassSection getClassSectionFromArray(String classSectionTitle){
-        ClassSection classSection = null;
-        for(int i = 0; i < myClassSections.size(); i++){
-            if(myClassSections.get(i).getClassSectionName().equals(classSectionTitle)){
-                classSection = myClassSections.get(i);
+    public Classroom getClassSectionFromArray(String classSectionTitle){
+        Classroom classroom = null;
+        for(int i = 0; i < mMyClassrooms.size(); i++){
+            if(mMyClassrooms.get(i).getClassSectionName().equals(classSectionTitle)){
+                classroom = mMyClassrooms.get(i);
             }
 
         }
-        return classSection;
+        return classroom;
     }
 
 }

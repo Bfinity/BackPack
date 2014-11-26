@@ -8,16 +8,16 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
-import com.example.bfinerocks.backpack.models.ClassSection;
+import com.example.bfinerocks.backpack.models.Classroom;
 
 import java.util.List;
 
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassroomListViewAdapter extends ArrayAdapter<ClassSection> {
+public class ClassroomListViewAdapter extends ArrayAdapter<Classroom> {
 
-    public ClassroomListViewAdapter(Context context, int resource, List<ClassSection> objects) {
+    public ClassroomListViewAdapter(Context context, int resource, List<Classroom> objects) {
         super(context, resource, objects);
     }
 
@@ -25,13 +25,13 @@ public class ClassroomListViewAdapter extends ArrayAdapter<ClassSection> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View classRoomItem = inflater.inflate(R.layout.list_item_classroom, parent, false);
-        ClassSection classSection = getItem(position);
+        Classroom classroom = getItem(position);
 
         TextView titleText = (TextView) classRoomItem.findViewById(R.id.class_title);
-        titleText.setText(classSection.getClassSectionName());
+        titleText.setText(classroom.getClassSectionName());
 
         TextView gradeLevelText = (TextView) classRoomItem.findViewById(R.id.class_gradeLevel);
-        gradeLevelText.setText(classSection.getClassSectionGradeLevel());
+        gradeLevelText.setText(classroom.getClassSectionGradeLevel());
 
         return classRoomItem;
     }

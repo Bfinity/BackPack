@@ -59,4 +59,10 @@ public class ParseUserObject {
     public Boolean getLoginResponse(){
         return loginResponse;
     }
+
+    public ParseUser getCurrentUser(){
+        user = ParseUser.getCurrentUser();
+        return user;
+    }
+
 }
