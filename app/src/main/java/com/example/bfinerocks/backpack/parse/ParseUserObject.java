@@ -11,10 +11,11 @@ import com.parse.SignUpCallback;
  */
 public class ParseUserObject {
 
-    public void createNewParseUser(String userName, String password){
+    public void createNewParseUser(String userName, String password, String userType){
         ParseUser user = new ParseUser();
         user.setUsername(userName);
         user.setPassword(password);
+        user.put("userType", userType);
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
