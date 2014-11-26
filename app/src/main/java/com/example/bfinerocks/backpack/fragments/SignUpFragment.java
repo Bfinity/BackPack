@@ -51,7 +51,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject();
                     user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
-
+                    if()
                 }
             });
 
