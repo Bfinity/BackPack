@@ -13,7 +13,7 @@ import com.parse.SignUpCallback;
 public class ParseUserObject {
 
     private ParseUser user;
-    Boolean loginResponse;
+    private Boolean loginResponse;
 
     public void createNewParseUser(String userName, String password, String userType){
         user = new ParseUser();
