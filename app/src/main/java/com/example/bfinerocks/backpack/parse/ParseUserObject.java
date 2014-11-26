@@ -12,7 +12,7 @@ import com.parse.SignUpCallback;
  */
 public class ParseUserObject {
 
-    ParseUser user;
+    private ParseUser user;
 
     public void createNewParseUser(String userName, String password, String userType){
         user = new ParseUser();
@@ -25,9 +25,11 @@ public class ParseUserObject {
             public void done(ParseException e) {
                 if(e == null){
                     Log.i("signUp", "Success");
+                    isLogInSuccessful(true);
                 }
                 else{
                    Log.i("signUp", e.getMessage());
+                    isLogInSuccessful(false);
                 }
             }
         });
@@ -39,11 +41,17 @@ public class ParseUserObject {
             public void done(ParseUser parseUser, ParseException e) {
                 if(parseUser != null){
                     Log.i("signIn", "Success");
+                    isLogInSuccessful(true);
                 }
                 else{
                     Log.i("signIn", e.getMessage());
+                    isLogInSuccessful(false);
                 }
             }
         });
+    }
+
+    public Boolean isLogInSuccessful(Boolean logInResponse){
+        return logInResponse;
     }
 }
