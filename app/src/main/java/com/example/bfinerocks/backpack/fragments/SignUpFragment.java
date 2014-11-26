@@ -1,7 +1,9 @@
 package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +27,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
     Spinner userTypeSelector;
     Button btnFinished;
     private String userType;
+    SharedPreferences sharedPref;
 
 
 
@@ -32,6 +35,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
+            sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            SharedPreferences.Editor editor = sharedPref.edit();
             edtUserName = (EditText) rootView.findViewById(R.id.sign_up_user_name);
             edtUserPassword = (EditText) rootView.findViewById(R.id.sign_up_password);
             btnFinished = (Button) rootView.findViewById(R.id.btn_done);
