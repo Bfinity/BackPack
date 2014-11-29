@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
+import com.example.bfinerocks.backpack.models.Assignment;
 
 /**
  * Created by BFineRocks on 11/29/14.
@@ -19,11 +20,30 @@ public class FragmentAssignmentDetail extends Fragment {
     private TextView assignmentDueDate;
     private TextView assignmentDetails;
     private TextView assignmentState;
+    private Assignment assignment;
+    private String completionState;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
 
+        assignment = getArguments().getParcelable("assignment");
+        assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
+        assigmentAssgnDate = (TextView) rootView.findViewById(R.id.detail_assignment_assgn_date);
+        assignmentDueDate = (TextView) rootView.findViewById(R.id.detail_assignment_due_date);
+        assignmentDetails = (TextView) rootView.findViewById(R.id.detail_assignment_details);
+        assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
+
+        assignmentTitle.setText(assignment.getAssignmentTitle());
+        assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
+        assignmentDueDate.setText(assignment.getAssignmentDueDate());
+        assignmentDetails.setText(assignment.getAssignmentDescription());
+        if(assignment.getAssignmentCompletionState()){
+            assignmentState.setText("Done");
+        }
+        else{
+            assignmentState.setText("Not Done");
+        }
         return rootView;
     }
 }
