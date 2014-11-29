@@ -2,7 +2,6 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -32,7 +31,6 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_new_class, container, false);
-        final String userName = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString("userName", "");
         enterClassName = (EditText) rootView.findViewById(R.id.enter_class_title);
         enterClassSubject = (EditText) rootView.findViewById(R.id.enter_class_subject);
         enterClassGrade = (NumberPicker) rootView.findViewById(R.id.enter_class_grade);
@@ -47,7 +45,9 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
             public void onClick(View view) {
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
-                classParseObject.addNewClassroom(userName, classroom);
+                classParseObject = new ParseClassSectionObject();
+                classParseObject.addNewClassroom(classroom);
+               getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
             }
         });
 

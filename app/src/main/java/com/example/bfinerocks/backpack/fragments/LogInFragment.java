@@ -36,6 +36,9 @@ public class LogInFragment extends Fragment {
                     public void onClick(View view) {
                         ParseUserObject user = new ParseUserObject();
                         user.signInExistingUser(userName.getText().toString(), password.getText().toString());
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new ClassListFragment())
+                                .commit();
                     }
                 });
 

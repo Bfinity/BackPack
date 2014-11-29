@@ -52,11 +52,10 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject();
                     user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
-                    if(user.getLoginResponse()){
                         editor.putString(USER_NAME_KEY, edtUserName.getText().toString());
                         editor.putString(USER_TYPE_KEY, userType);
                         editor.commit();
-                    }
+                    getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
                 }
             });
 

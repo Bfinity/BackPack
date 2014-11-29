@@ -31,7 +31,7 @@ public class ClassroomListViewAdapter extends ArrayAdapter<Classroom> {
         titleText.setText(classroom.getClassSectionName());
 
         TextView gradeLevelText = (TextView) classRoomItem.findViewById(R.id.class_gradeLevel);
-        gradeLevelText.setText(classroom.getClassSectionGradeLevel());
+        gradeLevelText.setText(String.valueOf(classroom.getClassSectionGradeLevel()));
 
         return classRoomItem;
     }
