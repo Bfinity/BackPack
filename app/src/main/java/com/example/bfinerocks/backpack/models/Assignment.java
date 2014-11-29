@@ -13,8 +13,12 @@ public class Assignment {
     private Boolean assignmentCompletionState; // Possibly use instead of assignment task objects
     private ArrayList<AssignmentTask> assignmentTasks;
 
-    public Assignment(String assignmentTitle){
+    public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription){
         this.assignmentTitle = assignmentTitle;
+        this.assignmentAssignedDate = assignmentAssignedDate;
+        this.assignmentDueDate = assignmentDueDate;
+        this.assignmentDescription = assignmentDescription;
+        this.assignmentCompletionState = false;
     }
 
     public String getAssignmentTitle(){

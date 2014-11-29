@@ -21,12 +21,13 @@ public class ClassSpecificFragment extends Fragment {
     TextView classGradeLevel;
     ListView assignmentList;
     TextView addAssignment;
+    Classroom classroomDetail;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
-
         Classroom classRoom = getArguments().getParcelable("class");
+        classroomDetail = classRoom;
         classTitle = (TextView) rootView.findViewById(R.id.class_specific_title);
         classSubject = (TextView) rootView.findViewById(R.id.class_specific_subject);
         classGradeLevel = (TextView) rootView.findViewById(R.id.class_specific_grade);
@@ -39,6 +40,10 @@ public class ClassSpecificFragment extends Fragment {
         addAssignment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
+                CreateNewAssignment createNewAssignment = new CreateNewAssignment();
+                createNewAssignment.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, createNewAssignment)
+                        .addToBackStack("createAssignment").commit();
 
             }
         });

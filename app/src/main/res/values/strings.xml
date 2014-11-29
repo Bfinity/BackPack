@@ -22,5 +22,6 @@
     <string name="enter_assignment_assgn_date">Date Assigned</string>
     <string name="enter_assignment_due_date">Date Due</string>
     <string name="enter_assignment_details">Enter the assignment instructions</string>
+    <string name="btn_create_assignment">Create</string>
 
 </resources>
