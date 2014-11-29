@@ -23,6 +23,8 @@ public class CreateNewAssignment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_add_new_assignment, container, false);
         assignmentTitle = (TextView) rootView.findViewById(R.id.enter_assignment_name);
         assignmentAssignedDate = (TextView) rootView.findViewById(R.id.enter_assgn_date);
+        assignmentDueDate = (TextView) rootView.findViewById(R.id.enter_due_date);
+        assignmentDirections = (TextView) rootView.findViewById(R.id.enter_assignment_directions);
 
         return rootView;
     }
