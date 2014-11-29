@@ -7,6 +7,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -56,6 +58,22 @@ public class ClassListFragment extends Fragment{
                     updateView();
                 }
             });
+
+            classListView.setOnItemClickListener(new OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                    Classroom classRoom = (Classroom) adapterView.getItemAtPosition(i);
+                    ClassSpecificFragment classSpecificFragment = new ClassSpecificFragment();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelable("class", classRoom);
+                    classSpecificFragment.setArguments(bundle);
+                    getFragmentManager().beginTransaction().replace(R.id.container, classSpecificFragment)
+                            .addToBackStack("ClassListView")
+                            .commit();
+
+                }
+            });
+
             return rootView;
         }
 

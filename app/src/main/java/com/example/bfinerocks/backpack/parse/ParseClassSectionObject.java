@@ -18,6 +18,7 @@ import java.util.List;
 public class ParseClassSectionObject {
 
     ParseUserObject parseUserObject = new ParseUserObject();
+    ParseObject parseClassroomObject;
     List<Classroom> myClasses = new ArrayList<Classroom>();
 
     public static String CLASSROOM_KEY = "Classroom";
@@ -87,6 +88,34 @@ public class ParseClassSectionObject {
     public List<Classroom> getArrayListOfClassrooms(){
 //        Log.i("arrayLoaded", myClasses.get(0).getClassSectionName());
         return myClasses;
+    }
+
+    public void getQueriedClassroomByClassName(Classroom classroomQueried) throws ParseException {
+        ParseObject queriedClassroom = null;
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
+        query.whereEqualTo(CLASSROOM_TITLE_KEY, classroomQueried.getClassSectionName());
+        setParseClassroomObject(query.getFirst());
+
+
+/*        query.getFirstInBackground(new GetCallback<ParseObject>() {
+            @Override
+            public void done(ParseObject parseObject, ParseException e) {
+                if (e == null) {
+                    Log.i("classQuery", "Success");
+                    setParseClassroomObject(parseObject);
+                } else {
+                    Log.i("classQuery", e.getMessage());
+                }
+            }
+        });*/
+    }
+
+    public void setParseClassroomObject(ParseObject parseObjectFound){
+        this.parseClassroomObject = parseObjectFound;
+    }
+
+    public ParseObject getQueriedClassroom(){
+        return parseClassroomObject;
     }
 
 
