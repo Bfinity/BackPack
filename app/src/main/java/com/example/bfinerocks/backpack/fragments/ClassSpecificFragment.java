@@ -36,6 +36,7 @@ public class ClassSpecificFragment extends Fragment {
     public void onResume() {
         super.onResume();
         parseAssignmentObject = new ParseAssignmentObject();
+        parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
     }
 
     @Override
@@ -43,14 +44,25 @@ public class ClassSpecificFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
         Classroom classRoom = getArguments().getParcelable("class");
         classroomDetail = classRoom;
+        listOfAssignments = new ArrayList<Assignment>();
         assignmentList = (ListView) rootView.findViewById(R.id.assignment_list_view);
         classTitle = (TextView) rootView.findViewById(R.id.class_specific_title);
+        classTitle.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                updateAssignmentListView();
+            }
+        });
         classSubject = (TextView) rootView.findViewById(R.id.class_specific_subject);
         classGradeLevel = (TextView) rootView.findViewById(R.id.class_specific_grade);
         classTitle.setText(classRoom.getClassSectionName());
         classSubject.setText(classRoom.getClassSectionSubject());
         String classGrade = String.valueOf(classRoom.getClassSectionGradeLevel());
         classGradeLevel.setText(classGrade);
+
+        assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
+        assignmentList.setAdapter(assignmentListViewAdapter);
+
         addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
 
         addAssignment.setOnClickListener(new OnClickListener() {
@@ -68,8 +80,9 @@ public class ClassSpecificFragment extends Fragment {
     }
 
     public void updateAssignmentListView(){
-        listOfAssignments = new ArrayList<Assignment>();
-        parseAssignmentObject
+        listOfAssignments = parseAssignmentObject.getListOfAssignments();
+        assignmentListViewAdapter.addAll(listOfAssignments);
+        assignmentListViewAdapter.notifyDataSetChanged();
 
     }
 }
