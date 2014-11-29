@@ -4,6 +4,7 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -19,6 +20,7 @@ public class ClassSpecificFragment extends Fragment {
     TextView classSubject;
     TextView classGradeLevel;
     ListView assignmentList;
+    TextView addAssignment;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,6 +34,14 @@ public class ClassSpecificFragment extends Fragment {
         classSubject.setText(classRoom.getClassSectionSubject());
         String classGrade = String.valueOf(classRoom.getClassSectionGradeLevel());
         classGradeLevel.setText(classGrade);
+        addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
+
+        addAssignment.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return rootView;
     }
