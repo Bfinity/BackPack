@@ -1,11 +1,13 @@
 package com.example.bfinerocks.backpack.models;
 
+import android.os.Parcel;
+
 import java.util.ArrayList;
 
 /**
  * Created by BFineRocks on 11/14/14.
  */
-public class Assignment {
+public class Assignment implements android.os.Parcelable {
     private String assignmentTitle;
     private String assignmentAssignedDate;
     private String assignmentDueDate;
@@ -69,4 +71,38 @@ public class Assignment {
         return assignmentCompletionState;
     }
 
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(this.assignmentTitle);
+        dest.writeString(this.assignmentAssignedDate);
+        dest.writeString(this.assignmentDueDate);
+        dest.writeString(this.assignmentDescription);
+        dest.writeValue(this.assignmentCompletionState);
+        dest.writeSerializable(this.assignmentTasks);
+    }
+
+    private Assignment(Parcel in) {
+        this.assignmentTitle = in.readString();
+        this.assignmentAssignedDate = in.readString();
+        this.assignmentDueDate = in.readString();
+        this.assignmentDescription = in.readString();
+        this.assignmentCompletionState = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.assignmentTasks = (ArrayList<AssignmentTask>) in.readSerializable();
+    }
+
+    public static final Creator<Assignment> CREATOR = new Creator<Assignment>() {
+        public Assignment createFromParcel(Parcel source) {
+            return new Assignment(source);
+        }
+
+        public Assignment[] newArray(int size) {
+            return new Assignment[size];
+        }
+    };
 }

@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -62,6 +64,19 @@ public class ClassSpecificFragment extends Fragment {
 
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
+
+        assignmentList.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
+                FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("assignment", assignmentSelected);
+                fragmentAssignmentDetail.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, fragmentAssignmentDetail).addToBackStack("assgnDetail").commit();
+            }
+        });
+
 
         addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
 
