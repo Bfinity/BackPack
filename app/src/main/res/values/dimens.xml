@@ -5,4 +5,5 @@
     <dimen name="text_margin">16dp</dimen>
     <dimen name="text_view_size">20dp</dimen>
     <dimen name="text_padding">10dp</dimen>
+    <dimen name="heading_text_size">30sp</dimen>
 </resources>

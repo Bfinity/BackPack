@@ -6,34 +6,21 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.bfinerocks.backpack.R;
-import com.example.bfinerocks.backpack.fragments.LogInFragment;
-import com.firebase.client.Firebase;
-import com.parse.Parse;
 
 
-public class MainActivity extends Activity {
+public class HomePageActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        Parse.initialize(this, "K7x39gpZ124odhnnoxMGj4B9TzrIoTNZfGRl1djm", "E4kpb79zcWQ63uWaEQFjzH0lLsEhd2QAFD9xfA4O");
-
-
-
-        Firebase.setAndroidContext(getApplicationContext());
-        if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new LogInFragment())
-                    .commit();
-        }
+        setContentView(R.layout.activity_home_page);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.main, menu);
+        getMenuInflater().inflate(R.menu.menu_home_page, menu);
         return true;
     }
 
@@ -43,10 +30,12 @@ public class MainActivity extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
             return true;
         }
+
         return super.onOptionsItemSelected(item);
     }
-
 }

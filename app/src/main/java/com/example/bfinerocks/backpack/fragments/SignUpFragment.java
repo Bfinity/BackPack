@@ -1,7 +1,9 @@
 package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -25,6 +27,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
     Spinner userTypeSelector;
     Button btnFinished;
     private String userType;
+    public static String USER_NAME_KEY = "userName";
+    public static String USER_TYPE_KEY = "userType";
 
 
 
@@ -32,6 +36,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
+            SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            final SharedPreferences.Editor editor = sharedPref.edit();
             edtUserName = (EditText) rootView.findViewById(R.id.sign_up_user_name);
             edtUserPassword = (EditText) rootView.findViewById(R.id.sign_up_password);
             btnFinished = (Button) rootView.findViewById(R.id.btn_done);
@@ -46,7 +52,10 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject();
                     user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
-
+                        editor.putString(USER_NAME_KEY, edtUserName.getText().toString());
+                        editor.putString(USER_TYPE_KEY, userType);
+                        editor.commit();
+                    getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
                 }
             });
 

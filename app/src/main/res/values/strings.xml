@@ -8,5 +8,15 @@
     <string name="password_request">Enter Your Password</string>
     <string name="user_type_request">I am a:</string>
     <string name="done">Finished</string>
+    <string name="title_activity_home_page">HomePageActivity</string>
+    <string name="class_list">My Classes</string>
+    <string name="add_class">Add New Class</string>
+    <string name="lesson_plan_list">My Lesson Plans</string>
+    <string name="add_lesson_plan">Add New Lesson Plan</string>
+    <string name="add_assignment">Add New Assignment</string>
+    <string name="enter_class_title">Enter Classroom Name</string>
+    <string name="enter_class_subject">Enter Classroom Subject</string>
+    <string name="enter_class_grade">Select Classroom Grade Level</string>
+    <string name="btn_create_class">Create New Classroom</string>
 
 </resources>

@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent">
+
+    <TextView
+        android:id="@+id/class_label"
+        android:text="@string/class_list"
+        android:textSize="@dimen/heading_text_size"
+        android:clickable="true"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <ListView
+        android:id="@+id/class_list_view"
+        android:layout_weight="1"
+        android:layout_width="wrap_content"
+        android:layout_height="?android:listPreferredItemHeight">
+
+        </ListView>
+
+    <TextView
+        android:id="@+id/add_class"
+        android:text="@string/add_class"
+        android:clickable="true"
+        android:textSize="@dimen/text_view_size"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_gravity="center_horizontal"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+</LinearLayout>
