@@ -29,18 +29,27 @@ public class ClassListFragment extends Fragment{
     ClassroomListViewAdapter classroomListAdapter;
     ParseClassSectionObject classRooms;
 
-        @Override
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        classRooms = new ParseClassSectionObject();
+        classRooms.updateListOfClassRooms();
+
+    }
+
+    @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_classroom_list, container, false);
-            classRooms = new ParseClassSectionObject();
+
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
             classListLabel = (TextView) rootView.findViewById(R.id.class_label);
-            classRooms.updateListOfClassRooms();
+
             classListLabel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -54,7 +63,7 @@ public class ClassListFragment extends Fragment{
 
 
             try{
-            Thread.sleep(10000);}
+            Thread.sleep(1000);}
             catch (InterruptedException e){
                 Log.i("Exception", e.getMessage());
             }

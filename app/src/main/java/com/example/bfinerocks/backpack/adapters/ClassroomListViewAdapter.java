@@ -21,6 +21,8 @@ public class ClassroomListViewAdapter extends ArrayAdapter<Classroom> {
         super(context, resource, objects);
     }
 
+
+
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
