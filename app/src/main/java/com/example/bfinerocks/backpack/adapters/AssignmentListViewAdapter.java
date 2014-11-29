@@ -9,7 +9,6 @@ import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
-import com.example.bfinerocks.backpack.models.Classroom;
 
 import java.util.List;
 
@@ -41,4 +40,4 @@ public class AssignmentListViewAdapter extends ArrayAdapter<Assignment> {
         }
     }
 
-}
+

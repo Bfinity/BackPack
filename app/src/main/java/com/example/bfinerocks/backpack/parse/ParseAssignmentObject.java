@@ -1,8 +1,16 @@
 package com.example.bfinerocks.backpack.parse;
 
+import android.util.Log;
+
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
+import com.parse.FindCallback;
+import com.parse.ParseException;
 import com.parse.ParseObject;
+import com.parse.ParseQuery;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/21/14.
@@ -15,6 +23,7 @@ public class ParseAssignmentObject {
     public static String ASSIGNMENT_DIRECTIONS_KEY = "assignmentDetails";
     public static String ASSIGNMENT_COMPLETION_STATE_KEY = "completionState";
     public static String ASSIGNMENT_CLASSROOM_ASSOCIATION = "classroom";
+    private List<Assignment> listOfAssignments;
     private Assignment assignmentToAdd;
     private Classroom classToAssociate;
     private ParseClassSectionObject parseClassObject = new ParseClassSectionObject();
@@ -39,6 +48,44 @@ public class ParseAssignmentObject {
         parseAssignment.put(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
         parseAssignment.saveInBackground();
 
+    }
+
+    public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
+     this.classToAssociate = classroom;
+       try{
+           parseClassObject.getQueriedClassroomByClassName(classroom);
+       }catch (ParseException e){
+           e.printStackTrace();
+       }
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
+        query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e == null){
+                    Log.i("assignmentList", "Success");
+                setListOfAssignments(parseObjects);}
+                else{
+                    Log.i("assignmentList", e.getMessage());
+                }
+            }
+        });
+
+    }
+
+    public void setListOfAssignments(List<ParseObject> parseObjectsFound){
+        listOfAssignments = new ArrayList<Assignment>();
+        for(int i = 0; i < parseObjectsFound.size(); i++){
+            ParseObject assignmentObject = parseObjectsFound.get(i);
+            Assignment assignmentToAddToList = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
+                    assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
+                    assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+            listOfAssignments.add(assignmentToAddToList);
+        }
+    }
+
+    public List<Assignment> getListOfAssignments(){
+        return listOfAssignments;
     }
 
 
