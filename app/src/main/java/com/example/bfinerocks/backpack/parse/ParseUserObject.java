@@ -14,12 +14,14 @@ public class ParseUserObject {
 
     private ParseUser user;
     private Boolean loginResponse;
+    private String userType;
+    public static final String USER_TYPE_KEY = "userType";
 
     public void createNewParseUser(String userName, String password, String userType){
         user = new ParseUser();
         user.setUsername(userName);
         user.setPassword(password);
-        user.put("userType", userType);
+        user.put(USER_TYPE_KEY, userType);
 
         user.signUpInBackground(new SignUpCallback() {
             @Override
@@ -63,6 +65,10 @@ public class ParseUserObject {
     public ParseUser getCurrentUser(){
         user = ParseUser.getCurrentUser();
         return user;
+    }
+
+    public String getUserType(){
+        return  user.getString(USER_TYPE_KEY);
     }
 
 }
