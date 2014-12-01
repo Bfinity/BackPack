@@ -79,7 +79,7 @@ public class ParseAssignmentObject {
             ParseObject assignmentObject = parseObjectsFound.get(i);
             Assignment assignmentToAddToList = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
                     assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
-                    assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+                    assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY), assignmentObject.getBoolean(ASSIGNMENT_COMPLETION_STATE_KEY));
             listOfAssignments.add(assignmentToAddToList);
         }
     }

@@ -15,12 +15,12 @@ public class Assignment implements android.os.Parcelable {
     private Boolean assignmentCompletionState; // Possibly use instead of assignment task objects
     private ArrayList<AssignmentTask> assignmentTasks;
 
-    public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription){
+    public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription, Boolean assignmentCompletionState){
         this.assignmentTitle = assignmentTitle;
         this.assignmentAssignedDate = assignmentAssignedDate;
         this.assignmentDueDate = assignmentDueDate;
         this.assignmentDescription = assignmentDescription;
-        this.assignmentCompletionState = false;
+        this.assignmentCompletionState = assignmentCompletionState;
     }
 
     public String getAssignmentTitle(){
