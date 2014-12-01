@@ -2,10 +2,15 @@ package com.example.bfinerocks.backpack.parse;
 
 import android.util.Log;
 
+import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/25/14.
@@ -16,6 +21,7 @@ public class ParseUserObject {
     private ParseUser user;
     private Boolean loginResponse;
     public static final String USER_TYPE_KEY = "userType";
+    private ArrayList<ParseUser> userArrayList;
 
 
     public void createNewParseUser(String userName, String password, String userType){
@@ -71,6 +77,33 @@ public class ParseUserObject {
     public String getUserType(){
         getCurrentUser();
         return  user.getString(USER_TYPE_KEY);
+    }
+
+    public void updateListOfUsers(String userType){
+
+        ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
+        parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
+        parseUsers.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parseUsers, ParseException e) {
+                if(e == null) {
+                    Log.i("parseUserArray", "Succes");
+                    setUserArrayList(parseUsers);
+                }
+                else{
+                    Log.i("parseUserArray", e.getMessage());
+                }
+            }
+        });
+    }
+
+    public void setUserArrayList(List<ParseUser> list){
+        userArrayList = new ArrayList<ParseUser>();
+        userArrayList.addAll(list);
+    }
+
+    public ArrayList<ParseUser> getUserArrayList(){
+        return userArrayList;
     }
 
 }

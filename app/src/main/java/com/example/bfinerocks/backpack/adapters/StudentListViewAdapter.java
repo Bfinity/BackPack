@@ -10,15 +10,16 @@ import android.widget.TextView;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.User;
+import com.parse.ParseUser;
 
 import java.util.List;
 
 /**
  * Created by BFineRocks on 12/1/14.
  */
-public class StudentListViewAdapter extends ArrayAdapter<User> {
+public class StudentListViewAdapter extends ArrayAdapter<ParseUser> {
 
-    public StudentListViewAdapter(Context context, int resource, List<User> objects) {
+    public StudentListViewAdapter(Context context, int resource, List<ParseUser> objects) {
         super(context, resource, objects);
     }
 
