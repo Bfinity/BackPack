@@ -16,6 +16,7 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +30,7 @@ public class ClassListFragment extends Fragment{
     TextView addClassText;
     List<Classroom> myClassList;
     ClassroomListViewAdapter classroomListAdapter;
+    ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
 
 
@@ -44,6 +46,8 @@ public class ClassListFragment extends Fragment{
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_classroom_list, container, false);
+
+            parseUserObject = new ParseUserObject();
 
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
@@ -89,6 +93,10 @@ public class ClassListFragment extends Fragment{
             classroomListAdapter.addAll(myClassList);
             classroomListAdapter.notifyDataSetChanged();
         }
+
+    public void changeViewForStudentUser(){
+        if(parseUserObject.getCurrentUser())
+    }
 
 
 }
