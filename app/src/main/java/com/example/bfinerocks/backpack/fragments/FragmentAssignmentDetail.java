@@ -4,12 +4,16 @@ import android.app.Fragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
+import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
 
 /**
  * Created by BFineRocks on 11/29/14.
@@ -24,11 +28,17 @@ public class FragmentAssignmentDetail extends Fragment {
     private Assignment assignment;
     private String completionState;
     private CheckBox assignmentStateBox;
+    private Button saveChanges;
+    private ParseUserObject currentUser;
+    private ParseAssignmentObject parseAssignmentObject;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
+
+        currentUser = new ParseUserObject();
+        parseAssignmentObject = new ParseAssignmentObject();
 
         assignment = getArguments().getParcelable("assignment");
         assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
@@ -37,6 +47,13 @@ public class FragmentAssignmentDetail extends Fragment {
         assignmentDetails = (TextView) rootView.findViewById(R.id.detail_assignment_details);
  //       assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
         assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
+        saveChanges = (Button) rootView.findViewById(R.id.btn_save_changes);
+        saveChanges.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                
+            }
+        });
 
         assignmentTitle.setText(assignment.getAssignmentTitle());
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
@@ -52,4 +69,5 @@ public class FragmentAssignmentDetail extends Fragment {
         }
         return rootView;
     }
+
 }
