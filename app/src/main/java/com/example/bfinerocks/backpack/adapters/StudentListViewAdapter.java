@@ -8,8 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
-import com.example.bfinerocks.backpack.models.Classroom;
-import com.example.bfinerocks.backpack.models.User;
 import com.parse.ParseUser;
 
 import java.util.List;
@@ -28,15 +26,12 @@ public class StudentListViewAdapter extends ArrayAdapter<ParseUser> {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        View classRoomItem = inflater.inflate(R.layout.list_item_classroom, parent, false);
-        Classroom classroom = getItem(position);
+        View studentListItem = inflater.inflate(R.layout.list_item_student, parent, false);
+        ParseUser parseUser = getItem(position);
 
-        TextView titleText = (TextView) classRoomItem.findViewById(R.id.class_title);
-        titleText.setText(classroom.getClassSectionName());
+        TextView titleText = (TextView) studentListItem.findViewById(R.id.student_name);
+        titleText.setText(parseUser.getUsername());
 
-        TextView gradeLevelText = (TextView) classRoomItem.findViewById(R.id.class_gradeLevel);
-        gradeLevelText.setText(String.valueOf(classroom.getClassSectionGradeLevel()));
-
-        return classRoomItem;
+        return studentListItem;
     }
 }

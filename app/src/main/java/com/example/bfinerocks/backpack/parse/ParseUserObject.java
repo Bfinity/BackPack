@@ -74,6 +74,7 @@ public class ParseUserObject {
         return user;
     }
 
+
     public String getUserType(){
         getCurrentUser();
         return  user.getString(USER_TYPE_KEY);
