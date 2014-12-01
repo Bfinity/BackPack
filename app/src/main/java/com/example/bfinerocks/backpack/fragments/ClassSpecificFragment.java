@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -16,6 +17,7 @@ import com.example.bfinerocks.backpack.adapters.AssignmentListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,14 +32,17 @@ public class ClassSpecificFragment extends Fragment {
     ListView assignmentList;
     TextView addAssignment;
     Classroom classroomDetail;
+    Button addToMyClasses;
     AssignmentListViewAdapter assignmentListViewAdapter;
     ParseAssignmentObject parseAssignmentObject;
     List<Assignment> listOfAssignments;
+    ParseUserObject parseUserObject;
 
     @Override
     public void onResume() {
         super.onResume();
         parseAssignmentObject = new ParseAssignmentObject();
+        parseUserObject = new ParseUserObject();
         parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
     }
 
@@ -61,6 +66,9 @@ public class ClassSpecificFragment extends Fragment {
         classSubject.setText(classRoom.getClassSectionSubject());
         String classGrade = String.valueOf(classRoom.getClassSectionGradeLevel());
         classGradeLevel.setText(classGrade);
+        addToMyClasses = (Button) rootView.findViewById(R.id.btn_add_class);
+        addToMyClasses.setVisibility(View.GONE);
+
 
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
@@ -99,5 +107,17 @@ public class ClassSpecificFragment extends Fragment {
         assignmentListViewAdapter.addAll(listOfAssignments);
         assignmentListViewAdapter.notifyDataSetChanged();
 
+    }
+
+    public void updateViewForStudent(){
+        if(parseUserObject.getUserType().equalsIgnoreCase("student")){
+            addToMyClasses.setVisibility(View.VISIBLE);
+            addToMyClasses.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    
+                }
+            });
+        }
     }
 }
