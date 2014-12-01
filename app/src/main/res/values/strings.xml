@@ -26,5 +26,6 @@
     <string name="btn_create_assignment">Create</string>
     <string name="btn_search_class">Search</string>
     <string name="search_results">Search Results</string>
+    <string name="btn_add_class">Add To My Classes</string>
 
 </resources>
