@@ -90,18 +90,23 @@ public class ParseClassSectionObject {
 
         ParseUser currentUser = parseUserObject.getCurrentUser();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
-        query.whereEqualTo("createdBy", currentUser);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if(e == null) {
-                    Log.i("classList", "success");
-                    addClasses(list);
-                }else{
-                    Log.i("classList", e.getMessage());
+        if(parseUserObject.getUserType().equalsIgnoreCase("Teacher")) {
+            query.whereEqualTo("createdBy", currentUser);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if (e == null) {
+                        Log.i("classList", "success");
+                        addClasses(list);
+                    } else {
+                        Log.i("classList", e.getMessage());
+                    }
                 }
-            }
-        });
+            });
+        }
+        if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
+
+        }
 
     }
 

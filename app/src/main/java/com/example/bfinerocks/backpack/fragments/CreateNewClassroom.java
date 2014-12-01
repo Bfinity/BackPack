@@ -14,6 +14,9 @@ import android.widget.NumberPicker.OnValueChangeListener;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
+
+import java.util.ArrayList;
 
 /**
  * Created by BFineRocks on 11/26/14.
@@ -26,11 +29,13 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
     private Button createClassButton;
     private int gradeLevel;
     ParseClassSectionObject classParseObject;
+    ParseUserObject currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_new_class, container, false);
+        currentUser = new ParseUserObject();
         enterClassName = (EditText) rootView.findViewById(R.id.enter_class_title);
         enterClassSubject = (EditText) rootView.findViewById(R.id.enter_class_subject);
         enterClassGrade = (NumberPicker) rootView.findViewById(R.id.enter_class_grade);
@@ -46,8 +51,17 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
                 classParseObject = new ParseClassSectionObject();
-                classParseObject.createNewClassroom(classroom);
-               getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
+                ClassListFragment classListFragment = new ClassListFragment();
+                if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
+                    classParseObject.createNewClassroom(classroom);
+                }
+                else if(currentUser.getUserType().equalsIgnoreCase("student")){
+                  ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classParseObject.findClassroomOnParse(classroom);
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
+                    classListFragment.setArguments(bundle);
+                }
+               getFragmentManager().beginTransaction().replace(R.id.container, classListFragment).commit();
             }
         });
 

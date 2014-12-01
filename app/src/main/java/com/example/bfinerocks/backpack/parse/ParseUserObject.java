@@ -12,10 +12,11 @@ import com.parse.SignUpCallback;
  */
 public class ParseUserObject {
 
+
     private ParseUser user;
     private Boolean loginResponse;
-    private String userType;
     public static final String USER_TYPE_KEY = "userType";
+
 
     public void createNewParseUser(String userName, String password, String userType){
         user = new ParseUser();
