@@ -48,10 +48,13 @@ public class FragmentAssignmentDetail extends Fragment {
  //       assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
         assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
         saveChanges = (Button) rootView.findViewById(R.id.btn_save_changes);
+        if(currentUser.getUserType().equalsIgnoreCase("teacher")){
+            saveChanges.setVisibility(View.GONE);
+        }
         saveChanges.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                
+
             }
         });
 

@@ -88,6 +88,19 @@ public class ParseAssignmentObject {
         return listOfAssignments;
     }
 
+    public void updateAssignment(Assignment assignment, Classroom classroom) throws ParseException{
+        ParseObject assignmentToUpdate = queryAssignmentBasedOnName(assignment);
+        assignmentToUpdate.put(ASSIGNMENT_COMPLETION_STATE_KEY, assignment.getAssignmentCompletionState());
+        assignmentToUpdate.saveInBackground();
+    }
+
+    public ParseObject queryAssignmentBasedOnName(Assignment assignmentToFind) throws ParseException{
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
+        query.whereEqualTo(ASSIGNMENT_DIRECTIONS_KEY, assignmentToFind.getAssignmentDescription());
+        return query.getFirst();
+    }
+
+
 
 
 }
