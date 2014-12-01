@@ -95,7 +95,9 @@ public class ClassListFragment extends Fragment{
         }
 
     public void changeViewForStudentUser(){
-        if(parseUserObject.getCurrentUser())
+        if(parseUserObject.getUserType().equals("Student")){
+            addClassText.setText();
+        }
     }
 
 
