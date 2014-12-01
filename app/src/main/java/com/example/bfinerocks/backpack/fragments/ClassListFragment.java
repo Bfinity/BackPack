@@ -54,6 +54,7 @@ public class ClassListFragment extends Fragment{
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
             changeViewForStudentUser();
 
+
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
@@ -100,9 +101,24 @@ public class ClassListFragment extends Fragment{
     public void changeViewForStudentUser(){
         if(parseUserObject.getUserType().equals("Student")){
             addClassText.setText(R.string.search_class);
+            addClassText.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+
+                }
+            });
         }
         else {
             addClassText.setText(R.string.add_class);
+            addClassText.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, new CreateNewClassroom())
+                            .addToBackStack("createNewClass")
+                            .commit();
+                }
+            });
         }
     }
 
