@@ -31,7 +31,7 @@ public class ParseClassSectionObject {
     private String classroomSubject;
     private int classroomGradeLevel;
 
-    public void addNewClassroom(Classroom classroom){
+    public void createNewClassroom(Classroom classroom){
         ParseObject parseClassroomObject = new ParseObject(CLASSROOM_KEY);
         getClassroomInformation(classroom);
         parseClassroomObject.put(CLASSROOM_TITLE_KEY, classroomTitle);
@@ -48,6 +48,36 @@ public class ParseClassSectionObject {
         currentUser.saveInBackground();*/
 
     }
+
+    public void addClassToStudentList(Classroom classroom){
+
+    }
+
+    public ParseObject findClassroomOnParse(Classroom classroom){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
+        if(!classroom.getClassSectionName().equalsIgnoreCase(null)) {
+            query.whereEqualTo(CLASSROOM_TITLE_KEY, classroom.getClassSectionName());
+        }
+        if(!classroom.getClassSectionSubject().equalsIgnoreCase(null)) {
+            query.whereEqualTo(CLASSROOM_SUBJECT_KEY, classroom.getClassSectionSubject());
+        }
+        if(classroom.getClassSectionGradeLevel() != 0){
+            query.whereEqualTo(CLASSROOM_GRADE_KEY, classroom.getClassSectionGradeLevel());
+        }
+        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e == null) {
+                    Log.i("queryClassrooms", "Success");
+                    addClasses(parseObjects);
+                }
+                else{
+                    Log.i("queryClassrooms", e.getMessage());
+                }
+            }
+        });
+    }
+
 
     public void getClassroomInformation(Classroom classroom){
         classroomTitle = classroom.getClassSectionName();

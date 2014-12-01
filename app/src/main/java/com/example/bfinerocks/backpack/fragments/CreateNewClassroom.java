@@ -46,7 +46,7 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
                 classParseObject = new ParseClassSectionObject();
-                classParseObject.addNewClassroom(classroom);
+                classParseObject.createNewClassroom(classroom);
                getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
             }
         });
