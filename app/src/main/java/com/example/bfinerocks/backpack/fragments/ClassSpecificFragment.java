@@ -34,6 +34,7 @@ public class ClassSpecificFragment extends Fragment {
     TextView classGradeLevel;
     ListView assignmentList;
     TextView addAssignment;
+    TextView viewStudentsInClass;
     Classroom classroomDetail;
     Button addToMyClasses;
     AssignmentListViewAdapter assignmentListViewAdapter;
@@ -103,6 +104,16 @@ public class ClassSpecificFragment extends Fragment {
             }
         });
 
+        viewStudentsInClass = (TextView) rootView.findViewById(R.id.view_students);
+        viewStudentsInClass.setOnClickListener(new OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getFragmentManager().beginTransaction().replace(R.id.container, new FragmentStudentList())
+                        .addToBackStack("studentList")
+                        .commit();
+            }
+        });
+
         return rootView;
     }
 
@@ -131,6 +142,8 @@ public class ClassSpecificFragment extends Fragment {
                             .commit();
                 }
             });
+            addAssignment.setVisibility(View.GONE);
+            viewStudentsInClass.setVisibility(View.GONE);
         }
     }
 }
