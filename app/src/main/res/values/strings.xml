@@ -29,5 +29,6 @@
     <string name="btn_add_class">Add To My Classes</string>
     <string name="btn_save_changes">Save Changes</string>
     <string name="student_list">Students Enrolled</string>
+    <string name="view_students">View Students Enrolled In Class</string>
 
 </resources>

@@ -10,14 +10,5 @@
         android:layout_width="wrap_content"
         android:layout_height="?android:listPreferredItemHeight"></ListView>
 
-    <TextView
-        android:id="@+id/add_assignment"
-        android:text="@string/add_assignment"
-        android:clickable="true"
-        android:textSize="@dimen/text_view_size"
-        android:layout_gravity="center_horizontal"
-        android:padding="@dimen/text_padding"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
 
 </LinearLayout>
