@@ -32,11 +32,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
+<!--    <TextView
         android:id="@+id/detail_assignment_state"
         android:textSize="@dimen/text_view_size"
         android:layout_margin="@dimen/text_margin"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"/>-->
+
+    <CheckBox
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Not Done"
+        android:id="@+id/checkBox_state"/>
 
 </LinearLayout>

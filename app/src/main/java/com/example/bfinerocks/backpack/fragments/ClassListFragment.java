@@ -59,7 +59,6 @@ public class ClassListFragment extends Fragment{
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
             classListLabel = (TextView) rootView.findViewById(R.id.class_list_label);
-
             classListLabel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {

@@ -126,6 +126,9 @@ public class ClassSpecificFragment extends Fragment {
                     }catch(ParseException e){
                         Log.i("addToList", e.getMessage());
                     }
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
+                            .addToBackStack("myClassList")
+                            .commit();
                 }
             });
         }

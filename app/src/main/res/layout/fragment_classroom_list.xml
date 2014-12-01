@@ -6,6 +6,7 @@
 
     <TextView
         android:id="@+id/class_list_label"
+        android:text="@string/class_list"
         android:textSize="@dimen/heading_text_size"
         android:clickable="true"
         android:layout_gravity="center_horizontal"
