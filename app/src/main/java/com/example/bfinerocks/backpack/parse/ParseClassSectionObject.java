@@ -53,7 +53,7 @@ public class ParseClassSectionObject {
 
     }
 
-    public List<Classroom> findClassroomOnParse(Classroom classroom){
+    public void findClassroomOnParse(Classroom classroom) throws ParseException{
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         if(!classroom.getClassSectionName().equalsIgnoreCase(null)) {
             query.whereEqualTo(CLASSROOM_TITLE_KEY, classroom.getClassSectionName());
@@ -64,7 +64,7 @@ public class ParseClassSectionObject {
         if(classroom.getClassSectionGradeLevel() != 0){
             query.whereEqualTo(CLASSROOM_GRADE_KEY, classroom.getClassSectionGradeLevel());
         }
-        query.findInBackground(new FindCallback<ParseObject>() {
+/*        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null) {
@@ -75,8 +75,9 @@ public class ParseClassSectionObject {
                     Log.i("queryClassrooms", e.getMessage());
                 }
             }
-        });
-        return getArrayListOfClassrooms();
+        });*/
+
+       addClasses(query.find());
     }
 
 

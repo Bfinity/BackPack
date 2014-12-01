@@ -15,6 +15,7 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 
@@ -51,17 +52,32 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
                 classParseObject = new ParseClassSectionObject();
-                ClassListFragment classListFragment = new ClassListFragment();
                 if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
                     classParseObject.createNewClassroom(classroom);
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
                 }
                 else if(currentUser.getUserType().equalsIgnoreCase("student")){
-                  ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classParseObject.findClassroomOnParse(classroom);
+
+                    try {
+                    classParseObject.findClassroomOnParse(classroom);
+
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){
+
+                    }
+                    catch (ParseException e){
+
+                    }
+                    ArrayList<Classroom> foundClasses = new ArrayList<Classroom>();
+                    foundClasses = (ArrayList<Classroom>) classParseObject.getArrayListOfClassrooms();
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
-                    classListFragment.setArguments(bundle);
+                    FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
+                    classSearchFragment.setArguments(bundle);
+
+                    getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
                 }
-               getFragmentManager().beginTransaction().replace(R.id.container, classListFragment).commit();
+
             }
         });
 

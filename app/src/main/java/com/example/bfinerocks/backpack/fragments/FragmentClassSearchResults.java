@@ -38,7 +38,8 @@ public class FragmentClassSearchResults extends Fragment {
     public void onResume() {
         super.onResume();
         classRooms = new ParseClassSectionObject();
-        classRooms.updateListOfClassRooms();
+      //  myClassList = new ArrayList<Classroom>();
+  //      myClassList = getArguments().getParcelableArrayList("listOfReturnedClasses");
 
     }
 
@@ -53,8 +54,11 @@ public class FragmentClassSearchResults extends Fragment {
 
         addClassText = (TextView) rootView.findViewById(R.id.add_class);
 
+
         myClassList = new ArrayList<Classroom>();
         classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
+       classroomListAdapter.addAll(myClassList);
+
         classListView.setAdapter(classroomListAdapter);
         classSearchResultLabel = (TextView) rootView.findViewById(R.id.class_list_label);
         classSearchResultLabel.setText(R.string.search_results);
@@ -92,7 +96,8 @@ public class FragmentClassSearchResults extends Fragment {
         catch (InterruptedException e){
             Log.i("Exception", e.getMessage());
         }
-        myClassList = classRooms.getArrayListOfClassrooms();
+    //    myClassList = classRooms.getArrayListOfClassrooms();
+        myClassList = getArguments().getParcelableArrayList("listOfClassesReturned");
         classroomListAdapter.addAll(myClassList);
         classroomListAdapter.notifyDataSetChanged();
     }
