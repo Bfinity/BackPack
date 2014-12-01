@@ -106,8 +106,21 @@ public class ParseClassSectionObject {
                 }
             });
         }
-        if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
-
+        else if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
+            ParseRelation relation = parseUserObject.getCurrentUser().getRelation("classrooms");
+            ParseQuery relationQuery = relation.getQuery();
+            relationQuery.findInBackground(new FindCallback() {
+                @Override
+                public void done(List list, ParseException e) {
+                    if(e == null){
+                        Log.i("classList", "Success");
+                        addClasses(list);
+                    }
+                    else{
+                        Log.i("classList", e.getMessage());
+                    }
+                }
+            });
         }
 
     }
