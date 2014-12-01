@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
@@ -22,6 +23,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private TextView assignmentState;
     private Assignment assignment;
     private String completionState;
+    private CheckBox assignmentStateBox;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -32,17 +34,20 @@ public class FragmentAssignmentDetail extends Fragment {
         assigmentAssgnDate = (TextView) rootView.findViewById(R.id.detail_assignment_assgn_date);
         assignmentDueDate = (TextView) rootView.findViewById(R.id.detail_assignment_due_date);
         assignmentDetails = (TextView) rootView.findViewById(R.id.detail_assignment_details);
-        assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
+ //       assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
+        assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
 
         assignmentTitle.setText(assignment.getAssignmentTitle());
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
         if(assignment.getAssignmentCompletionState()){
-            assignmentState.setText("Done");
+  //          assignmentState.setText("Done");
+            assignmentStateBox.setChecked(true);
+            assignmentStateBox.setText("Done!");
         }
         else{
-            assignmentState.setText("Not Done");
+   //         assignmentState.setText("Not Done");
         }
         return rootView;
     }
