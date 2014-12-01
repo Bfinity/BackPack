@@ -6,7 +6,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import com.example.bfinerocks.backpack.R;
-import com.example.bfinerocks.backpack.fragments.SignUpFragment;
+import com.example.bfinerocks.backpack.fragments.LogInFragment;
 import com.firebase.client.Firebase;
 import com.parse.Parse;
 
@@ -24,7 +24,7 @@ public class MainActivity extends Activity {
         Firebase.setAndroidContext(getApplicationContext());
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
-                    .add(R.id.container, new SignUpFragment())
+                    .add(R.id.container, new LogInFragment())
                     .commit();
         }
     }

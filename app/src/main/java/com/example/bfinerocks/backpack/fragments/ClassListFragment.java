@@ -50,7 +50,10 @@ public class ClassListFragment extends Fragment{
             parseUserObject = new ParseUserObject();
 
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
+
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
+            changeViewForStudentUser();
+
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
@@ -96,7 +99,10 @@ public class ClassListFragment extends Fragment{
 
     public void changeViewForStudentUser(){
         if(parseUserObject.getUserType().equals("Student")){
-            addClassText.setText();
+            addClassText.setText(R.string.search_class);
+        }
+        else {
+            addClassText.setText(R.string.add_class);
         }
     }
 

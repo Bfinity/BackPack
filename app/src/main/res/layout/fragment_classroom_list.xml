@@ -24,7 +24,6 @@
 
     <TextView
         android:id="@+id/add_class"
-        android:text="@string/add_class"
         android:clickable="true"
         android:textSize="@dimen/text_view_size"
         android:layout_margin="@dimen/text_margin"
