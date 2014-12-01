@@ -25,6 +25,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private String completionState;
     private CheckBox assignmentStateBox;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);

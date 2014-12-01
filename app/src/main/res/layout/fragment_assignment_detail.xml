@@ -46,4 +46,10 @@
         android:text="Not Done"
         android:id="@+id/checkBox_state"/>
 
+    <Button
+        android:id="@+id/btn_save_changes"
+        android:text="@string/btn_save_changes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>
