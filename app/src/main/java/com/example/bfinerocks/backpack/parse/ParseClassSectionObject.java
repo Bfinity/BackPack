@@ -7,6 +7,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -153,6 +154,13 @@ public class ParseClassSectionObject {
 
     public ParseObject getQueriedClassroom(){
         return parseClassroomObject;
+    }
+
+    public void addStudentToClassRelation(ParseUser currentUser, Classroom classroom) throws ParseException{
+        getQueriedClassroomByClassName(classroom);
+        ParseRelation<ParseObject> relation = currentUser.getRelation("classrooms");
+        relation.add(getQueriedClassroom());
+        currentUser.save();
     }
 
 
