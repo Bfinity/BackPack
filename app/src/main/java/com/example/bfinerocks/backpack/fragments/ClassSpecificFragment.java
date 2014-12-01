@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -17,7 +18,9 @@ import com.example.bfinerocks.backpack.adapters.AssignmentListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,6 +40,7 @@ public class ClassSpecificFragment extends Fragment {
     ParseAssignmentObject parseAssignmentObject;
     List<Assignment> listOfAssignments;
     ParseUserObject parseUserObject;
+    ParseClassSectionObject parseClassSection;
 
     @Override
     public void onResume() {
@@ -68,7 +72,7 @@ public class ClassSpecificFragment extends Fragment {
         classGradeLevel.setText(classGrade);
         addToMyClasses = (Button) rootView.findViewById(R.id.btn_add_class);
         addToMyClasses.setVisibility(View.GONE);
-
+        updateViewForStudent();
 
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
@@ -110,12 +114,18 @@ public class ClassSpecificFragment extends Fragment {
     }
 
     public void updateViewForStudent(){
+        parseUserObject = new ParseUserObject();
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
             addToMyClasses.setVisibility(View.VISIBLE);
             addToMyClasses.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-
+                parseClassSection = new ParseClassSectionObject();
+                    try {
+                        parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
+                    }catch(ParseException e){
+                        Log.i("addToList", e.getMessage());
+                    }
                 }
             });
         }
