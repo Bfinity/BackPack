@@ -53,7 +53,7 @@ public class ParseClassSectionObject {
 
     }
 
-    public ParseObject findClassroomOnParse(Classroom classroom){
+    public List<Classroom> findClassroomOnParse(Classroom classroom){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         if(!classroom.getClassSectionName().equalsIgnoreCase(null)) {
             query.whereEqualTo(CLASSROOM_TITLE_KEY, classroom.getClassSectionName());
@@ -76,6 +76,7 @@ public class ParseClassSectionObject {
                 }
             }
         });
+        return getArrayListOfClassrooms();
     }
 
 
