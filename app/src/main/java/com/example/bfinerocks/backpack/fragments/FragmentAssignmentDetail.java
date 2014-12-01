@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -14,6 +15,7 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 /**
  * Created by BFineRocks on 11/29/14.
@@ -26,7 +28,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private TextView assignmentDetails;
     private TextView assignmentState;
     private Assignment assignment;
-    private String completionState;
+    private Boolean assignmentIsComplete;
     private CheckBox assignmentStateBox;
     private Button saveChanges;
     private ParseUserObject currentUser;
@@ -54,7 +56,14 @@ public class FragmentAssignmentDetail extends Fragment {
         saveChanges.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                if(assignmentStateBox.isChecked()){
+                    assignment.isAssignmentCompleted(true);
+                }
+                try {
+                    parseAssignmentObject.updateAssignment(assignment);
+                }catch (ParseException e){
+                    Log.i("assignmentUpdate", e.getMessage());
+                }
             }
         });
 
@@ -62,13 +71,15 @@ public class FragmentAssignmentDetail extends Fragment {
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
-        if(assignment.getAssignmentCompletionState()){
+        assignmentIsComplete = assignment.getAssignmentCompletionState();
+        if(assignmentIsComplete){
   //          assignmentState.setText("Done");
             assignmentStateBox.setChecked(true);
             assignmentStateBox.setText("Done!");
         }
         else{
    //         assignmentState.setText("Not Done");
+            assignmentStateBox.setChecked(false);
         }
         return rootView;
     }

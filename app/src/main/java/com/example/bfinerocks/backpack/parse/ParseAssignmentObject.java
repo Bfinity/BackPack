@@ -88,7 +88,7 @@ public class ParseAssignmentObject {
         return listOfAssignments;
     }
 
-    public void updateAssignment(Assignment assignment, Classroom classroom) throws ParseException{
+    public void updateAssignment(Assignment assignment) throws ParseException{
         ParseObject assignmentToUpdate = queryAssignmentBasedOnName(assignment);
         assignmentToUpdate.put(ASSIGNMENT_COMPLETION_STATE_KEY, assignment.getAssignmentCompletionState());
         assignmentToUpdate.saveInBackground();
