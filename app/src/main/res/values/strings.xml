@@ -28,5 +28,6 @@
     <string name="search_results">Search Results</string>
     <string name="btn_add_class">Add To My Classes</string>
     <string name="btn_save_changes">Save Changes</string>
+    <string name="student_list">Students Enrolled</string>
 
 </resources>
