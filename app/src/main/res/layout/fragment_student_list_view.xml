@@ -5,9 +5,11 @@
               android:layout_height="match_parent">
 
     <TextView
+        android:id="@+id/student_list_header"
         android:text="@string/student_list"
         android:textSize="@dimen/heading_text_size"
         android:layout_margin="@dimen/text_margin"
+        android:clickable="true"
         android:layout_gravity="center_horizontal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>

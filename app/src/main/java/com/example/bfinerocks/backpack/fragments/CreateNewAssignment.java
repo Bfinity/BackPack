@@ -39,7 +39,7 @@ public class CreateNewAssignment extends Fragment {
             public void onClick(View view) {
                 Classroom classroomToAssociate = getArguments().getParcelable("class");
                 assignment = new Assignment(assignmentTitle.getText().toString(), assignmentAssignedDate.getText().toString(),
-                        assignmentDueDate.getText().toString(), assignmentDirections.getText().toString(), false);
+                        assignmentDueDate.getText().toString(), assignmentDirections.getText().toString());
                 parseAssignmentObject = new ParseAssignmentObject();
                 parseAssignmentObject.addNewAssignment(assignment, classroomToAssociate);
             }

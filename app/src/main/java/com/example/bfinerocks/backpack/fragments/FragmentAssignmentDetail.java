@@ -14,8 +14,10 @@ import android.widget.TextView;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 /**
  * Created by BFineRocks on 11/29/14.
@@ -33,6 +35,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private Button saveChanges;
     private ParseUserObject currentUser;
     private ParseAssignmentObject parseAssignmentObject;
+    private ParseStudentAssignmentObject studentAssignment;
 
 
     @Override
@@ -41,6 +44,7 @@ public class FragmentAssignmentDetail extends Fragment {
 
         currentUser = new ParseUserObject();
         parseAssignmentObject = new ParseAssignmentObject();
+        studentAssignment = new ParseStudentAssignmentObject();
 
         assignment = getArguments().getParcelable("assignment");
         assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
@@ -60,7 +64,8 @@ public class FragmentAssignmentDetail extends Fragment {
                     assignment.isAssignmentCompleted(true);
                 }
                 try {
-                    parseAssignmentObject.updateAssignment(assignment);
+                    ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignment);
+                    studentAssignment.updateStudentAssignment(assignmentObject, assignment);
                 }catch (ParseException e){
                     Log.i("assignmentUpdate", e.getMessage());
                 }
@@ -71,7 +76,7 @@ public class FragmentAssignmentDetail extends Fragment {
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
-        assignmentIsComplete = assignment.getAssignmentCompletionState();
+/*        assignmentIsComplete = assignment.getAssignmentCompletionState();
         if(assignmentIsComplete){
   //          assignmentState.setText("Done");
             assignmentStateBox.setChecked(true);
@@ -80,7 +85,7 @@ public class FragmentAssignmentDetail extends Fragment {
         else{
    //         assignmentState.setText("Not Done");
             assignmentStateBox.setChecked(false);
-        }
+        }*/
         return rootView;
     }
 

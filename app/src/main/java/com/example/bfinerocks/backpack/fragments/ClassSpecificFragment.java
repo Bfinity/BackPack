@@ -19,8 +19,10 @@ import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -42,6 +44,7 @@ public class ClassSpecificFragment extends Fragment {
     List<Assignment> listOfAssignments;
     ParseUserObject parseUserObject;
     ParseClassSectionObject parseClassSection;
+    ParseStudentAssignmentObject studentAssignment;
 
     @Override
     public void onResume() {
@@ -54,6 +57,7 @@ public class ClassSpecificFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
+        studentAssignment = new ParseStudentAssignmentObject();
         Classroom classRoom = getArguments().getParcelable("class");
         classroomDetail = classRoom;
         listOfAssignments = new ArrayList<Assignment>();
@@ -73,7 +77,8 @@ public class ClassSpecificFragment extends Fragment {
         classGradeLevel.setText(classGrade);
         addToMyClasses = (Button) rootView.findViewById(R.id.btn_add_class);
         addToMyClasses.setVisibility(View.GONE);
-        updateViewForStudent();
+        addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
+
 
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
@@ -82,6 +87,15 @@ public class ClassSpecificFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
+                if(parseUserObject.getUserType().equalsIgnoreCase("student")){
+                    try {
+                        ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignmentSelected);
+                        studentAssignment.addStudentAssignment(assignmentObject, assignmentSelected);
+                    }catch (ParseException e){
+                        Log.i("parseAssignmentTable", e.getMessage());
+                    }
+
+                }
                 FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
@@ -91,7 +105,7 @@ public class ClassSpecificFragment extends Fragment {
         });
 
 
-        addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
+
 
         addAssignment.setOnClickListener(new OnClickListener() {
             @Override
@@ -115,6 +129,7 @@ public class ClassSpecificFragment extends Fragment {
                         .commit();
             }
         });
+        updateViewForStudent();
 
         return rootView;
     }

@@ -27,14 +27,14 @@ public class ParseStudentAssignmentObject {
         ParseObject assignmentJoinTable = new ParseObject(STUDENT_ASSIGNMENT_OBJECT_KEY);
         assignmentJoinTable.put(STUDENT_USER, ParseUser.getCurrentUser());
         assignmentJoinTable.put(ASSIGNMENT_OBJECT, parseAssignment);
-        assignmentJoinTable.put(ASSIGNMENT_STATUS_KEY, assignment.getAssignmentCompletionState());
+/*        assignmentJoinTable.put(ASSIGNMENT_STATUS_KEY, false);
         if(assignment.getAssignmentCompletionState()){
             Date today = new Date();
             assignmentJoinTable.put(ASSIGNMENT_COMPLETED_DATE, today );
         }
         if(!assignment.getAssignmentNotes().isEmpty()) {
             assignmentJoinTable.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
-        }
+        }*/
         assignmentJoinTable.saveInBackground();
     }
 
@@ -54,9 +54,9 @@ public class ParseStudentAssignmentObject {
                 Date today = new Date();
                 assignmentToUpdate.put(ASSIGNMENT_COMPLETED_DATE, today);
             }
-            if (!assignment.getAssignmentNotes().isEmpty()) {
+/*            if (!assignment.getAssignmentNotes().equalsIgnoreCase(null)) {
                 assignmentToUpdate.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
-            }
+            }*/
             assignmentToUpdate.saveInBackground();
         }
 

@@ -88,7 +88,10 @@ public class ParseUserObject {
         ParseObject parseClassObject = classSection.getQueriedClassroom();
         ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
-        parseUsers.whereEqualTo("classroom", parseClassObject);
+        parseUsers.whereEqualTo("classrooms", parseClassObject);
+
+      //  setUserArrayList(parseUsers.find());
+
         parseUsers.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
@@ -101,6 +104,24 @@ public class ParseUserObject {
                 }
             }
         });
+    }
+
+    public void updateListOfUsersBasedOnUserType(String userType){
+        ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
+        parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
+        parseUsers.findInBackground(new FindCallback<ParseUser>() {
+            @Override
+            public void done(List<ParseUser> parseUsers, ParseException e) {
+                if(e == null) {
+                    Log.i("parseUserArray", "Succes");
+                    setUserArrayList(parseUsers);
+                }
+                else{
+                    Log.i("parseUserArray", e.getMessage());
+                }
+            }
+        });
+
     }
 
     public void setUserArrayList(List<ParseUser> list){

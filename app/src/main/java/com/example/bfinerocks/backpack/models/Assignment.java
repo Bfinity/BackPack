@@ -16,12 +16,11 @@ public class Assignment implements android.os.Parcelable {
     private String assignmentNotes;
     private ArrayList<AssignmentTask> assignmentTasks;
 
-    public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription, Boolean assignmentCompletionState){
+    public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription){
         this.assignmentTitle = assignmentTitle;
         this.assignmentAssignedDate = assignmentAssignedDate;
         this.assignmentDueDate = assignmentDueDate;
         this.assignmentDescription = assignmentDescription;
-        this.assignmentCompletionState = assignmentCompletionState;
     }
 
     public String getAssignmentTitle(){
