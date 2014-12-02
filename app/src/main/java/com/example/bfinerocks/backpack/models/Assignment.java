@@ -13,6 +13,7 @@ public class Assignment implements android.os.Parcelable {
     private String assignmentDueDate;
     private String assignmentDescription; // Possibly use instead of assignment task objects
     private Boolean assignmentCompletionState; // Possibly use instead of assignment task objects
+    private String assignmentNotes;
     private ArrayList<AssignmentTask> assignmentTasks;
 
     public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription, Boolean assignmentCompletionState){
@@ -71,6 +72,14 @@ public class Assignment implements android.os.Parcelable {
         return assignmentCompletionState;
     }
 
+    public void setAssignmentNotes(String assignmentNotes){
+        this.assignmentNotes = assignmentNotes;
+    }
+
+    public String getAssignmentNotes(){
+        return assignmentNotes;
+    }
+
 
     @Override
     public int describeContents() {
@@ -84,6 +93,7 @@ public class Assignment implements android.os.Parcelable {
         dest.writeString(this.assignmentDueDate);
         dest.writeString(this.assignmentDescription);
         dest.writeValue(this.assignmentCompletionState);
+        dest.writeString(this.assignmentNotes);
         dest.writeSerializable(this.assignmentTasks);
     }
 
@@ -93,6 +103,7 @@ public class Assignment implements android.os.Parcelable {
         this.assignmentDueDate = in.readString();
         this.assignmentDescription = in.readString();
         this.assignmentCompletionState = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.assignmentNotes = in.readString();
         this.assignmentTasks = (ArrayList<AssignmentTask>) in.readSerializable();
     }
 

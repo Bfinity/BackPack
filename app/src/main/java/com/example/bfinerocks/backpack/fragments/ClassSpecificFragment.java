@@ -108,7 +108,9 @@ public class ClassSpecificFragment extends Fragment {
         viewStudentsInClass.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                getFragmentManager().beginTransaction().replace(R.id.container, new FragmentStudentList())
+                FragmentStudentList fragmentStudentList = new FragmentStudentList();
+                fragmentStudentList.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, fragmentStudentList)
                         .addToBackStack("studentList")
                         .commit();
             }

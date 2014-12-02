@@ -2,9 +2,11 @@ package com.example.bfinerocks.backpack.parse;
 
 import android.util.Log;
 
+import com.example.bfinerocks.backpack.models.Classroom;
 import com.parse.FindCallback;
 import com.parse.LogInCallback;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 import com.parse.SignUpCallback;
@@ -80,10 +82,13 @@ public class ParseUserObject {
         return  user.getString(USER_TYPE_KEY);
     }
 
-    public void updateListOfUsers(String userType){
-
+    public void updateListOfUsers(String userType, Classroom classroom) throws ParseException{
+        ParseClassSectionObject classSection = new ParseClassSectionObject();
+        classSection.getQueriedClassroomByClassName(classroom);
+        ParseObject parseClassObject = classSection.getQueriedClassroom();
         ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
+        parseUsers.whereEqualTo("classroom", parseClassObject);
         parseUsers.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
@@ -106,5 +111,6 @@ public class ParseUserObject {
     public ArrayList<ParseUser> getUserArrayList(){
         return userArrayList;
     }
+
 
 }
