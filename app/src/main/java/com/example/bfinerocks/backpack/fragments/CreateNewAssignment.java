@@ -41,7 +41,7 @@ public class CreateNewAssignment extends Fragment {
                 assignment = new Assignment(assignmentTitle.getText().toString(), assignmentAssignedDate.getText().toString(),
                         assignmentDueDate.getText().toString(), assignmentDirections.getText().toString());
                 parseAssignmentObject = new ParseAssignmentObject();
-                parseAssignmentObject.addNewAssignment(assignment, classroomToAssociate);
+                parseAssignmentObject.createNewAssignmentToPost(assignment, classroomToAssociate);
             }
         });
 

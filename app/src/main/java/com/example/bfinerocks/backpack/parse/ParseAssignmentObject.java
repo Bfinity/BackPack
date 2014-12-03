@@ -24,21 +24,16 @@ public class ParseAssignmentObject {
     public static String ASSIGNMENT_CLASSROOM_ASSOCIATION = "classroom";
     private List<Assignment> listOfAssignments = null;
     private List<ParseObject> listOfParseAssignmentObjects;
-    private Assignment assignmentToAdd;
-    private Classroom classToAssociate;
     private ParseClassSectionObject parseClassObject = new ParseClassSectionObject();
 
 
-    public void addNewAssignment(Assignment assignmentToAdd, Classroom classToAssociate){
-        this.assignmentToAdd = assignmentToAdd;
+    public void createNewAssignmentToPost(Assignment assignmentToAdd, Classroom classToAssociate){
         ParseObject parseAssignment = new ParseObject(ASSIGNMENT_KEY);
         parseAssignment.put(ASSIGNMENT_TITLE_KEY, assignmentToAdd.getAssignmentTitle());
         parseAssignment.put(ASSIGNMENT_ASSIGN_DATE_KEY, assignmentToAdd.getAssignmentAssignedDate());
         parseAssignment.put(ASSIGNMENT_DUE_DATE_KEY, assignmentToAdd.getAssignmentDueDate());
         parseAssignment.put(ASSIGNMENT_DIRECTIONS_KEY, assignmentToAdd.getAssignmentDescription());
-        parseAssignment.put(ASSIGNMENT_COMPLETION_STATE_KEY, assignmentToAdd.getAssignmentCompletionState());
 
-        this.classToAssociate = classToAssociate;
         try {
             parseClassObject.queryClassroomByClassName(classToAssociate);
         }
@@ -51,7 +46,6 @@ public class ParseAssignmentObject {
     }
 
     public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
-     this.classToAssociate = classroom;
        try{
            parseClassObject.queryClassroomByClassName(classroom);
        }catch (ParseException e){
