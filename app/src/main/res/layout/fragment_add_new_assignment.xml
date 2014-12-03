@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
               android:orientation="vertical"
               android:layout_width="match_parent"
               android:layout_height="match_parent">
@@ -16,6 +16,7 @@
         android:hint="@string/enter_assignment_assgn_date"
         android:inputType="date"
         android:layout_margin="@dimen/text_margin"
+        android:layout_below="@id/enter_assignment_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
@@ -24,11 +25,16 @@
         android:hint="@string/enter_assignment_due_date"
         android:inputType="date"
         android:layout_margin="@dimen/text_margin"
+        android:layout_alignParentRight="true"
+        android:layout_below="@id/enter_assignment_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <EditText
         android:id="@+id/enter_assignment_directions"
+        android:hint="@string/enter_assignment_details"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_below="@id/enter_due_date"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:inputType="textMultiLine"
@@ -38,7 +44,9 @@
     <Button
         android:id="@+id/btn_create_assignment"
         android:text="@string/btn_create_assignment"
+        android:layout_below="@id/enter_assignment_directions"
+        android:layout_centerHorizontal="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-</LinearLayout>
+</RelativeLayout>

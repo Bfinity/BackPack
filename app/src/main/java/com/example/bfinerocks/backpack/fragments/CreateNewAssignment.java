@@ -8,6 +8,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
@@ -42,9 +43,13 @@ public class CreateNewAssignment extends Fragment {
                         assignmentDueDate.getText().toString(), assignmentDirections.getText().toString());
                 parseAssignmentObject = new ParseAssignmentObject();
                 parseAssignmentObject.createNewAssignmentToPost(assignment, classroomToAssociate);
+                Toast.makeText(getActivity(), "Assignment Added", Toast.LENGTH_SHORT).show();
+
             }
         });
 
         return rootView;
     }
+
+     
 }
