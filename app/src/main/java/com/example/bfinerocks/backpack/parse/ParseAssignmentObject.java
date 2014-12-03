@@ -1,10 +1,7 @@
 package com.example.bfinerocks.backpack.parse;
 
-import android.util.Log;
-
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -23,7 +20,8 @@ public class ParseAssignmentObject {
     public static String ASSIGNMENT_DIRECTIONS_KEY = "assignmentDetails";
     public static String ASSIGNMENT_COMPLETION_STATE_KEY = "completionState";
     public static String ASSIGNMENT_CLASSROOM_ASSOCIATION = "classroom";
-    private List<Assignment> listOfAssignments;
+    private List<Assignment> listOfAssignments = null;
+    private List<ParseObject> listOfParseAssignmentObjects;
     private Assignment assignmentToAdd;
     private Classroom classToAssociate;
     private ParseClassSectionObject parseClassObject = new ParseClassSectionObject();
@@ -59,18 +57,34 @@ public class ParseAssignmentObject {
        }
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        try{
+            setListOfParseAssignmentObjects(query.find());
+            setListOfAssignments(query.find());
+        }catch(ParseException e){
+
+        }
+/*        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null){
                     Log.i("assignmentList", "Success");
-                setListOfAssignments(parseObjects);}
+                    setListOfAssignments(parseObjects);
+                    setListOfParseAssignmentObjects(parseObjects);
+                }
                 else{
                     Log.i("assignmentList", e.getMessage());
                 }
             }
-        });
+        });*/
 
+    }
+
+    public void setListOfParseAssignmentObjects(List<ParseObject> listOfParseAssignmentObjects){
+        this.listOfParseAssignmentObjects = listOfParseAssignmentObjects;
+    }
+
+    public List<ParseObject> getListOfParseAssignmentObjects(){
+        return listOfParseAssignmentObjects;
     }
 
     public void setListOfAssignments(List<ParseObject> parseObjectsFound){

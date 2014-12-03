@@ -3,12 +3,14 @@ package com.example.bfinerocks.backpack.parse;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Assignment;
+import com.example.bfinerocks.backpack.models.Classroom;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 12/2/14.
@@ -36,6 +38,17 @@ public class ParseStudentAssignmentObject {
             assignmentJoinTable.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
         }*/
         assignmentJoinTable.saveInBackground();
+    }
+
+    public void addAssignmentsToStudentAssignments(Classroom classroom){
+
+        ParseAssignmentObject parseAssignment = new ParseAssignmentObject();
+        parseAssignment.createListOfAssignmentsAssociatedWithClassroom(classroom);
+        List<Assignment> listOfAssignments = parseAssignment.getListOfAssignments();
+        List<ParseObject> listOfParseAssignments = parseAssignment.getListOfParseAssignmentObjects();
+        for(int i = 0; i < listOfParseAssignments.size(); i++){
+            addStudentAssignment(listOfParseAssignments.get(i), listOfAssignments.get(i));
+        }
     }
 
     public void updateStudentAssignment(ParseObject parseAssignment, Assignment assignment){

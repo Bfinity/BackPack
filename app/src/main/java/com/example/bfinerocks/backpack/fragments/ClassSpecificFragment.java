@@ -22,7 +22,6 @@ import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -87,15 +86,6 @@ public class ClassSpecificFragment extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
-                if(parseUserObject.getUserType().equalsIgnoreCase("student")){
-                    try {
-                        ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignmentSelected);
-                        studentAssignment.addStudentAssignment(assignmentObject, assignmentSelected);
-                    }catch (ParseException e){
-                        Log.i("parseAssignmentTable", e.getMessage());
-                    }
-
-                }
                 FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
@@ -151,6 +141,7 @@ public class ClassSpecificFragment extends Fragment {
                 parseClassSection = new ParseClassSectionObject();
                     try {
                         parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
+                        studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
                     }catch(ParseException e){
                         Log.i("addToList", e.getMessage());
                     }
