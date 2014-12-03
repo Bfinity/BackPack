@@ -21,14 +21,17 @@ public class ParseUserObject {
     private ParseUser user;
     private Boolean loginResponse;
     public static final String USER_TYPE_KEY = "userType";
+    public static final String USER_FULL_NAME = "fullName";
     private ArrayList<ParseUser> userArrayList;
 
 
-    public void createNewParseUser(String userName, String password, String userType) throws ParseException{
+    public void createNewParseUser(String userName, String password, String userType, String fullName, String emailAddress) throws ParseException{
         user = new ParseUser();
         user.setUsername(userName);
         user.setPassword(password);
+        user.setEmail(emailAddress);
         user.put(USER_TYPE_KEY, userType);
+        user.put(USER_FULL_NAME, fullName);
 
         user.signUp();
 /*
@@ -74,14 +77,12 @@ public class ParseUserObject {
     }
 
     public ParseUser getCurrentUser(){
-        user = ParseUser.getCurrentUser();
-        return user;
+        return ParseUser.getCurrentUser();
     }
 
 
     public String getUserType(){
-        getCurrentUser();
-        return  user.getString(USER_TYPE_KEY);
+        return  ParseUser.getCurrentUser().getString(USER_TYPE_KEY);
     }
 
     public void updateListOfUsers(String userType, Classroom classroom) throws ParseException{
