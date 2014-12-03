@@ -43,7 +43,7 @@ public class LogInFragment extends Fragment {
 
 
                         }catch(ParseException e){
-                            Toast.makeText(getActivity(), "Log In Failed", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getActivity(), "Log In Failed" +"\n" + e.getMessage().toUpperCase(), Toast.LENGTH_SHORT).show();
                             logInSuccessful = false;
                         }
 

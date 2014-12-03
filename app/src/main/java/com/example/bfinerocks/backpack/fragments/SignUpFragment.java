@@ -14,9 +14,11 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 /**
  * Created by BFineRocks on 11/21/14.
@@ -51,11 +53,19 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 @Override
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject();
-                    user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
+                    Boolean signUpSuccess = true;
+                    try {
+                        user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
+                    }catch(ParseException e){
+                        Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ e.getMessage().toUpperCase(), Toast.LENGTH_SHORT).show();
+                        signUpSuccess = false;
+                    }
+                    if(signUpSuccess) {
                         editor.putString(USER_NAME_KEY, edtUserName.getText().toString());
                         editor.putString(USER_TYPE_KEY, userType);
-                        editor.commit();
-                    getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
+                        editor.apply();
+                        getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
+                    }
                 }
             });
 

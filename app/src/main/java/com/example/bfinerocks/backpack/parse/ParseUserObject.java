@@ -8,7 +8,6 @@ import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
-import com.parse.SignUpCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,12 +24,14 @@ public class ParseUserObject {
     private ArrayList<ParseUser> userArrayList;
 
 
-    public void createNewParseUser(String userName, String password, String userType){
+    public void createNewParseUser(String userName, String password, String userType) throws ParseException{
         user = new ParseUser();
         user.setUsername(userName);
         user.setPassword(password);
         user.put(USER_TYPE_KEY, userType);
 
+        user.signUp();
+/*
         user.signUpInBackground(new SignUpCallback() {
             @Override
             public void done(ParseException e) {
@@ -43,7 +44,7 @@ public class ParseUserObject {
                     isLogInSuccessful(false);
                 }
             }
-        });
+        });*/
     }
 
     public void signInExistingUser(String userName, String password) throws ParseException{
