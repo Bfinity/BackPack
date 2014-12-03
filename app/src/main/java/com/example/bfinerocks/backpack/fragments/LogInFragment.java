@@ -22,10 +22,6 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
     private EditText userName;
     private EditText password;
-    private Button btnFinished;
-    private TextView signUpLink;
-
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -33,8 +29,8 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
         userName = (EditText) rootView.findViewById(R.id.sign_up_user_name);
         password = (EditText) rootView.findViewById(R.id.sign_up_password);
-        btnFinished = (Button) rootView.findViewById(R.id.btn_done);
-        signUpLink = (TextView) rootView.findViewById(R.id.signUp_link);
+        Button btnFinished = (Button) rootView.findViewById(R.id.btn_done);
+        TextView signUpLink = (TextView) rootView.findViewById(R.id.signUp_link);
 
         btnFinished.setOnClickListener(this);
         signUpLink.setOnClickListener(this);
@@ -47,7 +43,7 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
         switch (view.getId()){
             case R.id.btn_done:
-                
+
                 ParseUserObject user = new ParseUserObject();
                 Boolean logInSuccessful = true;
                 try {
