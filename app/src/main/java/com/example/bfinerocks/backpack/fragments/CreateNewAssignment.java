@@ -51,5 +51,5 @@ public class CreateNewAssignment extends Fragment {
         return rootView;
     }
 
-     
+
 }

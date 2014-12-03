@@ -6,7 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="user_name_request">Enter Your User Name</string>
     <string name="password_request">Enter Your Password</string>
-    <string name="user_type_request">I am a:</string>
+    <string name="user_type_request">Select User Type</string>
     <string name="done">Log In</string>
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="class_list">My Classes</string>
@@ -31,5 +31,7 @@
     <string name="student_list">Students Enrolled</string>
     <string name="view_students">View Students Enrolled In Class</string>
     <string name="signUp">Click Here To Sign Up!</string>
+    <string name="enter_full_name">Enter Your Full Name</string>
+    <string name="enter_email">Enter Your Email Address</string>
 
 </resources>
