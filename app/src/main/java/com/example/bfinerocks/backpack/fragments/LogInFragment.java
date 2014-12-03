@@ -8,9 +8,11 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 /**
  * Created by BFineRocks on 11/26/14.
@@ -35,10 +37,22 @@ public class LogInFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         ParseUserObject user = new ParseUserObject();
-                        user.signInExistingUser(userName.getText().toString(), password.getText().toString());
-                        getFragmentManager().beginTransaction()
-                                .replace(R.id.container, new ClassListFragment())
-                                .commit();
+                        Boolean logInSuccessful = true;
+                        try {
+                            user.signInExistingUser(userName.getText().toString(), password.getText().toString());
+
+
+                        }catch(ParseException e){
+                            Toast.makeText(getActivity(), "Log In Failed", Toast.LENGTH_SHORT).show();
+                            logInSuccessful = false;
+                        }
+
+                        if(logInSuccessful) {
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.container, new ClassListFragment())
+                                    .commit();
+                        }
+
                     }
                 });
 

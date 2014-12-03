@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.parse.FindCallback;
-import com.parse.LogInCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -47,8 +46,10 @@ public class ParseUserObject {
         });
     }
 
-    public void signInExistingUser(String userName, String password){
-        ParseUser.logInInBackground(userName, password, new LogInCallback() {
+    public void signInExistingUser(String userName, String password) throws ParseException{
+
+        ParseUser.logIn(userName, password);
+/*        ParseUser.logInInBackground(userName, password, new LogInCallback() {
             @Override
             public void done(ParseUser parseUser, ParseException e) {
                 if(parseUser != null){
@@ -60,7 +61,7 @@ public class ParseUserObject {
                     isLogInSuccessful(false);
                 }
             }
-        });
+        });*/
     }
 
     public void isLogInSuccessful(Boolean logInResponse){
