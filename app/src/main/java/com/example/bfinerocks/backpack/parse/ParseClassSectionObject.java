@@ -3,7 +3,6 @@ package com.example.bfinerocks.backpack.parse;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -50,9 +49,6 @@ public class ParseClassSectionObject {
 
     }
 
-    public void addClassToStudentList(Classroom classroom){
-
-    }
 
     public void findClassroomOnParse(Classroom classroom) throws ParseException{
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
@@ -88,12 +84,13 @@ public class ParseClassSectionObject {
         classroomGradeLevel = classroom.getClassSectionGradeLevel();
     }
 
-    public void updateListOfClassRooms(){
+    public void updateListOfClassRooms() throws ParseException{
 
         ParseUser currentUser = parseUserObject.getCurrentUser();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         if(parseUserObject.getUserType().equalsIgnoreCase("Teacher")) {
-            query.whereEqualTo("createdBy", currentUser);
+            addClasses(query.find());
+/*            query.whereEqualTo("createdBy", currentUser);
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
@@ -104,12 +101,13 @@ public class ParseClassSectionObject {
                         Log.i("classList", e.getMessage());
                     }
                 }
-            });
+            });*/
         }
         else if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
             ParseRelation relation = parseUserObject.getCurrentUser().getRelation("classrooms");
             ParseQuery relationQuery = relation.getQuery();
-            relationQuery.findInBackground(new FindCallback() {
+            addClasses(relationQuery.find());
+/*            relationQuery.findInBackground(new FindCallback() {
                 @Override
                 public void done(List list, ParseException e) {
                     if(e == null){
@@ -120,7 +118,7 @@ public class ParseClassSectionObject {
                         Log.i("classList", e.getMessage());
                     }
                 }
-            });
+            });*/
         }
 
     }
