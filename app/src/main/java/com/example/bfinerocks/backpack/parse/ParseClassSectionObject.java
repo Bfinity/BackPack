@@ -139,7 +139,7 @@ public class ParseClassSectionObject {
         return myClasses;
     }
 
-    public void getQueriedClassroomByClassName(Classroom classroomQueried) throws ParseException {
+    public void queryClassroomByClassName(Classroom classroomQueried) throws ParseException {
         ParseObject queriedClassroom = null;
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         query.whereEqualTo(CLASSROOM_TITLE_KEY, classroomQueried.getClassSectionName());
@@ -168,7 +168,7 @@ public class ParseClassSectionObject {
     }
 
     public void addStudentToClassRelation(ParseUser currentUser, Classroom classroom) throws ParseException{
-        getQueriedClassroomByClassName(classroom);
+        queryClassroomByClassName(classroom);
         ParseRelation<ParseObject> relation = currentUser.getRelation("classrooms");
         relation.add(getQueriedClassroom());
         currentUser.save();

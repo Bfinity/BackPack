@@ -20,15 +20,19 @@ public class ParseStudentAssignmentObject {
     public static final String STUDENT_ASSIGNMENT_OBJECT_KEY = "StudentAssignment";
     public static final String STUDENT_USER = "studentUser";
     public static final String ASSIGNMENT_OBJECT = "assignment";
+    public static final String ASSIGNMENT_CLASSROOM_RELATION = "fromClassroom";
     public static final String ASSIGNMENT_REVIEWED_DATE_KEY = "dateReviewed";
     public static final String ASSIGNMENT_STATUS_KEY = "assignmentState";
     public static final String ASSIGNMENT_COMPLETED_DATE = "dateCompleted";
     public static final String ASSIGNMENT_NOTES = "notes";
+    private List<ParseObject> listOfStudentAssignmentObjects = null;
+    ParseClassSectionObject parseClassroom = null;
 
-    public void addStudentAssignment(ParseObject parseAssignment, Assignment assignment){
+    public void addStudentAssignment(ParseObject parseAssignment, String classroomName){
         ParseObject assignmentJoinTable = new ParseObject(STUDENT_ASSIGNMENT_OBJECT_KEY);
         assignmentJoinTable.put(STUDENT_USER, ParseUser.getCurrentUser());
         assignmentJoinTable.put(ASSIGNMENT_OBJECT, parseAssignment);
+        assignmentJoinTable.put(ASSIGNMENT_CLASSROOM_RELATION, classroomName);
 /*        assignmentJoinTable.put(ASSIGNMENT_STATUS_KEY, false);
         if(assignment.getAssignmentCompletionState()){
             Date today = new Date();
@@ -44,24 +48,23 @@ public class ParseStudentAssignmentObject {
 
         ParseAssignmentObject parseAssignment = new ParseAssignmentObject();
         parseAssignment.createListOfAssignmentsAssociatedWithClassroom(classroom);
-        List<Assignment> listOfAssignments = parseAssignment.getListOfAssignments();
         List<ParseObject> listOfParseAssignments = parseAssignment.getListOfParseAssignmentObjects();
         for(int i = 0; i < listOfParseAssignments.size(); i++){
-            addStudentAssignment(listOfParseAssignments.get(i), listOfAssignments.get(i));
+            addStudentAssignment(listOfParseAssignments.get(i), classroom.getClassSectionName());
         }
     }
 
-    public void updateStudentAssignment(ParseObject parseAssignment, Assignment assignment){
+    public void updateStudentAssignment(ParseObject parseAssignment, Assignment assignment) {
         ParseObject assignmentToUpdate = null;
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(ASSIGNMENT_OBJECT, parseAssignment);
         try {
             assignmentToUpdate = query.getFirst();
-        }catch (ParseException e){
+        } catch (ParseException e) {
             Log.i("updateAssignment", e.getMessage());
         }
-        if(assignmentToUpdate != null) {
+        if (assignmentToUpdate != null) {
             assignmentToUpdate.put(ASSIGNMENT_STATUS_KEY, assignment.getAssignmentCompletionState());
             if (assignment.getAssignmentCompletionState()) {
                 Date today = new Date();
@@ -72,7 +75,27 @@ public class ParseStudentAssignmentObject {
             }*/
             assignmentToUpdate.saveInBackground();
         }
+    }
 
+    public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+        query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
+        try {
+            setListOfStudentAssignmentObjects(query.find());
+        }catch (ParseException e){
+            Log.e("ParseException", e.getMessage());
+        }
+
+    }
+
+    public void setListOfStudentAssignmentObjects(List<ParseObject> listOfStudentAssignments){
+        this.listOfStudentAssignmentObjects = listOfStudentAssignments;
+    }
+
+
+    public List<ParseObject> getListOfStudentAssignmentObjects(){
+        return listOfStudentAssignmentObjects;
     }
 
 

@@ -1,5 +1,7 @@
 package com.example.bfinerocks.backpack.parse;
 
+import android.util.Log;
+
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.parse.ParseException;
@@ -38,7 +40,7 @@ public class ParseAssignmentObject {
 
         this.classToAssociate = classToAssociate;
         try {
-            parseClassObject.getQueriedClassroomByClassName(classToAssociate);
+            parseClassObject.queryClassroomByClassName(classToAssociate);
         }
         catch (com.parse.ParseException e) {
             e.printStackTrace();
@@ -51,7 +53,7 @@ public class ParseAssignmentObject {
     public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
      this.classToAssociate = classroom;
        try{
-           parseClassObject.getQueriedClassroomByClassName(classroom);
+           parseClassObject.queryClassroomByClassName(classroom);
        }catch (ParseException e){
            e.printStackTrace();
        }
@@ -61,7 +63,7 @@ public class ParseAssignmentObject {
             setListOfParseAssignmentObjects(query.find());
             setListOfAssignments(query.find());
         }catch(ParseException e){
-
+            Log.e("ParseAssignmentParseExeption", e.getMessage());
         }
 /*        query.findInBackground(new FindCallback<ParseObject>() {
             @Override

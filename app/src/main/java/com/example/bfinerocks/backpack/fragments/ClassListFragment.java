@@ -17,6 +17,7 @@ import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +25,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassListFragment extends Fragment{
+public class ClassListFragment extends Fragment {
     TextView classListLabel;
     ListView classListView;
     TextView addClassText;
@@ -35,10 +36,14 @@ public class ClassListFragment extends Fragment{
 
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
         classRooms = new ParseClassSectionObject();
-        classRooms.updateListOfClassRooms();
+        try {
+            classRooms.updateListOfClassRooms();
+        }catch (ParseException e){
+
+        }
 
     }
 

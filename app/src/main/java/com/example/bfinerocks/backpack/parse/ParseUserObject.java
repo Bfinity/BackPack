@@ -84,7 +84,7 @@ public class ParseUserObject {
 
     public void updateListOfUsers(String userType, Classroom classroom) throws ParseException{
         ParseClassSectionObject classSection = new ParseClassSectionObject();
-        classSection.getQueriedClassroomByClassName(classroom);
+        classSection.queryClassroomByClassName(classroom);
         ParseObject parseClassObject = classSection.getQueriedClassroom();
         ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
