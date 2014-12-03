@@ -7,7 +7,7 @@
     <string name="user_name_request">Enter Your User Name</string>
     <string name="password_request">Enter Your Password</string>
     <string name="user_type_request">I am a:</string>
-    <string name="done">Finished</string>
+    <string name="done">Log In</string>
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="class_list">My Classes</string>
     <string name="add_class">Add New Class</string>
@@ -30,5 +30,6 @@
     <string name="btn_save_changes">Save Changes</string>
     <string name="student_list">Students Enrolled</string>
     <string name="view_students">View Students Enrolled In Class</string>
+    <string name="signUp">Click Here To Sign Up!</string>
 
 </resources>
