@@ -38,6 +38,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private ParseStudentAssignmentObject studentAssignment;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
@@ -47,6 +48,10 @@ public class FragmentAssignmentDetail extends Fragment {
         studentAssignment = new ParseStudentAssignmentObject();
 
         assignment = getArguments().getParcelable("assignment");
+        if(currentUser.getUserType().equalsIgnoreCase("student")){
+            Assignment studentAssignmentDetail = studentAssignment.queryStudentAssignmentObject(assignment);
+            assignment = studentAssignmentDetail;
+        }
         assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
         assigmentAssgnDate = (TextView) rootView.findViewById(R.id.detail_assignment_assgn_date);
         assignmentDueDate = (TextView) rootView.findViewById(R.id.detail_assignment_due_date);
@@ -76,7 +81,7 @@ public class FragmentAssignmentDetail extends Fragment {
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
-/*        assignmentIsComplete = assignment.getAssignmentCompletionState();
+        assignmentIsComplete = assignment.getAssignmentCompletionState();
         if(assignmentIsComplete){
   //          assignmentState.setText("Done");
             assignmentStateBox.setChecked(true);
@@ -85,7 +90,7 @@ public class FragmentAssignmentDetail extends Fragment {
         else{
    //         assignmentState.setText("Not Done");
             assignmentStateBox.setChecked(false);
-        }*/
+        }
         return rootView;
     }
 

@@ -81,6 +81,13 @@ public class ParseAssignmentObject {
 
     }
 
+    public Assignment convertParseAssignmentObjectToAssignmentModel(ParseObject assignmentObject){
+        Assignment convertedAssignment = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
+                assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
+                assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+        return convertedAssignment;
+    }
+
     public void setListOfParseAssignmentObjects(List<ParseObject> listOfParseAssignmentObjects){
         this.listOfParseAssignmentObjects = listOfParseAssignmentObjects;
     }
@@ -93,9 +100,7 @@ public class ParseAssignmentObject {
         listOfAssignments = new ArrayList<Assignment>();
         for(int i = 0; i < parseObjectsFound.size(); i++){
             ParseObject assignmentObject = parseObjectsFound.get(i);
-            Assignment assignmentToAddToList = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
-                    assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
-                    assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+            Assignment assignmentToAddToList = convertParseAssignmentObjectToAssignmentModel(assignmentObject);
             listOfAssignments.add(assignmentToAddToList);
         }
     }
