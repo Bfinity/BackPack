@@ -71,9 +71,9 @@ public class ParseStudentAssignmentObject {
                 Date today = new Date();
                 assignmentToUpdate.put(ASSIGNMENT_COMPLETED_DATE, today);
             }
-/*            if (!assignment.getAssignmentNotes().equalsIgnoreCase(null)) {
+            if (!assignment.getAssignmentNotes().equalsIgnoreCase(null)) {
                 assignmentToUpdate.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
-            }*/
+            }
             assignmentToUpdate.saveInBackground();
         }
     }
@@ -98,6 +98,7 @@ public class ParseStudentAssignmentObject {
 
     public Assignment updateAssignmentWithDetailsFromStudent(ParseObject studentAssignment, Assignment assignment){
         assignment.isAssignmentCompleted(studentAssignment.getBoolean(ASSIGNMENT_STATUS_KEY));
+        assignment.setAssignmentNotes(studentAssignment.getString(ASSIGNMENT_NOTES));
         return assignment;
     }
 
@@ -115,7 +116,7 @@ public class ParseStudentAssignmentObject {
 
     public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom, ParseUser studentUser){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
-        query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(STUDENT_USER, studentUser);
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
         try {
             setListOfStudentAssignmentObjects(query.find());
@@ -126,11 +127,16 @@ public class ParseStudentAssignmentObject {
     }
 
     public ArrayList<Assignment> getListOfStudentAssignmentObjectsForDisplay(List<ParseObject> listOfParseAssignments){
-
+        ArrayList<Assignment> listOfAssignments = new ArrayList<Assignment>();
+        ParseAssignmentObject parseAssignmentObject = new ParseAssignmentObject();
+        Assignment assignment = null;
         for(int i = 0; i < listOfParseAssignments.size(); i ++){
             ParseObject parseObject = listOfParseAssignments.get(i);
-            Assignment assignment =
+            assignment = parseAssignmentObject.convertParseAssignmentObjectToAssignmentModel(parseObject);
+            assignment = updateAssignmentWithDetailsFromStudent(parseObject, assignment);
+            listOfAssignments.add(assignment);
         }
+        return listOfAssignments;
     }
 
     public void setListOfStudentAssignmentObjects(List<ParseObject> listOfStudentAssignments){
@@ -141,6 +147,8 @@ public class ParseStudentAssignmentObject {
     public List<ParseObject> getListOfStudentAssignmentObjects(){
         return listOfStudentAssignmentObjects;
     }
+
+
 
 
 

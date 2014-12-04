@@ -9,6 +9,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.CheckBox;
+import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
@@ -29,6 +31,8 @@ public class FragmentAssignmentDetail extends Fragment {
     private TextView assignmentDueDate;
     private TextView assignmentDetails;
     private TextView assignmentState;
+    private EditText assignmentNotes;
+    private ListView assignmentResponses;
     private Assignment assignment;
     private Boolean assignmentIsComplete;
     private CheckBox assignmentStateBox;
