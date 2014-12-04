@@ -89,6 +89,7 @@ public class ClassSpecificFragment extends Fragment {
                 FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
+                bundle.putParcelable("class", classroomDetail);
                 fragmentAssignmentDetail.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, fragmentAssignmentDetail).addToBackStack("assgnDetail").commit();
             }

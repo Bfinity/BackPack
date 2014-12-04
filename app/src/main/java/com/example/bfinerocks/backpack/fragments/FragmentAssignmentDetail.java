@@ -14,12 +14,16 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
+import com.example.bfinerocks.backpack.adapters.AssignmentResponseListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 import com.parse.ParseObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/29/14.
@@ -40,18 +44,28 @@ public class FragmentAssignmentDetail extends Fragment {
     private ParseUserObject currentUser;
     private ParseAssignmentObject parseAssignmentObject;
     private ParseStudentAssignmentObject studentAssignment;
+    private AssignmentResponseListViewAdapter responseAdapter;
+    private List<Assignment> listOfResponses;
 
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        currentUser = new ParseUserObject();
+        parseAssignmentObject = new ParseAssignmentObject();
+        studentAssignment = new ParseStudentAssignmentObject();
+        listOfResponses = new ArrayList<Assignment>();
+        listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
 
-        currentUser = new ParseUserObject();
-        parseAssignmentObject = new ParseAssignmentObject();
-        studentAssignment = new ParseStudentAssignmentObject();
+
 
         assignment = getArguments().getParcelable("assignment");
+
         if(currentUser.getUserType().equalsIgnoreCase("student")){
             Assignment studentAssignmentDetail = studentAssignment.queryStudentAssignmentObject(assignment);
             assignment = studentAssignmentDetail;
@@ -63,6 +77,7 @@ public class FragmentAssignmentDetail extends Fragment {
  //       assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
         assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
         saveChanges = (Button) rootView.findViewById(R.id.btn_save_changes);
+        assignmentNotes = (EditText) rootView.findViewById(R.id.assignment_notes);
         if(currentUser.getUserType().equalsIgnoreCase("teacher")){
             saveChanges.setVisibility(View.GONE);
         }
@@ -73,7 +88,9 @@ public class FragmentAssignmentDetail extends Fragment {
                     assignment.isAssignmentCompleted(true);
                 }
                 try {
+                    assignment.setAssignmentNotes(assignmentNotes.getText().toString());
                     ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignment);
+                    
                     studentAssignment.updateStudentAssignment(assignmentObject, assignment);
                 }catch (ParseException e){
                     Log.i("assignmentUpdate", e.getMessage());
@@ -94,6 +111,11 @@ public class FragmentAssignmentDetail extends Fragment {
    //         assignmentState.setText("Not Done");
             assignmentStateBox.setChecked(false);
         }
+        assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
+        responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
+        responseAdapter.addAll(listOfResponses);
+        assignmentResponses.setAdapter(responseAdapter);
+
         return rootView;
     }
 
