@@ -33,5 +33,6 @@
     <string name="signUp">Click Here To Sign Up!</string>
     <string name="enter_full_name">Enter Your Full Name</string>
     <string name="enter_email">Enter Your Email Address</string>
+    <string name="notes">Includes Notes</string>
 
 </resources>

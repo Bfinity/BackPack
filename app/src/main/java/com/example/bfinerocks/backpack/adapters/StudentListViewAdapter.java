@@ -30,7 +30,7 @@ public class StudentListViewAdapter extends ArrayAdapter<ParseUser> {
         ParseUser parseUser = getItem(position);
 
         TextView titleText = (TextView) studentListItem.findViewById(R.id.student_name);
-        titleText.setText(parseUser.getUsername());
+        titleText.setText(parseUser.getString("fullName"));
 
         return studentListItem;
     }
