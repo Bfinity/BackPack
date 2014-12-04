@@ -38,6 +38,12 @@
         android:text="Not Done"
         android:id="@+id/checkBox_state"/>
 
+    <EditText
+        android:id="@+id/assignment_notes"
+        android:hint="@string/add_notes"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
     <Button
         android:id="@+id/btn_save_changes"
         android:text="@string/btn_save_changes"
