@@ -36,7 +36,7 @@
     <CheckBox
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Not Done"
+        android:text="@string/chkbx_complete"
         android:id="@+id/checkBox_state"/>
 
     <EditText

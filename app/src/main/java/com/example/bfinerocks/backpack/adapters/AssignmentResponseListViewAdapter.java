@@ -31,6 +31,10 @@ public class AssignmentResponseListViewAdapter extends ArrayAdapter<Assignment> 
         TextView studentName = (TextView) assignmentResponse.findViewById(R.id.assignment_response_studentName);
         CheckBox noteCheckBox = (CheckBox) assignmentResponse.findViewById(R.id.chkbx_assignment_notes);
 
+        studentName.setText(assignment.getStudentName());
+        if(assignment.getAssignmentCompletionState()){
+            noteCheckBox.setChecked(true);
+        }
     }
 }
 

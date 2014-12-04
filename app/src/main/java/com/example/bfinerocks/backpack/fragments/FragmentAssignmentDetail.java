@@ -89,7 +89,6 @@ public class FragmentAssignmentDetail extends Fragment {
         if(assignmentIsComplete){
   //          assignmentState.setText("Done");
             assignmentStateBox.setChecked(true);
-            assignmentStateBox.setText("Done!");
         }
         else{
    //         assignmentState.setText("Not Done");

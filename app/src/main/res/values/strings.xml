@@ -37,5 +37,6 @@
     <string name="class_subject_title">Class Subject:</string>
     <string name="class_grade_level_title">Grade Level:</string>
     <string name="add_notes">Enter Notes About This Assignment</string>
+    <string name="chkbx_complete">Completed</string>
 
 </resources>
