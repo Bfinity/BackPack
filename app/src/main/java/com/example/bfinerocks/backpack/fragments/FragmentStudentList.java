@@ -7,12 +7,15 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.StudentListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
+import com.example.bfinerocks.backpack.models.UserModel;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 import com.parse.ParseUser;
@@ -63,8 +66,20 @@ public class FragmentStudentList extends Fragment {
             }
         });
 
-
-
+        studentListView.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                ParseUser parseUser = (ParseUser) adapterView.getItemAtPosition(i);
+                UserModel  userModel = parseUserObject.convertParseUserIntoUserModel(parseUser);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("UserModel", userModel);
+                StudentDetailFragment studentDetail = new StudentDetailFragment();
+                studentDetail.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, studentDetail)
+                        .addToBackStack("StudentDetail")
+                        .commit();
+            }
+        });
 
         return rootView;
     }

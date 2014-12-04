@@ -3,6 +3,7 @@ package com.example.bfinerocks.backpack.parse;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
+import com.example.bfinerocks.backpack.models.UserModel;
 import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -134,6 +135,13 @@ public class ParseUserObject {
 
     public ArrayList<ParseUser> getUserArrayList(){
         return userArrayList;
+    }
+
+    public UserModel convertParseUserIntoUserModel(ParseUser parseUser){
+        UserModel userModel = new UserModel(parseUser.getUsername(), parseUser.getEmail(),
+                parseUser.getString(USER_FULL_NAME), parseUser.getString(USER_TYPE_KEY));
+        userModel.setUserObjectID(parseUser.getObjectId());
+        return userModel;
     }
 
 

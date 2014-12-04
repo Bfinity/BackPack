@@ -9,6 +9,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseUser;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -110,6 +111,26 @@ public class ParseStudentAssignmentObject {
             Log.e("ParseException", e.getMessage());
         }
 
+    }
+
+    public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom, ParseUser studentUser){
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+        query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
+        try {
+            setListOfStudentAssignmentObjects(query.find());
+        }catch (ParseException e){
+            Log.e("ParseException", e.getMessage());
+        }
+
+    }
+
+    public ArrayList<Assignment> getListOfStudentAssignmentObjectsForDisplay(List<ParseObject> listOfParseAssignments){
+
+        for(int i = 0; i < listOfParseAssignments.size(); i ++){
+            ParseObject parseObject = listOfParseAssignments.get(i);
+            Assignment assignment =
+        }
     }
 
     public void setListOfStudentAssignmentObjects(List<ParseObject> listOfStudentAssignments){
