@@ -144,5 +144,13 @@ public class ParseUserObject {
         return userModel;
     }
 
+    public void searchForStudentUser(UserModel userModel) throws ParseException{
+        ParseUser parseUser = new ParseUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(USER_FULL_NAME, userModel.getUserFullName());
+        query.whereEqualTo(parseUser.getEmail(), userModel.getUserEmail());
+        setUserArrayList(query.find());
+    }
+
 
 }
