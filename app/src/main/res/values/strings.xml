@@ -44,5 +44,8 @@
     <string name="btn_add_student">Add Student</string>
     <string name="student_name">Student Name:</string>
     <string name="student_email">Student Email:</string>
+    <string name="teacher_type">Teacher</string>
+    <string name="student_type">Student</string>
+    <string name="parent_type">Parent</string>
 
 </resources>

@@ -38,6 +38,23 @@ public class LogInFragment extends Fragment implements OnClickListener{
         return rootView;
     }
 
+
+    public void changeOnUserType(ParseUserObject currentUser){
+        switch (currentUser.getUserTypeEnum()){
+            case TEACHER:
+                transitionToClassFragment();
+                break;
+
+            case STUDENT:
+                transitionToClassFragment();
+                break;
+
+            case PARENT:
+                transitionToStudentFragment();
+                break;
+        }
+    }
+
     @Override
     public void onClick(View view) {
 
@@ -56,10 +73,7 @@ public class LogInFragment extends Fragment implements OnClickListener{
                 }
 
                 if(logInSuccessful) {
-                    getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new ClassListFragment())
-                            .addToBackStack("classList")
-                            .commit();
+                    changeOnUserType(user);
                 }
 
                 break;
@@ -73,5 +87,19 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
                 break;
         }
+    }
+
+    public void transitionToClassFragment(){
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new ClassListFragment())
+                    .addToBackStack("classList")
+                    .commit();
+    }
+
+    public void transitionToStudentFragment(){
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new FragmentStudentList())
+                    .addToBackStack("studentList")
+                    .commit();
     }
 }

@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.parse;
 
 import android.util.Log;
 
+import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.UserModel;
 import com.parse.FindCallback;
@@ -86,6 +87,19 @@ public class ParseUserObject {
         return  ParseUser.getCurrentUser().getString(USER_TYPE_KEY);
     }
 
+    public UserTypes getUserTypeEnum(){
+        if(getUserType().equalsIgnoreCase("teacher")){
+            return UserTypes.TEACHER;
+        }
+        else if(getUserType().equalsIgnoreCase("student")){
+            return UserTypes.STUDENT;
+        }
+        else if(getUserType().equalsIgnoreCase("parent")){
+            return UserTypes.PARENT;
+        }
+       return null;
+    }
+
     public void updateListOfUsers(String userType, Classroom classroom) throws ParseException{
         ParseClassSectionObject classSection = new ParseClassSectionObject();
         classSection.queryClassroomByClassName(classroom);
@@ -144,14 +158,16 @@ public class ParseUserObject {
         return userModel;
     }
 
-    public void searchForStudentUser(UserModel userModel) throws ParseException{
+    public ParseUser searchForStudentUser(UserModel userModel) throws ParseException{
         ParseUser parseUser = new ParseUser();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_FULL_NAME, userModel.getUserFullName());
         query.whereEqualTo(USER_TYPE_KEY, userModel.getUserType());
         query.whereEqualTo(parseUser.getEmail(), userModel.getUserEmail());
-        setUserArrayList(query.find());
+        return query.getFirst();
     }
+
+
 
 
 }
