@@ -1,5 +1,8 @@
 package com.example.bfinerocks.backpack.parse;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -26,6 +29,8 @@ public class ParseClassSectionObject {
     public static String CLASSROOM_TITLE_KEY = "classroomTitle";
     public static String CLASSROOM_SUBJECT_KEY = "classroomSubject";
     public static String CLASSROOM_GRADE_KEY = "classroomGradeLevel";
+
+    public Handler parseClassHandler;
 
     private String classroomTitle;
     private String classroomSubject;
@@ -161,6 +166,7 @@ public class ParseClassSectionObject {
 
     public void setParseClassroomObject(ParseObject parseObjectFound){
         this.parseClassroomObject = parseObjectFound;
+        sendMessageFromHandler();
     }
 
     public ParseObject getQueriedClassroom(){
@@ -186,6 +192,16 @@ public class ParseClassSectionObject {
 
         }
        return classIsRelated;
+    }
+
+    public void sendMessageFromHandler(){
+        parseClassHandler = new Handler();
+        Message classMessage = parseClassHandler.obtainMessage();
+        boolean updateComplete = true;
+        Bundle messageBundle = new Bundle();
+        messageBundle.putBoolean("message", updateComplete);
+        classMessage.setData(messageBundle);
+        parseClassHandler.sendMessage(classMessage);
     }
 
 

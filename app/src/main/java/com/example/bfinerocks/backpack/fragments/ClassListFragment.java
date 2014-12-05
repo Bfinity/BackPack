@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassListFragment extends Fragment {
+public class ClassListFragment extends Fragment  {
     TextView classListLabel;
     ListView classListView;
     TextView addClassText;
@@ -33,6 +34,7 @@ public class ClassListFragment extends Fragment {
     ClassroomListViewAdapter classroomListAdapter;
     ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
+    Handler classListHandler;
 
 
     @Override
@@ -95,15 +97,26 @@ public class ClassListFragment extends Fragment {
                 }
             });
 
+/*
+            classListHandler = new Handler(new Callback() {
+                @Override
+                public boolean handleMessage(Message message) {
+
+                    return false;
+                }
+            });
+*/
+
+
+
 
             return rootView;
         }
 
         public void updateView(){
 
-
             try{
-            Thread.sleep(1000);}
+            Thread.sleep(1500);}
             catch (InterruptedException e){
                 Log.i("Exception", e.getMessage());
             }
@@ -121,5 +134,11 @@ public class ClassListFragment extends Fragment {
         }
     }
 
-
+/*
+    @Override
+    public boolean handleMessage(Message message) {
+        switch (message.what)
+            case
+        return false;
+    }*/
 }
