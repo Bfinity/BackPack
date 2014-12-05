@@ -51,8 +51,26 @@ public class ParseStudentAssignmentObject {
         parseAssignment.createListOfAssignmentsAssociatedWithClassroom(classroom);
         List<ParseObject> listOfParseAssignments = parseAssignment.getListOfParseAssignmentObjects();
         for(int i = 0; i < listOfParseAssignments.size(); i++){
-            addStudentAssignment(listOfParseAssignments.get(i), classroom.getClassSectionName());
+            ParseObject holder = listOfParseAssignments.get(i);
+            if(!assignmentHasBeenAdded(holder)) {
+                addStudentAssignment(holder, classroom.getClassSectionName());
+            }
         }
+    }
+
+    public boolean assignmentHasBeenAdded(ParseObject assignment){
+        boolean isAdded = false;
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+        query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+        query.whereEqualTo(ASSIGNMENT_OBJECT, assignment);
+        try {
+            if (query.count() > 0) {
+                isAdded = true;
+            }
+        }catch (ParseException e){
+
+        }
+        return isAdded;
     }
 
     public void updateStudentAssignment(ParseObject parseAssignment, Assignment assignment) {
@@ -102,7 +120,7 @@ public class ParseStudentAssignmentObject {
         return assignment;
     }
 
-    public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
+    public ArrayList<Assignment> createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
@@ -112,9 +130,10 @@ public class ParseStudentAssignmentObject {
             Log.e("ParseException", e.getMessage());
         }
 
+        return getListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
     }
 
-    public void createListOfStudentAssignmentObjectsForDisplay(ParseUser studentUser){
+    public ArrayList<Assignment> createListOfStudentAssignmentObjectsForDisplay(ParseUser studentUser){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, studentUser);
         try{
@@ -122,6 +141,7 @@ public class ParseStudentAssignmentObject {
         }catch (ParseException e){
             Log.e("ParseException", e.getMessage());
         }
+        return getListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
     }
 
     public ArrayList<Assignment> createListOfStudentResponses(Assignment assignment){
@@ -155,7 +175,11 @@ public class ParseStudentAssignmentObject {
         Assignment assignment = null;
         for(int i = 0; i < listOfParseAssignments.size(); i ++){
             ParseObject parseObject = listOfParseAssignments.get(i);
-            assignment = parseAssignmentObject.convertParseAssignmentObjectToAssignmentModel(parseObject);
+            try {
+                assignment = parseAssignmentObject.convertParseAssignmentObjectToAssignmentModel(parseObject.getParseObject(ASSIGNMENT_OBJECT).fetch());
+            }catch (ParseException e){
+                Log.e("Parse", e.getMessage());
+            }
             assignment = updateAssignmentWithDetailsFromStudent(parseObject, assignment);
             listOfAssignments.add(assignment);
         }

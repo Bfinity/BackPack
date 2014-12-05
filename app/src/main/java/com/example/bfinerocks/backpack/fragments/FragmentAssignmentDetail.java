@@ -51,22 +51,22 @@ public class FragmentAssignmentDetail extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        currentUser = new ParseUserObject();
-        parseAssignmentObject = new ParseAssignmentObject();
-        studentAssignment = new ParseStudentAssignmentObject();
-        listOfResponses = new ArrayList<Assignment>();
-        listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
+
+
+
+
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
-
-
-
+        parseAssignmentObject = new ParseAssignmentObject();
+        studentAssignment = new ParseStudentAssignmentObject();
+        currentUser = new ParseUserObject();
+        listOfResponses = new ArrayList<Assignment>();
         assignment = getArguments().getParcelable("assignment");
 
-        if(currentUser.getUserType().equalsIgnoreCase("student")){
+        if(currentUser.getUserType().equalsIgnoreCase("Student")){
             Assignment studentAssignmentDetail = studentAssignment.queryStudentAssignmentObject(assignment);
             assignment = studentAssignmentDetail;
         }
@@ -80,6 +80,8 @@ public class FragmentAssignmentDetail extends Fragment {
         assignmentNotes = (EditText) rootView.findViewById(R.id.assignment_notes);
         if(currentUser.getUserType().equalsIgnoreCase("teacher")){
             saveChanges.setVisibility(View.GONE);
+            assignmentStateBox.setVisibility(View.GONE);
+            assignmentNotes.setVisibility(View.GONE);
         }
         saveChanges.setOnClickListener(new OnClickListener() {
             @Override
@@ -90,7 +92,7 @@ public class FragmentAssignmentDetail extends Fragment {
                 try {
                     assignment.setAssignmentNotes(assignmentNotes.getText().toString());
                     ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignment);
-                    
+
                     studentAssignment.updateStudentAssignment(assignmentObject, assignment);
                 }catch (ParseException e){
                     Log.i("assignmentUpdate", e.getMessage());
@@ -103,20 +105,28 @@ public class FragmentAssignmentDetail extends Fragment {
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
         assignmentIsComplete = assignment.getAssignmentCompletionState();
-        if(assignmentIsComplete){
-  //          assignmentState.setText("Done");
-            assignmentStateBox.setChecked(true);
+        if(currentUser.getUserType().equalsIgnoreCase("Student")) {
+            if (assignmentIsComplete) {
+                //          assignmentState.setText("Done");
+                assignmentStateBox.setChecked(true);
+            } else {
+                //         assignmentState.setText("Not Done");
+                assignmentStateBox.setChecked(false);
+            }
+            assignmentNotes.setText(assignment.getAssignmentNotes());
         }
-        else{
-   //         assignmentState.setText("Not Done");
-            assignmentStateBox.setChecked(false);
+        if(currentUser.getUserType().equalsIgnoreCase("Teacher")) {
+            assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
+            responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
+            assignmentResponses.setAdapter(responseAdapter);
+            listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
+            responseAdapter.addAll(listOfResponses);
+            responseAdapter.notifyDataSetChanged();
         }
-        assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
-        responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
-        responseAdapter.addAll(listOfResponses);
-        assignmentResponses.setAdapter(responseAdapter);
 
         return rootView;
     }
+
+
 
 }

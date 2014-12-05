@@ -24,7 +24,10 @@ import com.parse.ParseException;
 public class SignUpFragment extends Fragment implements OnItemSelectedListener {
     private EditText edtUserName;
     private EditText edtUserPassword;
+    private EditText edtUserFullName;
+    private EditText edtUserEmail;
     private String userType;
+
 
 
 
@@ -34,6 +37,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
         View rootView = inflater.inflate(R.layout.fragment_sign_up, container, false);
             edtUserName = (EditText) rootView.findViewById(R.id.sign_up_user_name);
             edtUserPassword = (EditText) rootView.findViewById(R.id.sign_up_password);
+            edtUserFullName = (EditText) rootView.findViewById(R.id.enter_full_name);
+            edtUserEmail = (EditText) rootView.findViewById(R.id.enter_email_address);
             Button btnFinished = (Button) rootView.findViewById(R.id.btn_done);
             Spinner userTypeSelector = (Spinner) rootView.findViewById(R.id.spnr_user_type);
             ArrayAdapter<CharSequence> userTypeAdapter = ArrayAdapter.createFromResource(getActivity(), R.array.spinner_user_type_values,
@@ -47,7 +52,8 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                     ParseUserObject user = new ParseUserObject();
                     Boolean signUpSuccess = true;
                     try {
-                        user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType);
+                        user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType,
+                             edtUserFullName.getText().toString(), edtUserEmail.getText().toString()   );
                     }catch(ParseException e){
                         Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ e.getMessage().toUpperCase(), Toast.LENGTH_SHORT).show();
                         signUpSuccess = false;

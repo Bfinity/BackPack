@@ -21,7 +21,7 @@ public class StudentDetailFragment extends Fragment {
     private TextView studentEmail;
     private ListView listOfStudentAssignments;
     private ParseStudentAssignmentObject studentAssignmentObjects;
-    List
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {

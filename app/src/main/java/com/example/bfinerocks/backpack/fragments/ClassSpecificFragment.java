@@ -22,6 +22,7 @@ import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
+import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,6 +59,7 @@ public class ClassSpecificFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
         studentAssignment = new ParseStudentAssignmentObject();
         Classroom classRoom = getArguments().getParcelable("class");
+
         classroomDetail = classRoom;
         listOfAssignments = new ArrayList<Assignment>();
         assignmentList = (ListView) rootView.findViewById(R.id.assignment_list_view);
@@ -126,15 +128,29 @@ public class ClassSpecificFragment extends Fragment {
     }
 
     public void updateAssignmentListView(){
+        assignmentListViewAdapter.clear();
         listOfAssignments = parseAssignmentObject.getListOfAssignments();
         assignmentListViewAdapter.addAll(listOfAssignments);
         assignmentListViewAdapter.notifyDataSetChanged();
+
+        parseUserObject = new ParseUserObject();
+        if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
+            List<ParseObject> tempList = studentAssignment.getListOfStudentAssignmentObjects();
+            listOfAssignments = studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
+            assignmentListViewAdapter.addAll(listOfAssignments);
+            assignmentListViewAdapter.notifyDataSetChanged();
+        }
+
+
+
 
     }
 
     public void updateViewForStudent(){
         parseUserObject = new ParseUserObject();
+   //     studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
+            studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
             addToMyClasses.setVisibility(View.VISIBLE);
             addToMyClasses.setOnClickListener(new OnClickListener() {
                 @Override
@@ -142,7 +158,7 @@ public class ClassSpecificFragment extends Fragment {
                 parseClassSection = new ParseClassSectionObject();
                     try {
                         parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
-                        studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
+                  //      studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
                     }catch(ParseException e){
                         Log.i("addToList", e.getMessage());
                     }
