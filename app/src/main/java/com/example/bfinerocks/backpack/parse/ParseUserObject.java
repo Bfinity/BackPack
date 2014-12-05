@@ -148,6 +148,7 @@ public class ParseUserObject {
         ParseUser parseUser = new ParseUser();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
         query.whereEqualTo(USER_FULL_NAME, userModel.getUserFullName());
+        query.whereEqualTo(USER_TYPE_KEY, userModel.getUserType());
         query.whereEqualTo(parseUser.getEmail(), userModel.getUserEmail());
         setUserArrayList(query.find());
     }

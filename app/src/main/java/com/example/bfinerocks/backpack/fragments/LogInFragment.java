@@ -58,6 +58,7 @@ public class LogInFragment extends Fragment implements OnClickListener{
                 if(logInSuccessful) {
                     getFragmentManager().beginTransaction()
                             .replace(R.id.container, new ClassListFragment())
+                            .addToBackStack("classList")
                             .commit();
                 }
 
