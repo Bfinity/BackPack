@@ -52,10 +52,10 @@ public class ParseClassSectionObject {
 
     public void findClassroomOnParse(Classroom classroom) throws ParseException{
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
-        if(!classroom.getClassSectionName().equalsIgnoreCase(null)) {
+        if(classroom.getClassSectionName() != null) {
             query.whereEqualTo(CLASSROOM_TITLE_KEY, classroom.getClassSectionName());
         }
-        if(!classroom.getClassSectionSubject().equalsIgnoreCase(null)) {
+        if(classroom.getClassSectionSubject() != null) {
             query.whereEqualTo(CLASSROOM_SUBJECT_KEY, classroom.getClassSectionSubject());
         }
         if(classroom.getClassSectionGradeLevel() != 0){
@@ -104,7 +104,7 @@ public class ParseClassSectionObject {
             });*/
         }
         else if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
-            ParseRelation relation = parseUserObject.getCurrentUser().getRelation("classrooms");
+            ParseRelation relation = parseUserObject.getCurrentUser().getRelation(CLASSROOM_RELATION_KEY);
             ParseQuery relationQuery = relation.getQuery();
             addClasses(relationQuery.find());
 /*            relationQuery.findInBackground(new FindCallback() {
@@ -172,6 +172,20 @@ public class ParseClassSectionObject {
         ParseRelation<ParseObject> relation = currentUser.getRelation("classrooms");
         relation.add(getQueriedClassroom());
         currentUser.save();
+    }
+
+    public boolean isThereAClassStudentRelation(Classroom classroom){
+        Boolean classIsRelated = false;
+        ParseRelation relation = ParseUser.getCurrentUser().getRelation(CLASSROOM_RELATION_KEY);
+        ParseQuery relationQuery = relation.getQuery();
+        try {
+          if(relationQuery.count() > 0){
+              classIsRelated = true;
+          }
+        }catch(ParseException e){
+
+        }
+       return classIsRelated;
     }
 
 
