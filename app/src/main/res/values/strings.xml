@@ -6,11 +6,12 @@
     <string name="action_settings">Settings</string>
     <string name="user_name_request">Enter Your User Name</string>
     <string name="password_request">Enter Your Password</string>
-    <string name="user_type_request">I am a:</string>
-    <string name="done">Finished</string>
+    <string name="user_type_request">Select User Type</string>
+    <string name="done">Log In</string>
     <string name="title_activity_home_page">HomePageActivity</string>
     <string name="class_list">My Classes</string>
     <string name="add_class">Add New Class</string>
+    <string name="search_class">Search New Class</string>
     <string name="lesson_plan_list">My Lesson Plans</string>
     <string name="add_lesson_plan">Add New Lesson Plan</string>
     <string name="add_assignment">Add New Assignment</string>
@@ -23,5 +24,19 @@
     <string name="enter_assignment_due_date">Date Due</string>
     <string name="enter_assignment_details">Enter the assignment instructions</string>
     <string name="btn_create_assignment">Create</string>
+    <string name="btn_search_class">Search</string>
+    <string name="search_results">Search Results</string>
+    <string name="btn_add_class">Add To My Classes</string>
+    <string name="btn_save_changes">Save Changes</string>
+    <string name="student_list">Students Enrolled</string>
+    <string name="view_students">View Students Enrolled In Class</string>
+    <string name="signUp">Click Here To Sign Up!</string>
+    <string name="enter_full_name">Enter Your Full Name</string>
+    <string name="enter_email">Enter Your Email Address</string>
+    <string name="notes">Includes Notes</string>
+    <string name="class_subject_title">Class Subject:</string>
+    <string name="class_grade_level_title">Grade Level:</string>
+    <string name="add_notes">Enter Notes About This Assignment</string>
+    <string name="chkbx_complete">Completed</string>
 
 </resources>

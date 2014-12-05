@@ -4,7 +4,6 @@ import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -23,24 +22,20 @@ public class ParseAssignmentObject {
     public static String ASSIGNMENT_DIRECTIONS_KEY = "assignmentDetails";
     public static String ASSIGNMENT_COMPLETION_STATE_KEY = "completionState";
     public static String ASSIGNMENT_CLASSROOM_ASSOCIATION = "classroom";
-    private List<Assignment> listOfAssignments;
-    private Assignment assignmentToAdd;
-    private Classroom classToAssociate;
+    private List<Assignment> listOfAssignments = null;
+    private List<ParseObject> listOfParseAssignmentObjects;
     private ParseClassSectionObject parseClassObject = new ParseClassSectionObject();
 
 
-    public void addNewAssignment(Assignment assignmentToAdd, Classroom classToAssociate){
-        this.assignmentToAdd = assignmentToAdd;
+    public void createNewAssignmentToPost(Assignment assignmentToAdd, Classroom classToAssociate){
         ParseObject parseAssignment = new ParseObject(ASSIGNMENT_KEY);
         parseAssignment.put(ASSIGNMENT_TITLE_KEY, assignmentToAdd.getAssignmentTitle());
         parseAssignment.put(ASSIGNMENT_ASSIGN_DATE_KEY, assignmentToAdd.getAssignmentAssignedDate());
         parseAssignment.put(ASSIGNMENT_DUE_DATE_KEY, assignmentToAdd.getAssignmentDueDate());
         parseAssignment.put(ASSIGNMENT_DIRECTIONS_KEY, assignmentToAdd.getAssignmentDescription());
-        parseAssignment.put(ASSIGNMENT_COMPLETION_STATE_KEY, assignmentToAdd.getAssignmentCompletionState());
 
-        this.classToAssociate = classToAssociate;
         try {
-            parseClassObject.getQueriedClassroomByClassName(classToAssociate);
+            parseClassObject.queryClassroomByClassName(classToAssociate);
         }
         catch (com.parse.ParseException e) {
             e.printStackTrace();
@@ -51,35 +46,55 @@ public class ParseAssignmentObject {
     }
 
     public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
-     this.classToAssociate = classroom;
        try{
-           parseClassObject.getQueriedClassroomByClassName(classroom);
+           parseClassObject.queryClassroomByClassName(classroom);
        }catch (ParseException e){
            e.printStackTrace();
        }
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
-        query.findInBackground(new FindCallback<ParseObject>() {
+        try{
+            setListOfParseAssignmentObjects(query.find());
+            setListOfAssignments(query.find());
+        }catch(ParseException e){
+            Log.e("ParseAssignmentParseExeption", e.getMessage());
+        }
+/*        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null){
                     Log.i("assignmentList", "Success");
-                setListOfAssignments(parseObjects);}
+                    setListOfAssignments(parseObjects);
+                    setListOfParseAssignmentObjects(parseObjects);
+                }
                 else{
                     Log.i("assignmentList", e.getMessage());
                 }
             }
-        });
+        });*/
 
+    }
+
+    public Assignment convertParseAssignmentObjectToAssignmentModel(ParseObject assignmentObject){
+        Assignment convertedAssignment = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
+                assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
+                assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+        return convertedAssignment;
+    }
+
+    public void setListOfParseAssignmentObjects(List<ParseObject> listOfParseAssignmentObjects){
+        this.listOfParseAssignmentObjects = listOfParseAssignmentObjects;
+    }
+
+    public List<ParseObject> getListOfParseAssignmentObjects(){
+        return listOfParseAssignmentObjects;
     }
 
     public void setListOfAssignments(List<ParseObject> parseObjectsFound){
         listOfAssignments = new ArrayList<Assignment>();
         for(int i = 0; i < parseObjectsFound.size(); i++){
             ParseObject assignmentObject = parseObjectsFound.get(i);
-            Assignment assignmentToAddToList = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
-                    assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
-                    assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+            Assignment assignmentToAddToList = convertParseAssignmentObjectToAssignmentModel(assignmentObject);
             listOfAssignments.add(assignmentToAddToList);
         }
     }
@@ -87,6 +102,19 @@ public class ParseAssignmentObject {
     public List<Assignment> getListOfAssignments(){
         return listOfAssignments;
     }
+
+    public void updateAssignment(Assignment assignment) throws ParseException{
+        ParseObject assignmentToUpdate = queryAssignmentBasedOnName(assignment);
+        assignmentToUpdate.put(ASSIGNMENT_COMPLETION_STATE_KEY, assignment.getAssignmentCompletionState());
+        assignmentToUpdate.saveInBackground();
+    }
+
+    public ParseObject queryAssignmentBasedOnName(Assignment assignmentToFind) throws ParseException{
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
+        query.whereEqualTo(ASSIGNMENT_DIRECTIONS_KEY, assignmentToFind.getAssignmentDescription());
+        return query.getFirst();
+    }
+
 
 
 

@@ -16,6 +16,8 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +25,25 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassListFragment extends Fragment{
+public class ClassListFragment extends Fragment {
     TextView classListLabel;
     ListView classListView;
     TextView addClassText;
     List<Classroom> myClassList;
     ClassroomListViewAdapter classroomListAdapter;
+    ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
 
 
     @Override
-    public void onResume() {
+    public void onResume(){
         super.onResume();
         classRooms = new ParseClassSectionObject();
-        classRooms.updateListOfClassRooms();
+        try {
+            classRooms.updateListOfClassRooms();
+        }catch (ParseException e){
+
+        }
 
     }
 
@@ -45,13 +52,18 @@ public class ClassListFragment extends Fragment{
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_classroom_list, container, false);
 
+            parseUserObject = new ParseUserObject();
+
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
+
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
+            changeViewForStudentUser();
+
+
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
-            classListLabel = (TextView) rootView.findViewById(R.id.class_label);
-
+            classListLabel = (TextView) rootView.findViewById(R.id.class_list_label);
             classListLabel.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -73,6 +85,16 @@ public class ClassListFragment extends Fragment{
 
                 }
             });
+            addClassText.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    getFragmentManager().beginTransaction()
+                            .replace(R.id.container, new CreateNewClassroom())
+                            .addToBackStack("createNewClass")
+                            .commit();
+                }
+            });
+
 
             return rootView;
         }
@@ -89,6 +111,15 @@ public class ClassListFragment extends Fragment{
             classroomListAdapter.addAll(myClassList);
             classroomListAdapter.notifyDataSetChanged();
         }
+
+    public void changeViewForStudentUser(){
+        if(parseUserObject.getUserType().equals("Student")){
+            addClassText.setText(R.string.search_class);
+        }
+        else {
+            addClassText.setText(R.string.add_class);
+        }
+    }
 
 
 }

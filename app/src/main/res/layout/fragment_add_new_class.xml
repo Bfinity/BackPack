@@ -19,6 +19,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
+
     <TextView
         android:text="@string/enter_class_grade"
         android:textSize="@dimen/text_view_size"
@@ -38,7 +39,6 @@
 
     <Button
         android:id="@+id/btn_create_class"
-        android:text="@string/btn_create_class"
         android:layout_below="@id/enter_class_grade"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>

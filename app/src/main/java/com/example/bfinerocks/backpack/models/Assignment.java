@@ -13,14 +13,15 @@ public class Assignment implements android.os.Parcelable {
     private String assignmentDueDate;
     private String assignmentDescription; // Possibly use instead of assignment task objects
     private Boolean assignmentCompletionState; // Possibly use instead of assignment task objects
+    private String assignmentNotes;
     private ArrayList<AssignmentTask> assignmentTasks;
+    private String studentName;
 
     public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription){
         this.assignmentTitle = assignmentTitle;
         this.assignmentAssignedDate = assignmentAssignedDate;
         this.assignmentDueDate = assignmentDueDate;
         this.assignmentDescription = assignmentDescription;
-        this.assignmentCompletionState = false;
     }
 
     public String getAssignmentTitle(){
@@ -71,6 +72,21 @@ public class Assignment implements android.os.Parcelable {
         return assignmentCompletionState;
     }
 
+    public void setAssignmentNotes(String assignmentNotes){
+        this.assignmentNotes = assignmentNotes;
+    }
+
+    public String getAssignmentNotes(){
+        return assignmentNotes;
+    }
+
+    public String getStudentName() {
+        return studentName;
+    }
+
+    public void setStudentName(String studentName) {
+        this.studentName = studentName;
+    }
 
     @Override
     public int describeContents() {
@@ -84,7 +100,9 @@ public class Assignment implements android.os.Parcelable {
         dest.writeString(this.assignmentDueDate);
         dest.writeString(this.assignmentDescription);
         dest.writeValue(this.assignmentCompletionState);
+        dest.writeString(this.assignmentNotes);
         dest.writeSerializable(this.assignmentTasks);
+        dest.writeString(this.studentName);
     }
 
     private Assignment(Parcel in) {
@@ -93,7 +111,9 @@ public class Assignment implements android.os.Parcelable {
         this.assignmentDueDate = in.readString();
         this.assignmentDescription = in.readString();
         this.assignmentCompletionState = (Boolean) in.readValue(Boolean.class.getClassLoader());
+        this.assignmentNotes = in.readString();
         this.assignmentTasks = (ArrayList<AssignmentTask>) in.readSerializable();
+        this.studentName = in.readString();
     }
 
     public static final Creator<Assignment> CREATOR = new Creator<Assignment>() {

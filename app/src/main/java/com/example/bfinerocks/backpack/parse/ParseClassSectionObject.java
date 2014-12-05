@@ -3,10 +3,10 @@ package com.example.bfinerocks.backpack.parse;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -31,7 +31,7 @@ public class ParseClassSectionObject {
     private String classroomSubject;
     private int classroomGradeLevel;
 
-    public void addNewClassroom(Classroom classroom){
+    public void createNewClassroom(Classroom classroom){
         ParseObject parseClassroomObject = new ParseObject(CLASSROOM_KEY);
         getClassroomInformation(classroom);
         parseClassroomObject.put(CLASSROOM_TITLE_KEY, classroomTitle);
@@ -49,28 +49,77 @@ public class ParseClassSectionObject {
 
     }
 
+
+    public void findClassroomOnParse(Classroom classroom) throws ParseException{
+        ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
+        if(!classroom.getClassSectionName().equalsIgnoreCase(null)) {
+            query.whereEqualTo(CLASSROOM_TITLE_KEY, classroom.getClassSectionName());
+        }
+        if(!classroom.getClassSectionSubject().equalsIgnoreCase(null)) {
+            query.whereEqualTo(CLASSROOM_SUBJECT_KEY, classroom.getClassSectionSubject());
+        }
+        if(classroom.getClassSectionGradeLevel() != 0){
+            query.whereEqualTo(CLASSROOM_GRADE_KEY, classroom.getClassSectionGradeLevel());
+        }
+/*        query.findInBackground(new FindCallback<ParseObject>() {
+            @Override
+            public void done(List<ParseObject> parseObjects, ParseException e) {
+                if(e == null) {
+                    Log.i("queryClassrooms", "Success");
+                    addClasses(parseObjects);
+                }
+                else{
+                    Log.i("queryClassrooms", e.getMessage());
+                }
+            }
+        });*/
+
+       addClasses(query.find());
+    }
+
+
     public void getClassroomInformation(Classroom classroom){
         classroomTitle = classroom.getClassSectionName();
         classroomSubject = classroom.getClassSectionSubject();
         classroomGradeLevel = classroom.getClassSectionGradeLevel();
     }
 
-    public void updateListOfClassRooms(){
+    public void updateListOfClassRooms() throws ParseException{
 
         ParseUser currentUser = parseUserObject.getCurrentUser();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
-        query.whereEqualTo("createdBy", currentUser);
-        query.findInBackground(new FindCallback<ParseObject>() {
-            @Override
-            public void done(List<ParseObject> list, ParseException e) {
-                if(e == null) {
-                    Log.i("classList", "success");
-                    addClasses(list);
-                }else{
-                    Log.i("classList", e.getMessage());
+        if(parseUserObject.getUserType().equalsIgnoreCase("Teacher")) {
+            addClasses(query.find());
+/*            query.whereEqualTo("createdBy", currentUser);
+            query.findInBackground(new FindCallback<ParseObject>() {
+                @Override
+                public void done(List<ParseObject> list, ParseException e) {
+                    if (e == null) {
+                        Log.i("classList", "success");
+                        addClasses(list);
+                    } else {
+                        Log.i("classList", e.getMessage());
+                    }
                 }
-            }
-        });
+            });*/
+        }
+        else if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
+            ParseRelation relation = parseUserObject.getCurrentUser().getRelation("classrooms");
+            ParseQuery relationQuery = relation.getQuery();
+            addClasses(relationQuery.find());
+/*            relationQuery.findInBackground(new FindCallback() {
+                @Override
+                public void done(List list, ParseException e) {
+                    if(e == null){
+                        Log.i("classList", "Success");
+                        addClasses(list);
+                    }
+                    else{
+                        Log.i("classList", e.getMessage());
+                    }
+                }
+            });*/
+        }
 
     }
 
@@ -90,7 +139,7 @@ public class ParseClassSectionObject {
         return myClasses;
     }
 
-    public void getQueriedClassroomByClassName(Classroom classroomQueried) throws ParseException {
+    public void queryClassroomByClassName(Classroom classroomQueried) throws ParseException {
         ParseObject queriedClassroom = null;
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         query.whereEqualTo(CLASSROOM_TITLE_KEY, classroomQueried.getClassSectionName());
@@ -116,6 +165,13 @@ public class ParseClassSectionObject {
 
     public ParseObject getQueriedClassroom(){
         return parseClassroomObject;
+    }
+
+    public void addStudentToClassRelation(ParseUser currentUser, Classroom classroom) throws ParseException{
+        queryClassroomByClassName(classroom);
+        ParseRelation<ParseObject> relation = currentUser.getRelation("classrooms");
+        relation.add(getQueriedClassroom());
+        currentUser.save();
     }
 
 

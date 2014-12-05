@@ -14,6 +14,10 @@ import android.widget.NumberPicker.OnValueChangeListener;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseException;
+
+import java.util.ArrayList;
 
 /**
  * Created by BFineRocks on 11/26/14.
@@ -26,11 +30,13 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
     private Button createClassButton;
     private int gradeLevel;
     ParseClassSectionObject classParseObject;
+    ParseUserObject currentUser;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_add_new_class, container, false);
+        currentUser = new ParseUserObject();
         enterClassName = (EditText) rootView.findViewById(R.id.enter_class_title);
         enterClassSubject = (EditText) rootView.findViewById(R.id.enter_class_subject);
         enterClassGrade = (NumberPicker) rootView.findViewById(R.id.enter_class_grade);
@@ -46,8 +52,32 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
                 classParseObject = new ParseClassSectionObject();
-                classParseObject.addNewClassroom(classroom);
-               getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
+                if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
+                    classParseObject.createNewClassroom(classroom);
+                    getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
+                }
+                else if(currentUser.getUserType().equalsIgnoreCase("student")){
+
+                    try {
+                    classParseObject.findClassroomOnParse(classroom);
+
+                        Thread.sleep(1000);
+                    }catch (InterruptedException e){
+
+                    }
+                    catch (ParseException e){
+
+                    }
+                    ArrayList<Classroom> foundClasses = new ArrayList<Classroom>();
+                    foundClasses = (ArrayList<Classroom>) classParseObject.getArrayListOfClassrooms();
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
+                    FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
+                    classSearchFragment.setArguments(bundle);
+
+                    getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
+                }
+
             }
         });
 
