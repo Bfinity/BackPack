@@ -59,7 +59,9 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                         signUpSuccess = false;
                     }
                     if(signUpSuccess) {
-                        getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
+                        getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
+                                .addToBackStack("classList")
+                                .commit();
                     }
                 }
             });
