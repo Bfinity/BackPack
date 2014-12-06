@@ -101,22 +101,10 @@ public class ParseUserObject {
         });
     }
 
-    public void updateListOfStudentUsersForOnParentUser(String userType){
-        ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
-        parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
-        parseUsers.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> parseUsers, ParseException e) {
-                if(e == null) {
-                    Log.i("parseUserArray", "Succes");
-                    setUserArrayList(parseUsers);
-                }
-                else{
-                    Log.i("parseUserArray", e.getMessage());
-                }
-            }
-        });
-
+    public void updateListOfStudentUsersForOnParentUser(ParseUser parentUser) throws ParseException{
+        ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
+        ParseQuery<ParseUser> query = relation.getQuery();
+        setUserArrayList(query.find());
     }
 
     public void setUserArrayList(List<ParseUser> list){
