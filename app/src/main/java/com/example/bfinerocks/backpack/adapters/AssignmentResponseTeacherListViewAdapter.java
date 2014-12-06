@@ -15,11 +15,11 @@ import com.example.bfinerocks.backpack.models.Assignment;
 import java.util.List;
 
 /**
- * Created by BFineRocks on 12/5/14.
+ * Created by BFineRocks on 12/4/14.
  */
-public class AssignmentResponseListViewAdapter extends ArrayAdapter<Assignment> {
+public class AssignmentResponseTeacherListViewAdapter extends ArrayAdapter<Assignment> {
 
-    public AssignmentResponseListViewAdapter(Context context, int resource, List<Assignment> objects) {
+    public AssignmentResponseTeacherListViewAdapter(Context context, int resource, List<Assignment> objects) {
         super(context, resource, objects);
     }
 
@@ -29,10 +29,10 @@ public class AssignmentResponseListViewAdapter extends ArrayAdapter<Assignment> 
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View assignmentResponse = inflater.inflate(R.layout.list_item_assignment_response, parent, false);
         Assignment assignment = getItem(position);
-        TextView assignmentName = (TextView) assignmentResponse.findViewById(R.id.assignment_response_assignment);
+        TextView studentName = (TextView) assignmentResponse.findViewById(R.id.assignment_response_studentName);
         CheckBox noteCheckBox = (CheckBox) assignmentResponse.findViewById(R.id.chkbx_assignment_notes);
 
-        assignmentName.setText(assignment.getAssignmentTitle());
+        studentName.setText(assignment.getStudentName());
         if(assignment.getAssignmentNotes() != null){
             noteCheckBox.setChecked(true);
         }
@@ -43,14 +43,5 @@ public class AssignmentResponseListViewAdapter extends ArrayAdapter<Assignment> 
 
         return assignmentResponse;
     }
-
-
 }
-
-
-
-
-
-
-
 

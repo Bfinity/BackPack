@@ -10,6 +10,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.NumberPicker;
 import android.widget.NumberPicker.OnValueChangeListener;
+import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class CreateNewClassroom extends Fragment implements OnValueChangeListener{
+public class NewClassroom extends Fragment implements OnValueChangeListener{
 
     private EditText enterClassName;
     private EditText enterClassSubject;
@@ -66,7 +67,7 @@ public class CreateNewClassroom extends Fragment implements OnValueChangeListene
 
                     }
                     catch (ParseException e){
-
+                        Toast.makeText(getActivity(), "Class Not Found", Toast.LENGTH_SHORT);
                     }
                     ArrayList<Classroom> foundClasses = new ArrayList<Classroom>();
                     foundClasses = (ArrayList<Classroom>) classParseObject.getArrayListOfClassrooms();

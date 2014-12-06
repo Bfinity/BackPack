@@ -39,8 +39,8 @@
     <string name="add_notes">Enter Notes About This Assignment</string>
     <string name="chkbx_complete">Completed</string>
     <string name="btn_done">Done</string>
-    <string name="hint_student_name">Enter the student's full name</string>
-    <string name="hint_student_email">Enter the student's email address</string>
+    <string name="hint_student_name">Enter the student\'s full name</string>
+    <string name="hint_student_email">Enter the student\'s email address</string>
     <string name="btn_add_student">Add Student</string>
     <string name="student_name">Student Name:</string>
     <string name="student_email">Student Email:</string>

@@ -9,6 +9,7 @@ import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -24,6 +25,7 @@ public class ParseUserObject {
     private Boolean loginResponse;
     public static final String USER_TYPE_KEY = "userType";
     public static final String USER_FULL_NAME = "fullName";
+    public static final String PARENT_RELATION = "studentsRelated";
     private ArrayList<ParseUser> userArrayList;
 
 
@@ -36,38 +38,13 @@ public class ParseUserObject {
         user.put(USER_FULL_NAME, fullName);
 
         user.signUp();
-/*
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Log.i("signUp", "Success");
-                    isLogInSuccessful(true);
-                }
-                else{
-                   Log.i("signUp", e.getMessage());
-                    isLogInSuccessful(false);
-                }
-            }
-        });*/
+
     }
 
     public void signInExistingUser(String userName, String password) throws ParseException{
 
         ParseUser.logIn(userName, password);
-/*        ParseUser.logInInBackground(userName, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if(parseUser != null){
-                    Log.i("signIn", "Success");
-                    isLogInSuccessful(true);
-                }
-                else{
-                    Log.i("signIn", e.getMessage());
-                    isLogInSuccessful(false);
-                }
-            }
-        });*/
+
     }
 
     public void isLogInSuccessful(Boolean logInResponse){
@@ -124,7 +101,7 @@ public class ParseUserObject {
         });
     }
 
-    public void updateListOfUsersBasedOnUserType(String userType){
+    public void updateListOfStudentUsersForOnParentUser(String userType){
         ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
         parseUsers.findInBackground(new FindCallback<ParseUser>() {
@@ -158,14 +135,37 @@ public class ParseUserObject {
         return userModel;
     }
 
-    public ParseUser searchForStudentUser(UserModel userModel) throws ParseException{
-        ParseUser parseUser = new ParseUser();
+    public ParseUser searchForStudentUser(String userFullName, String userEmail) throws ParseException{
+        ParseUser parseUserFound = new ParseUser();
         ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(USER_FULL_NAME, userModel.getUserFullName());
-        query.whereEqualTo(USER_TYPE_KEY, userModel.getUserType());
-        query.whereEqualTo(parseUser.getEmail(), userModel.getUserEmail());
-        return query.getFirst();
+        query.whereEqualTo(USER_FULL_NAME, userFullName);
+        setUserArrayList(query.find());
+        for(ParseUser parseUser: getUserArrayList()){
+            if(parseUser.getEmail().equals(userEmail)){
+                parseUserFound = parseUser;
+            }
+        }
+
+        return parseUserFound;
     }
+
+    public void addParentStudentRelationship(UserModel userModel) throws ParseException{
+        ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
+        relation.add(getUserByUID(userModel));
+        ParseUser.getCurrentUser().save();
+    }
+
+    public ParseUser getUserByUID(UserModel userModel){
+        ParseUser userFound = new ParseUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        try {
+           userFound = query.get(userModel.getUserObjectID());
+        }catch (ParseException e){
+
+        }
+        return userFound;
+    }
+
 
 
 

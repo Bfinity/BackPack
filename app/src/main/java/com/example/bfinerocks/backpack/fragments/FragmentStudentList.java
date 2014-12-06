@@ -83,4 +83,22 @@ public class FragmentStudentList extends Fragment {
 
         return rootView;
     }
+
+    public void updateDataForUser(ParseUserObject userObject){
+        switch (userObject.getUserTypeEnum()){
+            case TEACHER:
+                Classroom classroom = getArguments().getParcelable("class");
+                try {
+                    parseUserObject = new ParseUserObject();
+                    parseUserObject.updateListOfUsers("Student", classroom);
+                }catch (ParseException e) {
+                    Log.i("studentView", e.getMessage());
+                }
+                break;
+
+            case PARENT:
+
+                break;
+        }
+    }
 }

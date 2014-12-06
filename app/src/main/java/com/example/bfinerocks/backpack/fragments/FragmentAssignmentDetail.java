@@ -14,7 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
-import com.example.bfinerocks.backpack.adapters.AssignmentResponseListViewAdapter;
+import com.example.bfinerocks.backpack.adapters.AssignmentResponseTeacherListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
@@ -44,7 +44,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private ParseUserObject currentUser;
     private ParseAssignmentObject parseAssignmentObject;
     private ParseStudentAssignmentObject studentAssignment;
-    private AssignmentResponseListViewAdapter responseAdapter;
+    private AssignmentResponseTeacherListViewAdapter responseAdapter;
     private List<Assignment> listOfResponses;
 
 
@@ -117,7 +117,7 @@ public class FragmentAssignmentDetail extends Fragment {
         }
         if(currentUser.getUserType().equalsIgnoreCase("Teacher")) {
             assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
-            responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
+            responseAdapter = new AssignmentResponseTeacherListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
             assignmentResponses.setAdapter(responseAdapter);
             listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
             responseAdapter.addAll(listOfResponses);

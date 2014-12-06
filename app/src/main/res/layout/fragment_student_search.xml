@@ -6,6 +6,7 @@
 
     <EditText
         android:id="@+id/student_search_student_name"
+        android:hint="@string/hint_student_name"
         android:layout_margin="@dimen/text_margin"
         android:padding="@dimen/text_padding"
         android:layout_width="match_parent"
@@ -13,6 +14,7 @@
 
     <EditText
         android:id="@+id/student_search_student_email"
+        android:hint="@string/hint_student_email"
         android:layout_margin="@dimen/text_margin"
         android:padding="@dimen/text_padding"
         android:layout_width="match_parent"
@@ -20,6 +22,7 @@
 
     <Button
         android:id="@+id/btn_student_search"
+        android:text="@string/btn_search_class"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 
