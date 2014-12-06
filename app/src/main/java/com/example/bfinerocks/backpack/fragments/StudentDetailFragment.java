@@ -41,6 +41,8 @@ public class StudentDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_student_detail, container, false);
 
+        userObject = new ParseUserObject();
+        studentAssignmentObjects = new ParseStudentAssignmentObject();
         studentName = (TextView) rootView.findViewById(R.id.student_name);
         studentName.setOnClickListener(new OnClickListener() {
             @Override
@@ -53,6 +55,7 @@ public class StudentDetailFragment extends Fragment {
         listOfStudentAssignments = (ListView) rootView.findViewById(R.id.student_assignment_list);
         listofAssignments = new ArrayList<Assignment>();
         responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listofAssignments);
+        listOfStudentAssignments.setAdapter(responseAdapter);
         userModel = getArguments().getParcelable("UserModel");
 
         studentName.setText(userModel.getUserFullName());
@@ -61,7 +64,7 @@ public class StudentDetailFragment extends Fragment {
         addStudentButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                userObject = new ParseUserObject();
+       //         userObject = new ParseUserObject();
                 try {
                     userObject.addParentStudentRelationship(userModel);
                 }catch (ParseException e){
@@ -76,13 +79,8 @@ public class StudentDetailFragment extends Fragment {
     }
 
     public void updateView(){
-        listOfStudentAssignments.setAdapter(responseAdapter);
-        try {
-            listofAssignments = studentAssignmentObjects.createListOfStudentAssignmentObjectsForDisplay(
+        listofAssignments = studentAssignmentObjects.createListOfStudentAssignmentObjectsForDisplay(
                     userObject.getUserByUID(userModel));
-        }catch (NullPointerException e){
-
-        }
         responseAdapter.addAll(listofAssignments);
         responseAdapter.notifyDataSetChanged();
     }
