@@ -32,6 +32,7 @@ public class FragmentStudentList extends Fragment {
     List<ParseUser> listOfStudentUsers;
     ParseUserObject parseUserObject;
     TextView studentListHeader;
+    TextView linkToSearchStudent;
 
     @Override
     public void onResume() {
@@ -49,6 +50,7 @@ public class FragmentStudentList extends Fragment {
         studentListView = (ListView) rootView.findViewById(R.id.student_list);
         studentListAdapter = new StudentListViewAdapter(getActivity(), R.layout.list_item_student, listOfStudentUsers);
         studentListHeader = (TextView) rootView.findViewById(R.id.student_list_header);
+        linkToSearchStudent = (TextView) rootView.findViewById(R.id.link_search_students);
         studentListView.setAdapter(studentListAdapter);
         studentListAdapter.addAll(listOfStudentUsers);
 
@@ -74,7 +76,10 @@ public class FragmentStudentList extends Fragment {
                         .addToBackStack("StudentDetail")
                         .commit();
             }
+
         });
+
+        updateViewForUser(parseUserObject);
 
         return rootView;
     }
@@ -96,6 +101,31 @@ public class FragmentStudentList extends Fragment {
                 }catch (ParseException e){
                     Log.i("studentView", e.getMessage());
                 }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void updateViewForUser(ParseUserObject parseUserObject){
+        switch (parseUserObject.getUserTypeEnum()){
+            case TEACHER:
+                linkToSearchStudent.setVisibility(View.GONE);
+
+                break;
+
+            case PARENT:
+                linkToSearchStudent.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new FragmentStudentSearch())
+                                .addToBackStack("studentSearch")
+                                .commit();
+                    }
+                });
 
                 break;
         }

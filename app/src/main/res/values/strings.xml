@@ -47,5 +47,6 @@
     <string name="teacher_type">Teacher</string>
     <string name="student_type">Student</string>
     <string name="parent_type">Parent</string>
+    <string name="link_search_student">Search For Students</string>
 
 </resources>
