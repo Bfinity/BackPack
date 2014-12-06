@@ -6,6 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -24,7 +26,7 @@ import java.util.ArrayList;
 /**
  * Created by BFineRocks on 12/3/14.
  */
-public class StudentDetailFragment extends Fragment {
+public class StudentDetailFragment extends Fragment{
 
     private TextView studentName;
     private TextView studentEmail;
@@ -73,6 +75,23 @@ public class StudentDetailFragment extends Fragment {
             }
         });
 
+        listOfStudentAssignments.setOnItemClickListener(new OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
+                Bundle bundle = new Bundle();
+                bundle.putParcelable("assignment", assignmentSelected);
+                FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
+                fragmentAssignmentDetail.setArguments(bundle);
+                getFragmentManager().beginTransaction()
+                        .replace(R.id.container, fragmentAssignmentDetail)
+                        .addToBackStack("assignmentDetail")
+                        .commit();
+
+            }
+        });
+
+
 
 
         return rootView;
@@ -84,4 +103,5 @@ public class StudentDetailFragment extends Fragment {
         responseAdapter.addAll(listofAssignments);
         responseAdapter.notifyDataSetChanged();
     }
+
 }
