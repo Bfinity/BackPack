@@ -36,13 +36,8 @@ public class FragmentStudentList extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        Classroom classroom = getArguments().getParcelable("class");
-        try {
-            parseUserObject = new ParseUserObject();
-            parseUserObject.updateListOfUsers("Student", classroom);
-        }catch (ParseException e) {
-            Log.i("studentView", e.getMessage());
-        }
+        parseUserObject = new ParseUserObject();
+        updateDataForUser(parseUserObject);
     }
 
     @Override
@@ -84,12 +79,11 @@ public class FragmentStudentList extends Fragment {
         return rootView;
     }
 
-    public void updateDataForUser(ParseUserObject userObject){
-        switch (userObject.getUserTypeEnum()){
+    public void updateDataForUser(ParseUserObject parseUserObject){
+        switch (parseUserObject.getUserTypeEnum()){
             case TEACHER:
                 Classroom classroom = getArguments().getParcelable("class");
                 try {
-                    parseUserObject = new ParseUserObject();
                     parseUserObject.updateListOfUsers("Student", classroom);
                 }catch (ParseException e) {
                     Log.i("studentView", e.getMessage());
@@ -97,6 +91,11 @@ public class FragmentStudentList extends Fragment {
                 break;
 
             case PARENT:
+                try {
+                    parseUserObject.updateListOfStudentUsersForOnParentUser();
+                }catch (ParseException e){
+                    Log.i("studentView", e.getMessage());
+                }
 
                 break;
         }

@@ -1,11 +1,8 @@
 package com.example.bfinerocks.backpack.parse;
 
-import android.util.Log;
-
 import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.UserModel;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -85,9 +82,9 @@ public class ParseUserObject {
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
         parseUsers.whereEqualTo("classrooms", parseClassObject);
 
-      //  setUserArrayList(parseUsers.find());
+        setUserArrayList(parseUsers.find());
 
-        parseUsers.findInBackground(new FindCallback<ParseUser>() {
+/*        parseUsers.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if(e == null) {
@@ -98,10 +95,10 @@ public class ParseUserObject {
                     Log.i("parseUserArray", e.getMessage());
                 }
             }
-        });
+        });*/
     }
 
-    public void updateListOfStudentUsersForOnParentUser(ParseUser parentUser) throws ParseException{
+    public void updateListOfStudentUsersForOnParentUser() throws ParseException{
         ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
         ParseQuery<ParseUser> query = relation.getQuery();
         setUserArrayList(query.find());
