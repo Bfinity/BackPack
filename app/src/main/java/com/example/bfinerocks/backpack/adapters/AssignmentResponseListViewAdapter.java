@@ -36,7 +36,7 @@ public class AssignmentResponseListViewAdapter extends ArrayAdapter<Assignment> 
         if(assignment.getAssignmentNotes() != null){
             noteCheckBox.setChecked(true);
         }
-
+        noteCheckBox.setEnabled(false);
         if(assignment.getAssignmentCompletionState()){
             assignmentResponse.setBackgroundColor(getContext().getResources().getColor( R.color.green));
         }

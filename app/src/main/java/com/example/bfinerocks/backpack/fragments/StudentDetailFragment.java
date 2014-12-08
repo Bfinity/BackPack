@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -78,6 +79,7 @@ public class StudentDetailFragment extends Fragment{
         listOfStudentAssignments.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.i("list", "Clicked");
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
@@ -87,11 +89,9 @@ public class StudentDetailFragment extends Fragment{
                         .replace(R.id.container, fragmentAssignmentDetail)
                         .addToBackStack("assignmentDetail")
                         .commit();
-
             }
+
         });
-
-
 
 
         return rootView;
