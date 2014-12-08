@@ -38,5 +38,15 @@
     <string name="class_grade_level_title">Grade Level:</string>
     <string name="add_notes">Enter Notes About This Assignment</string>
     <string name="chkbx_complete">Completed</string>
+    <string name="btn_done">Done</string>
+    <string name="hint_student_name">Enter the student\'s full name</string>
+    <string name="hint_student_email">Enter the student\'s email address</string>
+    <string name="btn_add_student">Add Student</string>
+    <string name="student_name">Student Name:</string>
+    <string name="student_email">Student Email:</string>
+    <string name="teacher_type">Teacher</string>
+    <string name="student_type">Student</string>
+    <string name="parent_type">Parent</string>
+    <string name="link_search_student">Search For Students</string>
 
 </resources>

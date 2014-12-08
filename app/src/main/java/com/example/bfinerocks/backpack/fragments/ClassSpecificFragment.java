@@ -151,22 +151,24 @@ public class ClassSpecificFragment extends Fragment {
    //     studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
             studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-            addToMyClasses.setVisibility(View.VISIBLE);
-            addToMyClasses.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                parseClassSection = new ParseClassSectionObject();
-                    try {
-                        parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
-                  //      studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-                    }catch(ParseException e){
-                        Log.i("addToList", e.getMessage());
+
+                addToMyClasses.setVisibility(View.VISIBLE);
+                addToMyClasses.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        parseClassSection = new ParseClassSectionObject();
+                        try {
+                            parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
+                            //      studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
+                        } catch (ParseException e) {
+                            Log.i("addToList", e.getMessage());
+                        }
+                        getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
+                                .addToBackStack("myClassList")
+                                .commit();
                     }
-                    getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
-                            .addToBackStack("myClassList")
-                            .commit();
-                }
-            });
+                });
+
             addAssignment.setVisibility(View.GONE);
             viewStudentsInClass.setVisibility(View.GONE);
         }

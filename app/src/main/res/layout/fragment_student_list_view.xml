@@ -20,4 +20,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></ListView>
 
+    <TextView
+        android:id="@+id/link_search_students"
+        android:text="@string/link_search_student"
+        android:textSize="@dimen/text_view_size"
+        android:layout_gravity="center_horizontal"
+        android:layout_margin="@dimen/text_margin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
 </LinearLayout>

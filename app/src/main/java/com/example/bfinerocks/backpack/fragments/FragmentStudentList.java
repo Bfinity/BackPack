@@ -32,17 +32,13 @@ public class FragmentStudentList extends Fragment {
     List<ParseUser> listOfStudentUsers;
     ParseUserObject parseUserObject;
     TextView studentListHeader;
+    TextView linkToSearchStudent;
 
     @Override
     public void onResume() {
         super.onResume();
-        Classroom classroom = getArguments().getParcelable("class");
-        try {
-            parseUserObject = new ParseUserObject();
-            parseUserObject.updateListOfUsers("Student", classroom);
-        }catch (ParseException e) {
-            Log.i("studentView", e.getMessage());
-        }
+        parseUserObject = new ParseUserObject();
+        updateDataForUser(parseUserObject);
     }
 
     @Override
@@ -54,6 +50,7 @@ public class FragmentStudentList extends Fragment {
         studentListView = (ListView) rootView.findViewById(R.id.student_list);
         studentListAdapter = new StudentListViewAdapter(getActivity(), R.layout.list_item_student, listOfStudentUsers);
         studentListHeader = (TextView) rootView.findViewById(R.id.student_list_header);
+        linkToSearchStudent = (TextView) rootView.findViewById(R.id.link_search_students);
         studentListView.setAdapter(studentListAdapter);
         studentListAdapter.addAll(listOfStudentUsers);
 
@@ -79,8 +76,58 @@ public class FragmentStudentList extends Fragment {
                         .addToBackStack("StudentDetail")
                         .commit();
             }
+
         });
 
+        updateViewForUser(parseUserObject);
+
         return rootView;
+    }
+
+    public void updateDataForUser(ParseUserObject parseUserObject){
+        switch (parseUserObject.getUserTypeEnum()){
+            case TEACHER:
+                Classroom classroom = getArguments().getParcelable("class");
+                try {
+                    parseUserObject.updateListOfUsers("Student", classroom);
+                }catch (ParseException e) {
+                    Log.i("studentView", e.getMessage());
+                }
+                break;
+
+            case PARENT:
+                try {
+                    parseUserObject.updateListOfStudentUsersForOnParentUser();
+                }catch (ParseException e){
+                    Log.i("studentView", e.getMessage());
+                }
+
+                break;
+
+            default:
+                break;
+        }
+    }
+
+    public void updateViewForUser(ParseUserObject parseUserObject){
+        switch (parseUserObject.getUserTypeEnum()){
+            case TEACHER:
+                linkToSearchStudent.setVisibility(View.GONE);
+
+                break;
+
+            case PARENT:
+                linkToSearchStudent.setOnClickListener(new OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        getFragmentManager().beginTransaction()
+                                .replace(R.id.container, new FragmentStudentSearch())
+                                .addToBackStack("studentSearch")
+                                .commit();
+                    }
+                });
+
+                break;
+        }
     }
 }

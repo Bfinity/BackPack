@@ -2,6 +2,7 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -25,7 +26,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassListFragment extends Fragment {
+public class ClassListFragment extends Fragment  {
     TextView classListLabel;
     ListView classListView;
     TextView addClassText;
@@ -33,6 +34,7 @@ public class ClassListFragment extends Fragment {
     ClassroomListViewAdapter classroomListAdapter;
     ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
+    Handler classListHandler;
 
 
     @Override
@@ -89,11 +91,23 @@ public class ClassListFragment extends Fragment {
                 @Override
                 public void onClick(View view) {
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new CreateNewClassroom())
+                            .replace(R.id.container, new NewClassroom())
                             .addToBackStack("createNewClass")
                             .commit();
                 }
             });
+
+/*
+            classListHandler = new Handler(new Callback() {
+                @Override
+                public boolean handleMessage(Message message) {
+
+                    return false;
+                }
+            });
+*/
+
+
 
 
             return rootView;
@@ -101,9 +115,8 @@ public class ClassListFragment extends Fragment {
 
         public void updateView(){
 
-
             try{
-            Thread.sleep(1000);}
+            Thread.sleep(1500);}
             catch (InterruptedException e){
                 Log.i("Exception", e.getMessage());
             }
@@ -121,5 +134,11 @@ public class ClassListFragment extends Fragment {
         }
     }
 
-
+/*
+    @Override
+    public boolean handleMessage(Message message) {
+        switch (message.what)
+            case
+        return false;
+    }*/
 }

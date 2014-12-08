@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
+import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 
@@ -59,7 +60,15 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                         signUpSuccess = false;
                     }
                     if(signUpSuccess) {
-                        getFragmentManager().beginTransaction().replace(R.id.container, new CreateNewClassroom()).commit();
+                        if(userType.equalsIgnoreCase(UserTypes.PARENT.toString())){
+                            getFragmentManager().beginTransaction()
+                                    .replace(R.id.container, new FragmentStudentSearch())
+                                    .addToBackStack("studentSearch")
+                                    .commit();
+                        }
+                        getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
+                                .addToBackStack("classList")
+                                .commit();
                     }
                 }
             });

@@ -1,13 +1,12 @@
 package com.example.bfinerocks.backpack.parse;
 
-import android.util.Log;
-
+import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.UserModel;
-import com.parse.FindCallback;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
+import com.parse.ParseRelation;
 import com.parse.ParseUser;
 
 import java.util.ArrayList;
@@ -23,6 +22,7 @@ public class ParseUserObject {
     private Boolean loginResponse;
     public static final String USER_TYPE_KEY = "userType";
     public static final String USER_FULL_NAME = "fullName";
+    public static final String PARENT_RELATION = "studentsRelated";
     private ArrayList<ParseUser> userArrayList;
 
 
@@ -35,38 +35,13 @@ public class ParseUserObject {
         user.put(USER_FULL_NAME, fullName);
 
         user.signUp();
-/*
-        user.signUpInBackground(new SignUpCallback() {
-            @Override
-            public void done(ParseException e) {
-                if(e == null){
-                    Log.i("signUp", "Success");
-                    isLogInSuccessful(true);
-                }
-                else{
-                   Log.i("signUp", e.getMessage());
-                    isLogInSuccessful(false);
-                }
-            }
-        });*/
+
     }
 
     public void signInExistingUser(String userName, String password) throws ParseException{
 
         ParseUser.logIn(userName, password);
-/*        ParseUser.logInInBackground(userName, password, new LogInCallback() {
-            @Override
-            public void done(ParseUser parseUser, ParseException e) {
-                if(parseUser != null){
-                    Log.i("signIn", "Success");
-                    isLogInSuccessful(true);
-                }
-                else{
-                    Log.i("signIn", e.getMessage());
-                    isLogInSuccessful(false);
-                }
-            }
-        });*/
+
     }
 
     public void isLogInSuccessful(Boolean logInResponse){
@@ -86,6 +61,19 @@ public class ParseUserObject {
         return  ParseUser.getCurrentUser().getString(USER_TYPE_KEY);
     }
 
+    public UserTypes getUserTypeEnum(){
+        if(getUserType().equalsIgnoreCase("teacher")){
+            return UserTypes.TEACHER;
+        }
+        else if(getUserType().equalsIgnoreCase("student")){
+            return UserTypes.STUDENT;
+        }
+        else if(getUserType().equalsIgnoreCase("parent")){
+            return UserTypes.PARENT;
+        }
+       return null;
+    }
+
     public void updateListOfUsers(String userType, Classroom classroom) throws ParseException{
         ParseClassSectionObject classSection = new ParseClassSectionObject();
         classSection.queryClassroomByClassName(classroom);
@@ -94,9 +82,9 @@ public class ParseUserObject {
         parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
         parseUsers.whereEqualTo("classrooms", parseClassObject);
 
-      //  setUserArrayList(parseUsers.find());
+        setUserArrayList(parseUsers.find());
 
-        parseUsers.findInBackground(new FindCallback<ParseUser>() {
+/*        parseUsers.findInBackground(new FindCallback<ParseUser>() {
             @Override
             public void done(List<ParseUser> parseUsers, ParseException e) {
                 if(e == null) {
@@ -107,25 +95,13 @@ public class ParseUserObject {
                     Log.i("parseUserArray", e.getMessage());
                 }
             }
-        });
+        });*/
     }
 
-    public void updateListOfUsersBasedOnUserType(String userType){
-        ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
-        parseUsers.whereEqualTo(USER_TYPE_KEY, userType);
-        parseUsers.findInBackground(new FindCallback<ParseUser>() {
-            @Override
-            public void done(List<ParseUser> parseUsers, ParseException e) {
-                if(e == null) {
-                    Log.i("parseUserArray", "Succes");
-                    setUserArrayList(parseUsers);
-                }
-                else{
-                    Log.i("parseUserArray", e.getMessage());
-                }
-            }
-        });
-
+    public void updateListOfStudentUsersForOnParentUser() throws ParseException{
+        ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
+        ParseQuery<ParseUser> query = relation.getQuery();
+        setUserArrayList(query.find());
     }
 
     public void setUserArrayList(List<ParseUser> list){
@@ -143,6 +119,40 @@ public class ParseUserObject {
         userModel.setUserObjectID(parseUser.getObjectId());
         return userModel;
     }
+
+    public ParseUser searchForStudentUser(String userFullName, String userEmail) throws ParseException{
+        ParseUser parseUserFound = new ParseUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        query.whereEqualTo(USER_FULL_NAME, userFullName);
+        setUserArrayList(query.find());
+        for(ParseUser parseUser: getUserArrayList()){
+            if(parseUser.getEmail().equals(userEmail)){
+                parseUserFound = parseUser;
+            }
+        }
+
+        return parseUserFound;
+    }
+
+    public void addParentStudentRelationship(UserModel userModel) throws ParseException{
+        ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
+        relation.add(getUserByUID(userModel));
+        ParseUser.getCurrentUser().save();
+    }
+
+    public ParseUser getUserByUID(UserModel userModel){
+        ParseUser userFound = new ParseUser();
+        ParseQuery<ParseUser> query = ParseUser.getQuery();
+        try {
+           userFound = query.get(userModel.getUserObjectID());
+        }catch (ParseException e){
+
+        }
+        return userFound;
+    }
+
+
+
 
 
 }

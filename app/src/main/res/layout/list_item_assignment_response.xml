@@ -6,6 +6,13 @@
 
     <TextView
         android:id="@+id/assignment_response_studentName"
+        android:textSize="@dimen/text_view_size"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
+
+    <TextView
+        android:id="@+id/assignment_response_assignment"
+        android:textSize="@dimen/text_view_size"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
