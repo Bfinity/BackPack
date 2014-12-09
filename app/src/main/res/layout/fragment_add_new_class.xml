@@ -21,18 +21,20 @@
 
 
     <TextView
+        android:id="@+id/text_grade_select"
         android:text="@string/enter_class_grade"
         android:textSize="@dimen/text_view_size"
         android:layout_margin="@dimen/text_margin"
         android:gravity="center_vertical"
         android:layout_below="@id/enter_class_subject"
-
+        android:maxLines="2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <NumberPicker
         android:id="@+id/enter_class_grade"
         android:layout_below="@id/enter_class_subject"
+        android:layout_toRightOf="@id/text_grade_select"
         android:layout_alignParentRight="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"></NumberPicker>
