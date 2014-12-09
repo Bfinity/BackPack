@@ -47,6 +47,9 @@ public class MainActivity extends Activity {
         if (id == R.id.action_settings) {
             ParseUserObject parseUser = new ParseUserObject();
             parseUser.logOutCurrentUser();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new LogInFragment())
+                    .commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
