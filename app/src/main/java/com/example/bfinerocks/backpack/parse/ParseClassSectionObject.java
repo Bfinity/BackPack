@@ -1,8 +1,6 @@
 package com.example.bfinerocks.backpack.parse;
 
-import android.os.Bundle;
 import android.os.Handler;
-import android.os.Message;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -20,6 +18,9 @@ import java.util.List;
  */
 public class ParseClassSectionObject {
 
+    private ParseClassObjectInterface parseClassInterface;
+  //  public UIHandler uIHandler = new UIHandler(Looper.getMainLooper());
+
     ParseUserObject parseUserObject = new ParseUserObject();
     ParseObject parseClassroomObject;
     List<Classroom> myClasses = new ArrayList<Classroom>();
@@ -35,6 +36,10 @@ public class ParseClassSectionObject {
     private String classroomTitle;
     private String classroomSubject;
     private int classroomGradeLevel;
+
+    public ParseClassSectionObject(){
+
+    }
 
     public void createNewClassroom(Classroom classroom){
         ParseObject parseClassroomObject = new ParseObject(CLASSROOM_KEY);
@@ -137,6 +142,7 @@ public class ParseClassSectionObject {
             myClasses.add(classRoom);
             Log.i("addClassMethod", "success :" + myClasses.get(i).getClassSectionName());
         }
+        parseClassInterface.classListReturned(true);
     }
 
     public List<Classroom> getArrayListOfClassrooms(){
@@ -166,7 +172,6 @@ public class ParseClassSectionObject {
 
     public void setParseClassroomObject(ParseObject parseObjectFound){
         this.parseClassroomObject = parseObjectFound;
-        sendMessageFromHandler();
     }
 
     public ParseObject getQueriedClassroom(){
@@ -194,14 +199,13 @@ public class ParseClassSectionObject {
        return classIsRelated;
     }
 
-    public void sendMessageFromHandler(){
-        parseClassHandler = new Handler();
-        Message classMessage = parseClassHandler.obtainMessage();
-        boolean updateComplete = true;
-        Bundle messageBundle = new Bundle();
-        messageBundle.putBoolean("message", updateComplete);
-        classMessage.setData(messageBundle);
-        parseClassHandler.sendMessage(classMessage);
+
+    public void setParseClassInterface(ParseClassObjectInterface classInterface){
+        this.parseClassInterface = classInterface;
+    }
+
+    public interface ParseClassObjectInterface{
+        public void classListReturned(boolean hasReturned);
     }
 
 
