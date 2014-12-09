@@ -55,6 +55,7 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
                 classParseObject = new ParseClassSectionObject();
                 if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
                     classParseObject.createNewClassroom(classroom);
+                    Toast.makeText(getActivity(), "Classroom Successfully Added", Toast.LENGTH_SHORT);
                     getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
                 }
                 else if(currentUser.getUserType().equalsIgnoreCase("student")){
