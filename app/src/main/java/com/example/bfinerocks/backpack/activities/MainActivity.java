@@ -7,6 +7,7 @@ import android.view.MenuItem;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.fragments.LogInFragment;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.firebase.client.Firebase;
 import com.parse.Parse;
 
@@ -44,6 +45,8 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            ParseUserObject parseUser = new ParseUserObject();
+            parseUser.logOutCurrentUser();
             return true;
         }
         return super.onOptionsItemSelected(item);

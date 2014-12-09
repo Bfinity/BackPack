@@ -151,6 +151,10 @@ public class ParseUserObject {
         return userFound;
     }
 
+    public void logOutCurrentUser(){
+        ParseUser.logOut();
+    }
+
 
 
 
