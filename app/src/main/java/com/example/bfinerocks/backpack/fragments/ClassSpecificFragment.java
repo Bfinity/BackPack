@@ -18,8 +18,10 @@ import com.example.bfinerocks.backpack.adapters.AssignmentListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseAssignmentObject.ParseAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -49,14 +51,36 @@ public class ClassSpecificFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        parseAssignmentObject = new ParseAssignmentObject();
-        parseUserObject = new ParseUserObject();
-        parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
+/*        parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
+            @Override
+            public void hasListUpdated(List<Assignment> listOfAssignments) {
+                updateAssignmentListView();
+            }
+
+            @Override
+            public void hasSingleAssignment(Assignment assignment) {
+
+            }
+        });
+        parseUserObject = new ParseUserObject();*/
+      //  parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
+        parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
+            @Override
+            public void hasListUpdated(List<Assignment> listOfAssignments) {
+                updateAssignmentListView();
+            }
+
+            @Override
+            public void hasSingleAssignment(Assignment assignment) {
+
+            }
+        });
+        parseUserObject = new ParseUserObject();
         studentAssignment = new ParseStudentAssignmentObject();
         Classroom classRoom = getArguments().getParcelable("class");
 
@@ -64,12 +88,6 @@ public class ClassSpecificFragment extends Fragment {
         listOfAssignments = new ArrayList<Assignment>();
         assignmentList = (ListView) rootView.findViewById(R.id.assignment_list_view);
         classTitle = (TextView) rootView.findViewById(R.id.class_specific_title);
-        classTitle.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateAssignmentListView();
-            }
-        });
         classSubject = (TextView) rootView.findViewById(R.id.class_specific_subject);
         classGradeLevel = (TextView) rootView.findViewById(R.id.class_specific_grade);
         classTitle.setText(classRoom.getClassSectionName());
@@ -123,6 +141,8 @@ public class ClassSpecificFragment extends Fragment {
             }
         });
         updateViewForStudent();
+        ParseThreadPool parseThreadPool = new ParseThreadPool();
+        parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
 
         return rootView;
     }

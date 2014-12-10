@@ -25,7 +25,15 @@ public class ParseAssignmentObject {
     private List<Assignment> listOfAssignments = null;
     private List<ParseObject> listOfParseAssignmentObjects;
     private ParseClassSectionObject parseClassObject = new ParseClassSectionObject();
+    private ParseAssignmentInterface mParseAssignmentInterface;
 
+    public ParseAssignmentObject() {
+
+    }
+
+    public ParseAssignmentObject(ParseAssignmentInterface parseAssignmentInterface) {
+        mParseAssignmentInterface = parseAssignmentInterface;
+    }
 
     public void createNewAssignmentToPost(Assignment assignmentToAdd, Classroom classToAssociate){
         ParseObject parseAssignment = new ParseObject(ASSIGNMENT_KEY);
@@ -45,7 +53,7 @@ public class ParseAssignmentObject {
 
     }
 
-    public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
+/*    public void createListOfAssignmentsAssociatedWithClassroom(Classroom classroom){
        try{
            parseClassObject.queryClassroomByClassName(classroom);
        }catch (ParseException e){
@@ -53,13 +61,15 @@ public class ParseAssignmentObject {
        }
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
-        try{
+*//*        try{
             setListOfParseAssignmentObjects(query.find());
             setListOfAssignments(query.find());
         }catch(ParseException e){
             Log.e("ParseAssignmentParseExeption", e.getMessage());
-        }
-/*        query.findInBackground(new FindCallback<ParseObject>() {
+        }*//*
+
+        //todo use the interface to call back to calling fragment
+*//*        query.findInBackground(new FindCallback<ParseObject>() {
             @Override
             public void done(List<ParseObject> parseObjects, ParseException e) {
                 if(e == null){
@@ -71,8 +81,32 @@ public class ParseAssignmentObject {
                     Log.i("assignmentList", e.getMessage());
                 }
             }
-        });*/
+        });*//*
 
+    }*/
+
+    public Runnable createListOfAssignmentsAssociatedWithClassroom(final Classroom classroom){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    parseClassObject.queryClassroomByClassName(classroom);
+                }catch (ParseException e){
+                    e.printStackTrace();
+                }
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
+                query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, parseClassObject.getQueriedClassroom());
+                try{
+                    setListOfParseAssignmentObjects(query.find());
+                    setListOfAssignments(query.find());
+                }catch(ParseException e){
+                    Log.e("ParseAssignmentParseExeption", e.getMessage());
+                }
+
+
+            }
+        };
+        return runnable;
     }
 
     public Assignment convertParseAssignmentObjectToAssignmentModel(ParseObject assignmentObject){
@@ -97,6 +131,9 @@ public class ParseAssignmentObject {
             Assignment assignmentToAddToList = convertParseAssignmentObjectToAssignmentModel(assignmentObject);
             listOfAssignments.add(assignmentToAddToList);
         }
+        if (mParseAssignmentInterface != null) {
+            mParseAssignmentInterface.hasListUpdated(listOfAssignments);
+        }
     }
 
     public List<Assignment> getListOfAssignments(){
@@ -113,6 +150,12 @@ public class ParseAssignmentObject {
         ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
         query.whereEqualTo(ASSIGNMENT_DIRECTIONS_KEY, assignmentToFind.getAssignmentDescription());
         return query.getFirst();
+    }
+
+    public interface ParseAssignmentInterface{
+        public void hasListUpdated(List<Assignment> listOfAssignments);
+        public void hasSingleAssignment(Assignment assignment);
+
     }
 
 

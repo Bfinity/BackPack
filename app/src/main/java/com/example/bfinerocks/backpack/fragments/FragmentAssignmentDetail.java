@@ -18,6 +18,7 @@ import com.example.bfinerocks.backpack.adapters.AssignmentResponseTeacherListVie
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 import com.parse.ParseObject;
@@ -119,7 +120,9 @@ public class FragmentAssignmentDetail extends Fragment {
             assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
             responseAdapter = new AssignmentResponseTeacherListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
             assignmentResponses.setAdapter(responseAdapter);
-            listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
+         //   listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
+            ParseThreadPool parseThreadPool = new ParseThreadPool();
+            parseThreadPool.execute(studentAssignment.createListOfStudentResponses(assignment));
             responseAdapter.addAll(listOfResponses);
             responseAdapter.notifyDataSetChanged();
         }

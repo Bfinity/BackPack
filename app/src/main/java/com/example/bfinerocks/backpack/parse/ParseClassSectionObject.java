@@ -94,13 +94,13 @@ public class ParseClassSectionObject {
         classroomGradeLevel = classroom.getClassSectionGradeLevel();
     }
 
-    public void updateListOfClassRooms() throws ParseException{
+/*    public void updateListOfClassRooms() throws ParseException{
 
         ParseUser currentUser = parseUserObject.getCurrentUser();
         ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
         if(parseUserObject.getUserType().equalsIgnoreCase("Teacher")) {
             addClasses(query.find());
-/*            query.whereEqualTo("createdBy", currentUser);
+*//*            query.whereEqualTo("createdBy", currentUser);
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> list, ParseException e) {
@@ -111,13 +111,13 @@ public class ParseClassSectionObject {
                         Log.i("classList", e.getMessage());
                     }
                 }
-            });*/
+            });*//*
         }
         else if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
             ParseRelation relation = parseUserObject.getCurrentUser().getRelation(CLASSROOM_RELATION_KEY);
             ParseQuery relationQuery = relation.getQuery();
             addClasses(relationQuery.find());
-/*            relationQuery.findInBackground(new FindCallback() {
+*//*            relationQuery.findInBackground(new FindCallback() {
                 @Override
                 public void done(List list, ParseException e) {
                     if(e == null){
@@ -128,9 +128,39 @@ public class ParseClassSectionObject {
                         Log.i("classList", e.getMessage());
                     }
                 }
-            });*/
+            });*//*
         }
 
+    }*/
+
+    public Runnable updateListOfClassRooms() {
+        Runnable runnable = new Runnable() {
+            ParseUser currentUser = ParseUser.getCurrentUser();
+            String userType = currentUser.getString("userType");
+            ParseQuery<ParseObject> query = ParseQuery.getQuery(CLASSROOM_KEY);
+            @Override
+            public void run() {
+                if(userType.equalsIgnoreCase("teacher")) {
+                    try {
+                        addClasses(query.find());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else if(userType.equalsIgnoreCase("student")){
+                    ParseRelation relation = parseUserObject.getCurrentUser().getRelation(CLASSROOM_RELATION_KEY);
+                    ParseQuery relationQuery = relation.getQuery();
+                    try {
+                        addClasses(relationQuery.find());
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+
+
+            }
+        };
+        return runnable;
     }
 
     public void addClasses(List<ParseObject> list){
@@ -142,7 +172,7 @@ public class ParseClassSectionObject {
             myClasses.add(classRoom);
             Log.i("addClassMethod", "success :" + myClasses.get(i).getClassSectionName());
         }
-        parseClassInterface.classListReturned(true);
+        parseClassInterface.classListReturned(myClasses);
     }
 
     public List<Classroom> getArrayListOfClassrooms(){
@@ -205,7 +235,7 @@ public class ParseClassSectionObject {
     }
 
     public interface ParseClassObjectInterface{
-        public void classListReturned(boolean hasReturned);
+        public void classListReturned(List<Classroom> classroomList);
     }
 
 

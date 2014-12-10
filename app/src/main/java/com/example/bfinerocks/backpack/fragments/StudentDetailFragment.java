@@ -58,6 +58,7 @@ public class StudentDetailFragment extends Fragment{
         listOfStudentAssignments = (ListView) rootView.findViewById(R.id.student_assignment_list);
         listofAssignments = new ArrayList<Assignment>();
         responseAdapter = new AssignmentResponseListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listofAssignments);
+
         listOfStudentAssignments.setAdapter(responseAdapter);
         userModel = getArguments().getParcelable("UserModel");
 

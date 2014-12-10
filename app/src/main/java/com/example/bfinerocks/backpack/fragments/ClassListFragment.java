@@ -18,8 +18,8 @@ import com.example.bfinerocks.backpack.adapters.ClassroomListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject.ParseClassObjectInterface;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -106,17 +106,17 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
                 }
             });
             classRooms.setParseClassInterface(this);
-        try {
-            classRooms.updateListOfClassRooms();
-        }catch (ParseException e){
+        ParseThreadPool parseThreadPool = new ParseThreadPool();
+        parseThreadPool.execute(classRooms.updateListOfClassRooms());
 
-        }
-
+      //  ParseThreadPool parseThreadPool = new ParseThreadPool(5, 18, 1, TimeUnit.MINUTES, parseBlockingQueue);
+/*            ParseAsyncTask asyncTask = new ParseAsyncTask();
+            asyncTask.execute(classRooms.updateListOfClassRooms());*/
             return rootView;
         }
 
         public void updateView(){
-
+//todo remove this
             try{
             Thread.sleep(1500);
 
@@ -141,9 +141,9 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
 
 
     @Override
-    public void classListReturned(boolean hasReturned) {
-        if(hasReturned){
-            updateView();
-        }
+    public void classListReturned(List<Classroom> classList) {
+        myClassList = classList;
+        classroomListAdapter.addAll(myClassList);
+        classroomListAdapter.notifyDataSetChanged();
     }
 }
