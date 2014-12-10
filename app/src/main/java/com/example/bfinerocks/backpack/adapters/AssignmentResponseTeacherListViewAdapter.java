@@ -35,6 +35,7 @@ public class AssignmentResponseTeacherListViewAdapter extends ArrayAdapter<Assig
         studentName.setText(assignment.getStudentName());
         if(assignment.getAssignmentNotes() != null){
             noteCheckBox.setChecked(true);
+            noteCheckBox.setEnabled(false);
         }
 
         if(assignment.getAssignmentCompletionState()){
