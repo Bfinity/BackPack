@@ -125,10 +125,12 @@ public class ParseStudentAssignmentObject {
 
     public Assignment updateAssignmentWithDetailsFromStudent(ParseObject studentAssignment, final Assignment assignment){
         try {
-            studentAssignment.getParseUser(STUDENT_USER).fetch();
+            ParseObject parseObject = studentAssignment.getParseUser(STUDENT_USER).fetch();
+            assignment.setStudentName(parseObject.getString("fullName"));
         } catch (ParseException e) {
             e.printStackTrace();
         }
+
         assignment.isAssignmentCompleted(studentAssignment.getBoolean(ASSIGNMENT_STATUS_KEY));
         assignment.setAssignmentNotes(studentAssignment.getString(ASSIGNMENT_NOTES));
         return assignment;
