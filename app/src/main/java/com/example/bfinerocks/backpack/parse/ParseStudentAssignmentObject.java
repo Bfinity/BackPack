@@ -134,7 +134,7 @@ public class ParseStudentAssignmentObject {
         return assignment;
     }
 
-    public ArrayList<Assignment> createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
+    public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
@@ -143,11 +143,11 @@ public class ParseStudentAssignmentObject {
         }catch (ParseException e){
             Log.e("ParseException", e.getMessage());
         }
+        setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
 
-        return getListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
     }
 
-    public ArrayList<Assignment> createListOfStudentAssignmentObjectsForDisplay(ParseUser studentUser){
+    public void createListOfStudentAssignmentObjectsForDisplay(ParseUser studentUser){
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, studentUser);
         try{
@@ -155,8 +155,8 @@ public class ParseStudentAssignmentObject {
         }catch (ParseException e){
             Log.e("ParseException", e.getMessage());
         }
-        return getListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
-    }*/
+        setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
+    }
 
 /*
     public ArrayList<Assignment> createListOfStudentResponses(Assignment assignment){
@@ -184,7 +184,7 @@ public class ParseStudentAssignmentObject {
                     assignmentQ.whereEqualTo("assignmentTitle", assignment.getAssignmentTitle());
                     ParseObject assignmentObject = assignmentQ.getFirst();
                     query.whereEqualTo(ASSIGNMENT_OBJECT, assignmentObject);
-                    setListOfStudentAssignmentObjects(query.find());
+                    setListOfStudentAssignmentObjectsForDisplay(query.find());
                 }catch (ParseException e){
 
                 }

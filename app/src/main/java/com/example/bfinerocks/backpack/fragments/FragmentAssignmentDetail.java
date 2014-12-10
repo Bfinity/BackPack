@@ -18,6 +18,7 @@ import com.example.bfinerocks.backpack.adapters.AssignmentResponseTeacherListVie
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
@@ -62,7 +63,13 @@ public class FragmentAssignmentDetail extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
         parseAssignmentObject = new ParseAssignmentObject();
-        studentAssignment = new ParseStudentAssignmentObject();
+        studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
+            @Override
+            public void hasListOfAssignmentsUpdated(List<Assignment> listOfUpdatedAssignments) {
+                responseAdapter.addAll(listOfUpdatedAssignments);
+                responseAdapter.notifyDataSetChanged();
+            }
+        });
         currentUser = new ParseUserObject();
         listOfResponses = new ArrayList<Assignment>();
         assignment = getArguments().getParcelable("assignment");
@@ -123,8 +130,8 @@ public class FragmentAssignmentDetail extends Fragment {
          //   listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
             ParseThreadPool parseThreadPool = new ParseThreadPool();
             parseThreadPool.execute(studentAssignment.createListOfStudentResponses(assignment));
-            responseAdapter.addAll(listOfResponses);
-            responseAdapter.notifyDataSetChanged();
+/*            responseAdapter.addAll(listOfResponses);
+            responseAdapter.notifyDataSetChanged();*/
         }
 
         return rootView;

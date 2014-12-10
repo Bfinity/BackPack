@@ -19,10 +19,12 @@ import com.example.bfinerocks.backpack.adapters.AssignmentResponseListViewAdapte
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.UserModel;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 12/3/14.
@@ -45,14 +47,13 @@ public class StudentDetailFragment extends Fragment{
         View rootView = inflater.inflate(R.layout.fragment_student_detail, container, false);
 
         userObject = new ParseUserObject();
-        studentAssignmentObjects = new ParseStudentAssignmentObject();
-        studentName = (TextView) rootView.findViewById(R.id.student_name);
-        studentName.setOnClickListener(new OnClickListener() {
+        studentAssignmentObjects = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
             @Override
-            public void onClick(View view) {
-                updateView();
+            public void hasListOfAssignmentsUpdated(List<Assignment> listOfUpdatedAssignments) {
+                updateView(listOfUpdatedAssignments);
             }
         });
+        studentName = (TextView) rootView.findViewById(R.id.student_name);
         studentEmail = (TextView) rootView.findViewById(R.id.student_email_address);
         addStudentButton = (Button) rootView.findViewById(R.id.add_student);
         listOfStudentAssignments = (ListView) rootView.findViewById(R.id.student_assignment_list);
@@ -98,9 +99,8 @@ public class StudentDetailFragment extends Fragment{
         return rootView;
     }
 
-    public void updateView(){
-        listofAssignments = studentAssignmentObjects.createListOfStudentAssignmentObjectsForDisplay(
-                    userObject.getUserByUID(userModel));
+    public void updateView(List<Assignment> assignmentList){
+        listofAssignments = (ArrayList<Assignment>) assignmentList;
         responseAdapter.addAll(listofAssignments);
         responseAdapter.notifyDataSetChanged();
     }

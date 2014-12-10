@@ -15,6 +15,7 @@ import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.AssignmentListViewAdapter;
+import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
@@ -24,7 +25,6 @@ import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +72,7 @@ public class ClassSpecificFragment extends Fragment {
         parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
             @Override
             public void hasListUpdated(List<Assignment> listOfAssignments) {
-                updateAssignmentListView();
+                updateAssignmentListView(listOfAssignments);
             }
 
             @Override
@@ -142,17 +142,23 @@ public class ClassSpecificFragment extends Fragment {
         });
         updateViewForStudent();
         ParseThreadPool parseThreadPool = new ParseThreadPool();
-        parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
+        if(parseUserObject.getUserTypeEnum().equals(UserTypes.STUDENT)){
+            studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classRoom);
+        }
+        else if(parseUserObject.getUserTypeEnum().equals(UserTypes.TEACHER)) {
+            parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
+        }
 
         return rootView;
     }
 
-    public void updateAssignmentListView(){
+    public void updateAssignmentListView(List<Assignment> assignments){
         assignmentListViewAdapter.clear();
-        listOfAssignments = parseAssignmentObject.getListOfAssignments();
+        listOfAssignments = assignments;
         assignmentListViewAdapter.addAll(listOfAssignments);
         assignmentListViewAdapter.notifyDataSetChanged();
 
+/*
         parseUserObject = new ParseUserObject();
         if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
             List<ParseObject> tempList = studentAssignment.getListOfStudentAssignmentObjects();
@@ -161,6 +167,7 @@ public class ClassSpecificFragment extends Fragment {
             assignmentListViewAdapter.notifyDataSetChanged();
         }
 
+*/
 
 
 
