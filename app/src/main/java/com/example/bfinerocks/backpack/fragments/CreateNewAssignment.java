@@ -14,6 +14,7 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 
 /**
  * Created by BFineRocks on 11/28/14.
@@ -42,7 +43,8 @@ public class CreateNewAssignment extends Fragment {
                 assignment = new Assignment(assignmentTitle.getText().toString(), assignmentAssignedDate.getText().toString(),
                         assignmentDueDate.getText().toString(), assignmentDirections.getText().toString());
                 parseAssignmentObject = new ParseAssignmentObject();
-                parseAssignmentObject.createNewAssignmentToPost(assignment, classroomToAssociate);
+                ParseThreadPool parseThreadPool = new ParseThreadPool();
+                parseThreadPool.execute(parseAssignmentObject.createNewAssignmentToPost(assignment, classroomToAssociate));
                 Toast.makeText(getActivity(), "Assignment Added", Toast.LENGTH_SHORT).show();
 
             }
@@ -50,6 +52,8 @@ public class CreateNewAssignment extends Fragment {
 
         return rootView;
     }
+
+    //todo create interface that only moves on if assignment was successfully sent to Parse
 
 
 }

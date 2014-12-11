@@ -17,6 +17,7 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.AssignmentResponseTeacherListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
@@ -47,6 +48,7 @@ public class FragmentAssignmentDetail extends Fragment {
     private ParseAssignmentObject parseAssignmentObject;
     private ParseStudentAssignmentObject studentAssignment;
     private AssignmentResponseTeacherListViewAdapter responseAdapter;
+    private ParseClassSectionObject classSectionObject;
     private List<Assignment> listOfResponses;
 
 
@@ -70,6 +72,7 @@ public class FragmentAssignmentDetail extends Fragment {
                 responseAdapter.notifyDataSetChanged();
             }
         });
+
         currentUser = new ParseUserObject();
         listOfResponses = new ArrayList<Assignment>();
         assignment = getArguments().getParcelable("assignment");
@@ -97,7 +100,7 @@ public class FragmentAssignmentDetail extends Fragment {
                 if(assignmentStateBox.isChecked()){
                     assignment.isAssignmentCompleted(true);
                 }
-                try {
+                try { //todo need to consolidate the student assignment query
                     assignment.setAssignmentNotes(assignmentNotes.getText().toString());
                     ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignment);
 

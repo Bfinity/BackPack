@@ -15,10 +15,12 @@ import android.widget.Toast;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
+import com.example.bfinerocks.backpack.parse.ParseClassSectionObject.ParseClassObjectInterface;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/26/14.
@@ -45,6 +47,7 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
 
         enterClassGrade.setMaxValue(12);
         enterClassGrade.setMinValue(1);
+    //    enterClassGrade.setValue(0); //todo create conditional for null value
         enterClassGrade.setOnValueChangedListener(this);
 
         createClassButton.setOnClickListener(new OnClickListener() {
@@ -52,32 +55,32 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
             public void onClick(View view) {
                 Classroom classroom = new Classroom(enterClassName.getText().toString(),
                         enterClassSubject.getText().toString(), gradeLevel);
-                classParseObject = new ParseClassSectionObject();
+
+                classParseObject = new ParseClassSectionObject(new ParseClassObjectInterface() {
+                    @Override
+                    public void classListReturned(List<Classroom> classroomList) {
+
+                        if(classroomList.size() > 0) {
+                            ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classroomList;
+                            Bundle bundle = new Bundle();
+                            bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
+                            FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
+                            classSearchFragment.setArguments(bundle);
+                            getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
+                        }
+                        else{
+                            Toast.makeText(getActivity(), "Classroom Not Found", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
                 if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
                     classParseObject.createNewClassroom(classroom);
-                    Toast.makeText(getActivity(), "Classroom Successfully Added", Toast.LENGTH_LONG);
+                    Toast.makeText(getActivity(), "Classroom Successfully Added", Toast.LENGTH_LONG).show();
                     getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment()).commit();
                 }
                 else if(currentUser.getUserType().equalsIgnoreCase("student")){
-
-                    try {
-                    classParseObject.findClassroomOnParse(classroom);
-
-                        Thread.sleep(1000);
-                    }catch (InterruptedException e){
-
-                    }
-                    catch (ParseException e){
-                        Toast.makeText(getActivity(), "Class Not Found", Toast.LENGTH_SHORT);
-                    }
-                    ArrayList<Classroom> foundClasses = new ArrayList<Classroom>();
-                    foundClasses = (ArrayList<Classroom>) classParseObject.getArrayListOfClassrooms();
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
-                    FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
-                    classSearchFragment.setArguments(bundle);
-
-                    getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
+                    ParseThreadPool threadPool = new ParseThreadPool();
+                    threadPool.execute(classParseObject.findClassroomOnParse(classroom));
                 }
 
             }

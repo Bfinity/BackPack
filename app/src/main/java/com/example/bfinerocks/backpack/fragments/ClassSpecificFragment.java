@@ -2,7 +2,6 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -24,7 +23,6 @@ import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -175,7 +173,6 @@ public class ClassSpecificFragment extends Fragment {
 
     public void updateViewForStudent(){
         parseUserObject = new ParseUserObject();
-   //     studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
             studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
 
@@ -184,12 +181,8 @@ public class ClassSpecificFragment extends Fragment {
                     @Override
                     public void onClick(View view) {
                         parseClassSection = new ParseClassSectionObject();
-                        try {
-                            parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
-                            //      studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-                        } catch (ParseException e) {
-                            Log.i("addToList", e.getMessage());
-                        }
+                        ParseThreadPool parseThreadPool = new ParseThreadPool();
+                        parseThreadPool.execute(parseClassSection.addStudentToClassRelation(classroomDetail));
                         getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
                                 .addToBackStack("myClassList")
                                 .commit();
