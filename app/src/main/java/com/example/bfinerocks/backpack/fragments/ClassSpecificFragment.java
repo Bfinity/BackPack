@@ -73,11 +73,6 @@ public class ClassSpecificFragment extends Fragment {
             public void hasListUpdated(List<Assignment> listOfAssignments) {
                 updateAssignmentListView(listOfAssignments);
             }
-
-            @Override
-            public void hasSingleAssignment(Assignment assignment) {
-
-            }
         });
         parseUserObject = new ParseUserObject();
         studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {

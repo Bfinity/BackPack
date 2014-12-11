@@ -115,8 +115,6 @@ public class ParseAssignmentObject {
 
     public interface ParseAssignmentInterface{
         public void hasListUpdated(List<Assignment> listOfAssignments);
-        public void hasSingleAssignment(Assignment assignment);
-
     }
 
 

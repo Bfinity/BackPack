@@ -16,7 +16,9 @@ import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.StudentListViewAdapter;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.UserModel;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.example.bfinerocks.backpack.parse.ParseUserObject.ParseUserInterface;
 import com.parse.ParseException;
 import com.parse.ParseUser;
 
@@ -29,7 +31,7 @@ import java.util.List;
 public class FragmentStudentList extends Fragment {
     ListView studentListView;
     StudentListViewAdapter studentListAdapter;
-    List<ParseUser> listOfStudentUsers;
+    List<UserModel> listOfStudentUsers;
     ParseUserObject parseUserObject;
     TextView studentListHeader;
     TextView linkToSearchStudent;
@@ -45,24 +47,26 @@ public class FragmentStudentList extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_student_list_view, container, false);
 
-        listOfStudentUsers = new ArrayList<ParseUser>();
-        parseUserObject = new ParseUserObject();
+        listOfStudentUsers = new ArrayList<UserModel>();
+        parseUserObject = new ParseUserObject(new ParseUserInterface() {
+            @Override
+            public void logInResult(boolean result) {
+
+            }
+
+            @Override
+            public void listOfUsersReturned(List<UserModel> listOfUsers) {
+                listOfStudentUsers = listOfUsers;
+                studentListAdapter.addAll(listOfStudentUsers);
+                studentListAdapter.notifyDataSetChanged();
+            }
+        });
         studentListView = (ListView) rootView.findViewById(R.id.student_list);
         studentListAdapter = new StudentListViewAdapter(getActivity(), R.layout.list_item_student, listOfStudentUsers);
         studentListHeader = (TextView) rootView.findViewById(R.id.student_list_header);
         linkToSearchStudent = (TextView) rootView.findViewById(R.id.link_search_students);
         studentListView.setAdapter(studentListAdapter);
         studentListAdapter.addAll(listOfStudentUsers);
-
-        studentListHeader.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                listOfStudentUsers = parseUserObject.getUserArrayList();
-                studentListAdapter.addAll(listOfStudentUsers);
-                studentListAdapter.notifyDataSetChanged();
-            }
-        });
-
         studentListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -85,19 +89,16 @@ public class FragmentStudentList extends Fragment {
     }
 
     public void updateDataForUser(ParseUserObject parseUserObject){
+        ParseThreadPool parseThreadPool = new ParseThreadPool();
         switch (parseUserObject.getUserTypeEnum()){
             case TEACHER:
                 Classroom classroom = getArguments().getParcelable("class");
-                try {
-                    parseUserObject.updateListOfUsers("Student", classroom);
-                }catch (ParseException e) {
-                    Log.i("studentView", e.getMessage());
-                }
+                    parseThreadPool.execute(parseUserObject.updateListOfStudentsInClassroom(classroom));
                 break;
 
             case PARENT:
                 try {
-                    parseUserObject.updateListOfStudentUsersForOnParentUser();
+                    parseThreadPool.execute(parseUserObject.updateListOfStudentUsersForOnParentUser());
                 }catch (ParseException e){
                     Log.i("studentView", e.getMessage());
                 }
