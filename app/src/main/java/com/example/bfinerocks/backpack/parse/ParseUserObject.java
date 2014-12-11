@@ -36,7 +36,7 @@ public class ParseUserObject {
     }
 
 
-    public void createNewParseUser(final String userName, final String password, final String userType,
+    public Runnable createNewParseUser(final String userName, final String password, final String userType,
                                    final String fullName, final String emailAddress){
         Runnable runnable = new Runnable() {
             @Override
@@ -50,27 +50,34 @@ public class ParseUserObject {
                 try {
                     user.signUp();
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    parseUserInterface.onLogInFailure(e.getMessage());
                 }
 
             }
         };
-        checkForLogIn();
+        checkParseUserLoggedIn(ParseUser.getCurrentUser());
+        return runnable;
     }
 
-    public void signInExistingUser(final String userName, final String password){
+    public Runnable signInExistingUser(final String userName, final String password){
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 try {
                     ParseUser.logIn(userName, password);
                 } catch (ParseException e) {
-                    e.printStackTrace();
+                    parseUserInterface.onLogInFailure(e.getMessage());
                 }
             }
         };
-        checkForLogIn();
+        checkParseUserLoggedIn(ParseUser.getCurrentUser());
+        return runnable;
+    }
 
+    public void checkParseUserLoggedIn(ParseUser parseUser){
+        if(parseUser != null){
+            parseUserInterface.onLogInSuccess(convertParseUserIntoUserModel(parseUser));
+        }
     }
 
     public ParseUser getCurrentUser(){
@@ -179,24 +186,13 @@ public class ParseUserObject {
         return userFound;
     }
 
-    public void checkForLogIn(){
-        ParseUser parseUser = ParseUser.getCurrentUser();
-        if(parseUserInterface != null) {
-            if (parseUser != null) {
-                parseUserInterface.logInResult(true);
-            }
-            else{
-                parseUserInterface.logInResult(false);
-            }
-        }
-    }
-
     public void logOutCurrentUser(){
         ParseUser.logOut();
     }
 
     public interface ParseUserInterface{
-        public void logInResult(boolean result);
+        public void onLogInSuccess(UserModel userModel);
+        public void onLogInFailure(String result);
         public void listOfUsersReturned(List<UserModel> listOfUsers);
     }
 

@@ -50,7 +50,12 @@ public class FragmentStudentList extends Fragment {
         listOfStudentUsers = new ArrayList<UserModel>();
         parseUserObject = new ParseUserObject(new ParseUserInterface() {
             @Override
-            public void logInResult(boolean result) {
+            public void onLogInSuccess(boolean result) {
+
+            }
+
+            @Override
+            public void onLogInFailure(String result) {
 
             }
 
