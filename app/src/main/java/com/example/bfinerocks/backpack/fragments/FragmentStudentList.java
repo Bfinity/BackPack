@@ -34,20 +34,14 @@ public class FragmentStudentList extends Fragment {
     ParseUserObject parseUserObject;
     TextView studentListHeader;
     TextView linkToSearchStudent;
-
-/*    @Override
-    public void onResume() {
-        super.onResume();
-        parseUserObject = new ParseUserObject();
-        updateDataForUser(parseUserObject);
-    }*/
+    private Classroom classroom;
 
     //todo this fragment is not loading
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_student_list_view, container, false);
-
+        classroom = getArguments().getParcelable("class");
         listOfStudentUsers = new ArrayList<UserModel>();
         parseUserObject = new ParseUserObject(new ParseUserInterface() {
             @Override
@@ -82,6 +76,7 @@ public class FragmentStudentList extends Fragment {
                 UserModel  userModel = (UserModel) adapterView.getItemAtPosition(i);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("UserModel", userModel);
+                bundle.putParcelable("classroom", classroom);
                 StudentDetailFragment studentDetail = new StudentDetailFragment();
                 studentDetail.setArguments(bundle);
                 getFragmentManager().beginTransaction().replace(R.id.container, studentDetail)
@@ -99,7 +94,6 @@ public class FragmentStudentList extends Fragment {
         ParseThreadPool parseThreadPool = new ParseThreadPool();
         switch (currentUser.getUserEnum()){
             case TEACHER:
-                Classroom classroom = getArguments().getParcelable("class");
                     parseThreadPool.execute(parseUserObject.updateListOfStudentsInClassroom(classroom));
                 break;
 

@@ -1,5 +1,9 @@
 package com.example.bfinerocks.backpack.parse;
 
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
+
 import com.example.bfinerocks.backpack.constants.ParseKeys;
 import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -26,6 +30,7 @@ public class ParseUserObject {
     public static final String PARENT_RELATION = "studentsRelated";
     private ArrayList<ParseUser> userArrayList;
     private List<UserModel> listOfUserModels;
+    private Handler mHandler;
 
     public ParseUserObject(){
 
@@ -33,6 +38,10 @@ public class ParseUserObject {
 
     public ParseUserObject(ParseUserInterface parseUserInterface){
         this.parseUserInterface = parseUserInterface;
+    }
+
+    public ParseUserObject(Handler handler){
+        mHandler = handler;
     }
 
 
@@ -76,7 +85,8 @@ public class ParseUserObject {
 
     public void checkParseUserLoggedIn(ParseUser parseUser){
         if(parseUser != null){
-            parseUserInterface.onLogInSuccess(convertParseUserIntoUserModel(parseUser));
+           parseUserInterface.onLogInSuccess(convertParseUserIntoUserModel(parseUser));
+           //sendUserModelDataBack(convertParseUserIntoUserModel(parseUser));
         }
     }
 
@@ -190,6 +200,15 @@ public class ParseUserObject {
 
     public void logOutCurrentUser(){
         ParseUser.logOut();
+    }
+
+    public void sendUserModelDataBack(UserModel userModel){
+        Message userModelMessage = new Message();
+        Bundle bundle = new Bundle();
+        bundle.putParcelable("userModel", userModel);
+        userModelMessage.setData(bundle);
+        userModelMessage.setTarget(mHandler);
+        userModelMessage.sendToTarget();
     }
 
     public interface ParseUserInterface{

@@ -56,17 +56,24 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
                         @Override
-                        public void onLogInSuccess(UserModel userModel) {
-                            if(userModel.getUserEnum() == UserTypes.PARENT){
-                                getFragmentManager().beginTransaction()
-                                        .replace(R.id.container, new FragmentStudentSearch())
-                                        .addToBackStack("studentSearch")
-                                        .commit();
-                            }
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.container, new ClassListFragment())
-                                    .addToBackStack("classList")
-                                    .commit();
+                        public void onLogInSuccess(final UserModel userModel) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(userModel.getUserEnum() == UserTypes.PARENT){
+                                        getFragmentManager().beginTransaction()
+                                                .replace(R.id.container, new FragmentStudentSearch())
+                                                .addToBackStack("studentSearch")
+                                                .commit();
+                                    }
+                                    getFragmentManager().beginTransaction()
+                                            .replace(R.id.container, new ClassListFragment())
+                                            .addToBackStack("classList")
+                                            .commit();
+
+                                }
+                            });
+
                         }
 
                         @Override
@@ -80,7 +87,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                         }
                     });
                     ParseThreadPool parseThreadPool = new ParseThreadPool();
-                      parseThreadPool.execute(user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType,
+                    parseThreadPool.execute(user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType,
                              edtUserFullName.getText().toString(), edtUserEmail.getText().toString()));
 
                 }

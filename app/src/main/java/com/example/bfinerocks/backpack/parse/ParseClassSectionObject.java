@@ -1,6 +1,7 @@
 package com.example.bfinerocks.backpack.parse;
 
 import android.os.Handler;
+import android.os.Message;
 import android.util.Log;
 
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -43,6 +44,10 @@ public class ParseClassSectionObject {
 
     public ParseClassSectionObject(ParseClassObjectInterface parseClassInterface){
         this.parseClassInterface = parseClassInterface;
+    }
+
+    public ParseClassSectionObject(Handler handler){
+        parseClassHandler = handler;
     }
 
     public void createNewClassroom(Classroom classroom){
@@ -114,7 +119,7 @@ public class ParseClassSectionObject {
             }
         };
         return runnable;
-    }
+   }
 
     public void addClasses(List<ParseObject> list){
         for(int i = 0; i < list.size(); i++){
@@ -124,7 +129,8 @@ public class ParseClassSectionObject {
             myClasses.add(classRoom);
             Log.i("addClassMethod", "success :" + myClasses.get(i).getClassSectionName());
         }
-        parseClassInterface.classListReturned(myClasses);
+      //  parseClassInterface.classListReturned(myClasses);
+        sendDataBackToUI(myClasses);
     }
 
     public List<Classroom> getArrayListOfClassrooms(){
@@ -187,6 +193,16 @@ public class ParseClassSectionObject {
 
         }
        return classIsRelated;
+    }
+
+    public void sendDataBackToUI(List<Classroom> classroomList){
+        Message userModelMessage = new Message();
+/*        Bundle bundle = new Bundle();
+        bundle.putParcelable("userModel", userModel);
+        userModelMessage.setData(bundle);*/
+        userModelMessage.obj = classroomList;
+        userModelMessage.setTarget(parseClassHandler);
+        userModelMessage.sendToTarget();
     }
 
 

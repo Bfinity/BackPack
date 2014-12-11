@@ -6,6 +6,7 @@ import android.util.Log;
 import com.example.bfinerocks.backpack.constants.ParseKeys;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
+import com.example.bfinerocks.backpack.models.UserModel;
 import com.parse.ParseException;
 import com.parse.ParseObject;
 import com.parse.ParseQuery;
@@ -152,6 +153,24 @@ public class ParseStudentAssignmentObject {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
                 query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
                 query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
+                try {
+                    setListOfStudentAssignmentObjects(query.find());
+                }catch (ParseException e){
+                    Log.e("ParseException", e.getMessage());
+                }
+                setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
+            }
+        };
+
+        return runnable;
+    }
+
+    public Runnable createListOfStudentAssignmentObjectsForDisplay(final UserModel studentUser){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+                query.whereEqualTo(STUDENT_USER, studentUser.getUserObjectID());
                 try {
                     setListOfStudentAssignmentObjects(query.find());
                 }catch (ParseException e){

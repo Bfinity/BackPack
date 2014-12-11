@@ -70,8 +70,13 @@ public class ClassSpecificFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
         parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
             @Override
-            public void hasListUpdated(List<Assignment> listOfAssignments) {
-                updateAssignmentListView(listOfAssignments);
+            public void hasListUpdated(final List<Assignment> listOfAssignments) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAssignmentListView(listOfAssignments);
+                    }
+                });
             }
         });
         parseUserObject = new ParseUserObject();

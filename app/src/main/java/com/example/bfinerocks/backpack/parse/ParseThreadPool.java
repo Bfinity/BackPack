@@ -8,7 +8,7 @@ import java.util.concurrent.Executor;
 public class ParseThreadPool implements Executor {
     @Override
     public void execute(Runnable runnable) {
-        runnable.run();
+        new Thread(runnable).start();
     }
 
 

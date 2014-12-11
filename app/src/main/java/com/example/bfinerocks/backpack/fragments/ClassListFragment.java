@@ -3,7 +3,8 @@ package com.example.bfinerocks.backpack.fragments;
 import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
+import android.os.Handler;
+import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -35,6 +36,7 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
     ClassroomListViewAdapter classroomListAdapter;
     ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
+    private Handler classListHandler;
 
 
     @Override
@@ -53,16 +55,17 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_classroom_list, container, false);
 
-        classRooms = new ParseClassSectionObject();
-/*        classRooms.setParseClassInterface(this);
-        try {
-            classRooms.updateListOfClassRooms();
-        }catch (ParseException e){
+            classListHandler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+                    super.handleMessage(msg);
+                    myClassList = (List<Classroom>) msg.obj;
+                    classroomListAdapter.addAll(myClassList);
+                    classroomListAdapter.notifyDataSetChanged();
+                }
+            };
 
-        }*/
-
-
-
+            classRooms = new ParseClassSectionObject(classListHandler);
             parseUserObject = new ParseUserObject();
 
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
@@ -106,24 +109,14 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
                 }
             });
             classRooms.setParseClassInterface(this);
+
         ParseThreadPool parseThreadPool = new ParseThreadPool();
         parseThreadPool.execute(classRooms.updateListOfClassRooms());
 
-      //  ParseThreadPool parseThreadPool = new ParseThreadPool(5, 18, 1, TimeUnit.MINUTES, parseBlockingQueue);
-/*            ParseAsyncTask asyncTask = new ParseAsyncTask();
-            asyncTask.execute(classRooms.updateListOfClassRooms());*/
             return rootView;
         }
 
         public void updateView(){
-//todo remove this
-            try{
-            Thread.sleep(1500);
-
-            }
-            catch (InterruptedException e){
-                Log.i("Exception", e.getMessage());
-            }
 
             myClassList = classRooms.getArrayListOfClassrooms();
             classroomListAdapter.addAll(myClassList);

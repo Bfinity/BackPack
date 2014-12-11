@@ -65,15 +65,21 @@ public class LogInFragment extends Fragment implements OnClickListener{
             case R.id.btn_done:
                 final ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
                     @Override
-                    public void onLogInSuccess(UserModel userModel) {
-                        if(userModel != null){
-                            changeOnUserType(userModel);
-                        }
+                    public void onLogInSuccess(final UserModel userModel) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(userModel != null){
+                                    changeOnUserType(userModel);
+                                }
+                            }
+                        });
+
                     }
 
                     @Override
                     public void onLogInFailure(String result) {
-                        Toast.makeText(getActivity(), "Log In Failed" +"\n" + result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), "Log In Failed" + "\n" + result.toUpperCase(), Toast.LENGTH_SHORT).show();
                     }
 
                     @Override
@@ -81,8 +87,21 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
                     }
                 });
+/*                Handler handler = new Handler(Looper.getMainLooper()){
+                    @Override
+                    public void handleMessage(Message msg) {
+                       // super.handleMessage(msg);
+                        Log.i("message", msg.toString());
+                        Bundle bundle = msg.getData();
+                        UserModel userModel = bundle.getParcelable("userModel");
+                        changeOnUserType(userModel);
+                    }
+                };*/
+
+               // ParseUserObject user = new ParseUserObject(handler);
                 ParseThreadPool parseThreadPool = new ParseThreadPool();
                 parseThreadPool.execute(user.signInExistingUser(userName.getText().toString(), password.getText().toString()));
+
                 break;
 
             case R.id.signUp_link:

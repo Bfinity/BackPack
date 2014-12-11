@@ -17,9 +17,11 @@ import android.widget.Toast;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.AssignmentResponseListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
+import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.models.UserModel;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.ParseException;
 
@@ -40,6 +42,7 @@ public class StudentDetailFragment extends Fragment{
     private AssignmentResponseListViewAdapter responseAdapter;
     private UserModel userModel;
     private ParseUserObject userObject;
+
 
 
     @Override
@@ -94,6 +97,9 @@ public class StudentDetailFragment extends Fragment{
             }
 
         });
+        Classroom classroom = getArguments().getParcelable("classroom");
+        ParseThreadPool parseThreadPool = new ParseThreadPool();
+        parseThreadPool.execute(studentAssignmentObjects.createListOfStudentAssignmentObjectsForDisplay(userModel));
 
 
         return rootView;
