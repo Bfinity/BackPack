@@ -43,6 +43,8 @@ public class FragmentStudentList extends Fragment {
         updateDataForUser(parseUserObject);
     }
 
+    //todo this fragment is not loading
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_student_list_view, container, false);
@@ -50,7 +52,7 @@ public class FragmentStudentList extends Fragment {
         listOfStudentUsers = new ArrayList<UserModel>();
         parseUserObject = new ParseUserObject(new ParseUserInterface() {
             @Override
-            public void onLogInSuccess(boolean result) {
+            public void onLogInSuccess(UserModel userModel) {
 
             }
 

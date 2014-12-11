@@ -151,6 +151,7 @@ public class ParseUserObject {
     public UserModel convertParseUserIntoUserModel(ParseUser parseUser){
         UserModel userModel = new UserModel(parseUser.getUsername(), parseUser.getEmail(),
                 parseUser.getString(USER_FULL_NAME), parseUser.getString(USER_TYPE_KEY));
+        userModel.setUserEnum(parseUser.getString(USER_TYPE_KEY));
         userModel.setUserObjectID(parseUser.getObjectId());
         return userModel;
     }
