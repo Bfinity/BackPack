@@ -21,6 +21,7 @@ import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject.ParseAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 
@@ -79,7 +80,12 @@ public class ClassSpecificFragment extends Fragment {
             }
         });
         parseUserObject = new ParseUserObject();
-        studentAssignment = new ParseStudentAssignmentObject();
+        studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
+            @Override
+            public void hasListOfAssignmentsUpdated(List<Assignment> listOfUpdatedAssignments) {
+                updateAssignmentListView(listOfUpdatedAssignments);
+            }
+        });
         Classroom classRoom = getArguments().getParcelable("class");
 
         classroomDetail = classRoom;
@@ -141,12 +147,13 @@ public class ClassSpecificFragment extends Fragment {
         updateViewForStudent();
         ParseThreadPool parseThreadPool = new ParseThreadPool();
         if(parseUserObject.getUserTypeEnum().equals(UserTypes.STUDENT)){
-            studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classRoom);
+            parseThreadPool.execute(studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classRoom));
         }
         else if(parseUserObject.getUserTypeEnum().equals(UserTypes.TEACHER)) {
             parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
         }
 
+      //  parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
         return rootView;
     }
 
@@ -174,8 +181,8 @@ public class ClassSpecificFragment extends Fragment {
     public void updateViewForStudent(){
         parseUserObject = new ParseUserObject();
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
-            studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-
+            ParseThreadPool parseThreadPool = new ParseThreadPool();
+            parseThreadPool.execute(studentAssignment.addAssignmentsToStudentAssignments(classroomDetail));
                 addToMyClasses.setVisibility(View.VISIBLE);
                 addToMyClasses.setOnClickListener(new OnClickListener() {
                     @Override

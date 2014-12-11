@@ -3,6 +3,7 @@ package com.example.bfinerocks.backpack.parse;
 import android.os.Looper;
 import android.util.Log;
 
+import com.example.bfinerocks.backpack.constants.ParseKeys;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.parse.ParseException;
@@ -20,7 +21,6 @@ import java.util.List;
 public class ParseStudentAssignmentObject {
 
     private ParseStudentAssignmentInterface mParseStudentAssignmentInterface;
-
     public static final String STUDENT_ASSIGNMENT_OBJECT_KEY = "StudentAssignment";
     public static final String STUDENT_USER = "studentUser";
     public static final String ASSIGNMENT_OBJECT = "assignment";
@@ -44,31 +44,36 @@ public class ParseStudentAssignmentObject {
         assignmentJoinTable.put(STUDENT_USER, ParseUser.getCurrentUser());
         assignmentJoinTable.put(ASSIGNMENT_OBJECT, parseAssignment);
         assignmentJoinTable.put(ASSIGNMENT_CLASSROOM_RELATION, classroomName);
-/*        assignmentJoinTable.put(ASSIGNMENT_STATUS_KEY, false);
-        if(assignment.getAssignmentCompletionState()){
-            Date today = new Date();
-            assignmentJoinTable.put(ASSIGNMENT_COMPLETED_DATE, today );
+        try {
+            assignmentJoinTable.save();
+        } catch (ParseException e) {
+            e.printStackTrace();
         }
-        if(!assignment.getAssignmentNotes().isEmpty()) {
-            assignmentJoinTable.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
-        }*/
-        assignmentJoinTable.saveInBackground();
     }
 
-    public void addAssignmentsToStudentAssignments(Classroom classroom){
-
-        ParseAssignmentObject parseAssignment = new ParseAssignmentObject();
-        ParseClassSectionObject classSection = new ParseClassSectionObject();
-        ParseObject classObject = classSection.getParseClassroomObject(classroom);
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(ASSIGNMENT_KEY);
-        query.whereEqualTo(ASSIGNMENT_CLASSROOM_ASSOCIATION, classObject);
-        List<ParseObject> listOfParseAssignments = parseAssignment.getListOfParseAssignmentObjects();
-        for(int i = 0; i < listOfParseAssignments.size(); i++){
-            ParseObject holder = listOfParseAssignments.get(i);
-            if(!assignmentHasBeenAdded(holder)) {
-                addStudentAssignment(holder, classroom.getClassSectionName());
+    public Runnable addAssignmentsToStudentAssignments(final Classroom classroom){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseClassSectionObject classSection = new ParseClassSectionObject();
+                ParseObject classObject = classSection.getParseClassroomObject(classroom);
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(ParseKeys.ASSIGNMENT_KEY);
+                query.whereEqualTo(ParseKeys.ASSIGNMENT_CLASSROOM_ASSOCIATION, classObject);
+                List<ParseObject> listOfParseAssignments = null;
+                try {
+                    listOfParseAssignments = query.find();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                for(int i = 0; i < listOfParseAssignments.size(); i++){
+                    ParseObject holder = listOfParseAssignments.get(i);
+                    if(!assignmentHasBeenAdded(holder)) {         //still on the background thread
+                        addStudentAssignment(holder, classroom.getClassSectionName());
+                    }
+                }
             }
-        }
+        };
+        return runnable;
     }
 
 /*    public void addAssignmentsToStudentAssignments(Classroom classroom){
@@ -154,17 +159,23 @@ public class ParseStudentAssignmentObject {
         return assignment;
     }
 
-    public void createListOfStudentAssignmentObjectsForDisplay(Classroom classroom){
-        ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
-        query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
-        query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
-        try {
-            setListOfStudentAssignmentObjects(query.find());
-        }catch (ParseException e){
-            Log.e("ParseException", e.getMessage());
-        }
-        setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
+    public Runnable createListOfStudentAssignmentObjectsForDisplay(final Classroom classroom){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+                query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+                query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
+                try {
+                    setListOfStudentAssignmentObjects(query.find());
+                }catch (ParseException e){
+                    Log.e("ParseException", e.getMessage());
+                }
+                setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
+            }
+        };
 
+        return runnable;
     }
 
     public void createListOfStudentAssignmentObjectsForDisplay(ParseUser studentUser){
@@ -211,11 +222,11 @@ public class ParseStudentAssignmentObject {
     }
 
     public void setListOfStudentAssignmentObjectsForDisplay(List<ParseObject> listOfParseAssignments){
-        final ArrayList<Assignment> listOfAssignments = new ArrayList<Assignment>();
-        final ParseAssignmentObject parseAssignmentObject = new ParseAssignmentObject();
+         ArrayList<Assignment> listOfAssignments = new ArrayList<Assignment>();
+         ParseAssignmentObject parseAssignmentObject = new ParseAssignmentObject();
         ParseThreadPool parseThreadPool = new ParseThreadPool();
         for(int i = 0; i < listOfParseAssignments.size(); i ++){
-            final ParseObject parseObject = listOfParseAssignments.get(i);
+            ParseObject parseObject = listOfParseAssignments.get(i);
 /*            Runnable runnable = new Runnable() {
                 @Override
                 public void run() {*/
