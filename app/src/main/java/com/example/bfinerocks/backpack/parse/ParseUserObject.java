@@ -108,7 +108,7 @@ public class ParseUserObject {
                 ParseClassSectionObject classSection = new ParseClassSectionObject();
                 ParseObject parseClassObject =  classSection.getParseClassroomObject(classroom);
                 ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
-                parseUsers.whereEqualTo(USER_TYPE_KEY, "Student");
+             //   parseUsers.whereEqualTo(USER_TYPE_KEY, "Student");
                 parseUsers.whereEqualTo(ParseKeys.CLASSROOM_RELATION_KEY, parseClassObject);
                 try {
                     setUserArrayList(parseUsers.find());
@@ -137,6 +137,7 @@ public class ParseUserObject {
     }
 
     public void setUserArrayList(List<ParseUser> list){
+        listOfUserModels = new ArrayList<UserModel>();
         for(int i = 0; i < list.size(); i++){
             UserModel userModel = convertParseUserIntoUserModel(list.get(i));
             listOfUserModels.add(userModel);

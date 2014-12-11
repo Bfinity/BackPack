@@ -20,7 +20,6 @@ import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.example.bfinerocks.backpack.parse.ParseUserObject.ParseUserInterface;
 import com.parse.ParseException;
-import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +35,12 @@ public class FragmentStudentList extends Fragment {
     TextView studentListHeader;
     TextView linkToSearchStudent;
 
-    @Override
+/*    @Override
     public void onResume() {
         super.onResume();
         parseUserObject = new ParseUserObject();
         updateDataForUser(parseUserObject);
-    }
+    }*/
 
     //todo this fragment is not loading
 
@@ -68,6 +67,9 @@ public class FragmentStudentList extends Fragment {
                 studentListAdapter.notifyDataSetChanged();
             }
         });
+
+        UserModel currentUser = parseUserObject.convertParseUserIntoUserModel(parseUserObject.getCurrentUser());
+
         studentListView = (ListView) rootView.findViewById(R.id.student_list);
         studentListAdapter = new StudentListViewAdapter(getActivity(), R.layout.list_item_student, listOfStudentUsers);
         studentListHeader = (TextView) rootView.findViewById(R.id.student_list_header);
@@ -77,8 +79,7 @@ public class FragmentStudentList extends Fragment {
         studentListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                ParseUser parseUser = (ParseUser) adapterView.getItemAtPosition(i);
-                UserModel  userModel = parseUserObject.convertParseUserIntoUserModel(parseUser);
+                UserModel  userModel = (UserModel) adapterView.getItemAtPosition(i);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("UserModel", userModel);
                 StudentDetailFragment studentDetail = new StudentDetailFragment();
@@ -89,15 +90,14 @@ public class FragmentStudentList extends Fragment {
             }
 
         });
-
-        updateViewForUser(parseUserObject);
-
+        updateViewForUser(currentUser);
+        updateDataForUser(currentUser);
         return rootView;
     }
 
-    public void updateDataForUser(ParseUserObject parseUserObject){
+    public void updateDataForUser(UserModel currentUser){
         ParseThreadPool parseThreadPool = new ParseThreadPool();
-        switch (parseUserObject.getUserTypeEnum()){
+        switch (currentUser.getUserEnum()){
             case TEACHER:
                 Classroom classroom = getArguments().getParcelable("class");
                     parseThreadPool.execute(parseUserObject.updateListOfStudentsInClassroom(classroom));
@@ -117,8 +117,8 @@ public class FragmentStudentList extends Fragment {
         }
     }
 
-    public void updateViewForUser(ParseUserObject parseUserObject){
-        switch (parseUserObject.getUserTypeEnum()){
+    public void updateViewForUser(UserModel currentUser){
+        switch (currentUser.getUserEnum()){
             case TEACHER:
                 linkToSearchStudent.setVisibility(View.GONE);
 
