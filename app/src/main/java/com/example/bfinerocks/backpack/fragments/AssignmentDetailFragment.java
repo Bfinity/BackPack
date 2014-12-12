@@ -11,16 +11,18 @@ import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.AssignmentResponseTeacherListViewAdapter;
 import com.example.bfinerocks.backpack.models.Assignment;
+import com.example.bfinerocks.backpack.models.UserModel;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
-import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
+import com.parse.ParseUser;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -40,11 +42,10 @@ public class AssignmentDetailFragment extends Fragment {
     private Boolean assignmentIsComplete;
     private CheckBox assignmentStateBox;
     private Button saveChanges;
-    private ParseUserObject currentUser;
+    private ParseUserObject userObject;
     private ParseAssignmentObject parseAssignmentObject;
     private ParseStudentAssignmentObject studentAssignment;
     private AssignmentResponseTeacherListViewAdapter responseAdapter;
-    private ParseClassSectionObject classSectionObject;
     private List<Assignment> listOfResponses;
 
 
@@ -64,8 +65,8 @@ public class AssignmentDetailFragment extends Fragment {
                 });
             }
         });
-
-        currentUser = new ParseUserObject();
+        userObject = new ParseUserObject();
+        UserModel currentUser = userObject.convertParseUserIntoUserModel(ParseUser.getCurrentUser());
         listOfResponses = new ArrayList<Assignment>();
         assignment = getArguments().getParcelable("assignment");
         assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
@@ -75,48 +76,62 @@ public class AssignmentDetailFragment extends Fragment {
         assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
         saveChanges = (Button) rootView.findViewById(R.id.btn_save_changes);
         assignmentNotes = (EditText) rootView.findViewById(R.id.assignment_notes);
-        if(currentUser.getUserType().equalsIgnoreCase("teacher")){
-            saveChanges.setVisibility(View.GONE);
-            assignmentStateBox.setVisibility(View.GONE);
-            assignmentNotes.setVisibility(View.GONE);
-        }
         saveChanges.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(assignmentStateBox.isChecked()){
+                if (assignmentStateBox.isChecked()) {
                     assignment.isAssignmentCompleted(true);
                 }
-                    assignment.setAssignmentNotes(assignmentNotes.getText().toString());
+                assignment.setAssignmentNotes(assignmentNotes.getText().toString());
                 ParseThreadPool parseThreadPool = new ParseThreadPool();
-                    parseThreadPool.execute(studentAssignment.updateStudentAssignment(assignment));
+                parseThreadPool.execute(studentAssignment.updateStudentAssignment(assignment));
+                Toast.makeText(getActivity(), "Changes Saved", Toast.LENGTH_SHORT).show();
                 getFragmentManager().popBackStackImmediate();
             }
         });
-
         assignmentTitle.setText(assignment.getAssignmentTitle());
         assigmentAssgnDate.setText(assignment.getAssignmentAssignedDate());
         assignmentDueDate.setText(assignment.getAssignmentDueDate());
         assignmentDetails.setText(assignment.getAssignmentDescription());
         assignmentIsComplete = assignment.getAssignmentCompletionState();
-        if(currentUser.getUserType().equalsIgnoreCase("Student")) {
-            if (assignmentIsComplete) {
-                assignmentStateBox.setChecked(true);
-            } else {
-                assignmentStateBox.setChecked(false);
-            }
-            assignmentNotes.setText(assignment.getAssignmentNotes());
-        }
-        if(currentUser.getUserType().equalsIgnoreCase("Teacher")) {
-            assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
-            responseAdapter = new AssignmentResponseTeacherListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
-            assignmentResponses.setAdapter(responseAdapter);
-            ParseThreadPool parseThreadPool = new ParseThreadPool();
-            parseThreadPool.execute(studentAssignment.createListOfStudentResponses(assignment));
-        }
-
+        assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
+        updateViewForUserTypes(currentUser);
         return rootView;
     }
 
+    public void updateViewForUserTypes(UserModel currentUser) {
+        switch (currentUser.getUserEnum()) {
+            case TEACHER:
+                saveChanges.setVisibility(View.GONE);
+                assignmentStateBox.setVisibility(View.GONE);
+                assignmentNotes.setVisibility(View.GONE);
+                responseAdapter = new AssignmentResponseTeacherListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
+                assignmentResponses.setAdapter(responseAdapter);
+                ParseThreadPool parseThreadPool = new ParseThreadPool();
+                parseThreadPool.execute(studentAssignment.createListOfStudentResponses(assignment));
+                break;
+            case STUDENT:
+                assignmentResponses.setVisibility(View.GONE);
+                if (assignmentIsComplete) {
+                    assignmentStateBox.setChecked(true);
+                } else {
+                    assignmentStateBox.setChecked(false);
+                }
+                assignmentNotes.setText(assignment.getAssignmentNotes());
+                break;
+            case PARENT:
+                assignmentResponses.setVisibility(View.GONE);
+                if (assignmentIsComplete) {
+                    assignmentStateBox.setChecked(true);
+                } else {
+                    assignmentStateBox.setChecked(false);
+                }
+                assignmentStateBox.setEnabled(false);
+                assignmentNotes.setText(assignment.getAssignmentNotes());
+                assignmentNotes.setEnabled(false);
+                break;
+        }
+    }
 
 
 }

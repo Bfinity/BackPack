@@ -220,8 +220,9 @@ public class ParseStudentAssignmentObject {
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
+                ParseUserObject userObject = new ParseUserObject();
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
-                query.whereEqualTo(STUDENT_USER, studentUser.getUserObjectID());
+                query.whereEqualTo(STUDENT_USER, userObject.getUserByUID(studentUser));
                 try {
                     setListOfStudentAssignmentObjects(query.find());
                 }catch (ParseException e){

@@ -41,7 +41,9 @@ public class StudentListViewFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_student_list_view, container, false);
-        classroom = getArguments().getParcelable("class");
+        if(getArguments() != null) {
+            classroom = getArguments().getParcelable("class");
+        }
         listOfStudentUsers = new ArrayList<UserModel>();
         parseUserObject = new ParseUserObject(new ParseUserInterface() {
             @Override

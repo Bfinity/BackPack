@@ -184,16 +184,6 @@ public class ParseUserObject {
             }
         };
         return runnable;
-/*        ParseUser parseUserFound = new ParseUser();
-
-        setUserArrayList(query.find());
-        for(ParseUser parseUser: getUserArrayList()){
-            if(parseUser.getEmail().equals(userEmail)){
-                parseUserFound = parseUser;
-            }
-        }
-
-        return parseUserFound;*/
     }
 
     public void addParentStudentRelationship(UserModel userModel){

@@ -53,23 +53,13 @@ public class ClassListFragment extends Fragment{
                 }
             });
             parseUserObject = new ParseUserObject();
-
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
-
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
             changeViewForStudentUser();
-
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
             classListView.setAdapter(classroomListAdapter);
             classListLabel = (TextView) rootView.findViewById(R.id.class_list_label);
-            classListLabel.setOnClickListener(new OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    updateView();
-                }
-            });
-
             classListView.setOnItemClickListener(new OnItemClickListener() {
                 @Override
                 public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
