@@ -32,7 +32,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 12/3/14.
  */
-public class StudentDetailFragment extends Fragment{
+public class StudentDetailFragment extends Fragment {
 
     private TextView studentName;
     private TextView studentEmail;
@@ -108,10 +108,9 @@ public class StudentDetailFragment extends Fragment{
                 getActivity().runOnUiThread(new Runnable() {
                     @Override
                     public void run() {
-                        if(relationSuccess){
+                        if (relationSuccess) {
                             Toast.makeText(getActivity(), R.string.student_add_success, Toast.LENGTH_SHORT).show();
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getActivity(), R.string.student_add_failure, Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -121,15 +120,15 @@ public class StudentDetailFragment extends Fragment{
         addStudentButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-               currentUser.addParentStudentRelationship(userModel);
+                currentUser.addParentStudentRelationship(userModel);
             }
         });
         updateViewOnUserType(currentUser.convertParseUserIntoUserModel(ParseUser.getCurrentUser()));
         return rootView;
     }
 
-    public void updateViewOnUserType(UserModel currentUser){
-        switch(currentUser.getUserEnum()){
+    public void updateViewOnUserType(UserModel currentUser) {
+        switch (currentUser.getUserEnum()) {
             case PARENT:
                 parseThreadPool.execute(studentAssignmentObjects.createListOfStudentAssignmentObjectsForDisplay(userModel));
                 break;
@@ -141,7 +140,7 @@ public class StudentDetailFragment extends Fragment{
         }
     }
 
-    public void updateView(List<Assignment> assignmentList){
+    public void updateView(List<Assignment> assignmentList) {
         listofAssignments = (ArrayList<Assignment>) assignmentList;
         responseAdapter.addAll(listofAssignments);
         responseAdapter.notifyDataSetChanged();
