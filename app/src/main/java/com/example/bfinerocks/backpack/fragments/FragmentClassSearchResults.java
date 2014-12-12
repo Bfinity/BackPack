@@ -42,16 +42,8 @@ public class FragmentClassSearchResults extends Fragment {
         classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
         classroomListAdapter.addAll(myClassList);
         classListView.setAdapter(classroomListAdapter);
-     //  classroomListAdapter.notifyDataSetChanged();
-      //  myClassList = new ArrayList<Classroom>();
-
-      // classroomListAdapter.addAll(myClassList);
-
-
         classSearchResultLabel = (TextView) rootView.findViewById(R.id.class_list_label);
         classSearchResultLabel.setText(R.string.search_results);
-
-
         classListView.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
@@ -67,11 +59,5 @@ public class FragmentClassSearchResults extends Fragment {
         });
 
         return rootView;
-    }
-
-    public void updateView(){
-        myClassList = getArguments().getParcelableArrayList("listOfClassesReturned");
-        classroomListAdapter.addAll(myClassList);
-        classroomListAdapter.notifyDataSetChanged();
     }
 }

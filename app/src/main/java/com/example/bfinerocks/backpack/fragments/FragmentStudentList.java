@@ -55,15 +55,19 @@ public class FragmentStudentList extends Fragment {
             }
 
             @Override
-            public void listOfUsersReturned(List<UserModel> listOfUsers) {
-                listOfStudentUsers = listOfUsers;
-                studentListAdapter.addAll(listOfStudentUsers);
-                studentListAdapter.notifyDataSetChanged();
+            public void listOfUsersReturned(final List<UserModel> listOfUsers) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        listOfStudentUsers = listOfUsers;
+                        studentListAdapter.addAll(listOfStudentUsers);
+                        studentListAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
 
         UserModel currentUser = parseUserObject.convertParseUserIntoUserModel(parseUserObject.getCurrentUser());
-
         studentListView = (ListView) rootView.findViewById(R.id.student_list);
         studentListAdapter = new StudentListViewAdapter(getActivity(), R.layout.list_item_student, listOfStudentUsers);
         studentListHeader = (TextView) rootView.findViewById(R.id.student_list_header);
