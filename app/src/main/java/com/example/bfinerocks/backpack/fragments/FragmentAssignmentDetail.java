@@ -89,6 +89,7 @@ public class FragmentAssignmentDetail extends Fragment {
                     assignment.setAssignmentNotes(assignmentNotes.getText().toString());
                 ParseThreadPool parseThreadPool = new ParseThreadPool();
                     parseThreadPool.execute(studentAssignment.updateStudentAssignment(assignment));
+                getFragmentManager().popBackStackImmediate();
             }
         });
 
