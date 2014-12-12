@@ -1,10 +1,7 @@
 package com.example.bfinerocks.backpack.fragments;
 
-import android.app.Activity;
 import android.app.Fragment;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -28,7 +25,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class ClassListFragment extends Fragment implements ParseClassObjectInterface{
+public class ClassListFragment extends Fragment{
     TextView classListLabel;
     ListView classListView;
     TextView addClassText;
@@ -36,43 +33,31 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
     ClassroomListViewAdapter classroomListAdapter;
     ParseUserObject parseUserObject;
     ParseClassSectionObject classRooms;
-    private Handler classListHandler;
-
-
-    @Override
-    public void onAttach(Activity activity) {
-        super.onAttach(activity);
-    }
-
-    @Override
-    public void onResume(){
-        super.onResume();
-
-    }
 
     @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
             View rootView = inflater.inflate(R.layout.fragment_classroom_list, container, false);
 
-            classListHandler = new Handler(){
+            classRooms = new ParseClassSectionObject(new ParseClassObjectInterface() {
                 @Override
-                public void handleMessage(Message msg) {
-                    super.handleMessage(msg);
-                    myClassList = (List<Classroom>) msg.obj;
-                    classroomListAdapter.addAll(myClassList);
-                    classroomListAdapter.notifyDataSetChanged();
+                public void classListReturned(final List<Classroom> classroomList) {
+                    getActivity().runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            myClassList = classroomList;
+                            classroomListAdapter.addAll(myClassList);
+                            classroomListAdapter.notifyDataSetChanged();
+                        }
+                    });
                 }
-            };
-
-            classRooms = new ParseClassSectionObject(classListHandler);
+            });
             parseUserObject = new ParseUserObject();
 
             classListView = (ListView) rootView.findViewById(R.id.class_list_view);
 
             addClassText = (TextView) rootView.findViewById(R.id.add_class);
             changeViewForStudentUser();
-
 
             myClassList = new ArrayList<Classroom>();
             classroomListAdapter = new ClassroomListViewAdapter(getActivity(), R.layout.list_item_classroom, myClassList);
@@ -108,7 +93,6 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
                             .commit();
                 }
             });
-            classRooms.setParseClassInterface(this);
 
         ParseThreadPool parseThreadPool = new ParseThreadPool();
         parseThreadPool.execute(classRooms.updateListOfClassRooms());
@@ -132,11 +116,4 @@ public class ClassListFragment extends Fragment implements ParseClassObjectInter
         }
     }
 
-
-    @Override
-    public void classListReturned(List<Classroom> classList) {
-        myClassList = classList;
-        classroomListAdapter.addAll(myClassList);
-        classroomListAdapter.notifyDataSetChanged();
-    }
 }

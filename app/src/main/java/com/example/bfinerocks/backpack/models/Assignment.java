@@ -16,6 +16,7 @@ public class Assignment implements android.os.Parcelable {
     private String assignmentNotes;
     private ArrayList<AssignmentTask> assignmentTasks;
     private String studentName;
+    private String assignmentUniqueID;
 
     public Assignment(String assignmentTitle, String assignmentAssignedDate, String assignmentDueDate, String assignmentDescription){
         this.assignmentTitle = assignmentTitle;
@@ -86,6 +87,14 @@ public class Assignment implements android.os.Parcelable {
 
     public void setStudentName(String studentName) {
         this.studentName = studentName;
+    }
+
+    public String getAssignmentUniqueID() {
+        return assignmentUniqueID;
+    }
+
+    public void setAssignmentUniqueID(String assignmentUniqueID) {
+        this.assignmentUniqueID = assignmentUniqueID;
     }
 
     @Override

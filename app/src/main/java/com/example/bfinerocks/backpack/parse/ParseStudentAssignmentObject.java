@@ -92,8 +92,8 @@ public class ParseStudentAssignmentObject {
         return isAdded;
     }
 
-    public void updateStudentAssignment(ParseObject parseAssignment, Assignment assignment) {
-        ParseObject assignmentToUpdate = null;
+    public Runnable updateStudentAssignment(final Assignment assignment) {
+/*        ParseObject assignmentToUpdate = null;
         ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
         query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
         query.whereEqualTo(ASSIGNMENT_OBJECT, parseAssignment);
@@ -112,7 +112,38 @@ public class ParseStudentAssignmentObject {
                 assignmentToUpdate.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
             }
             assignmentToUpdate.saveInBackground();
-        }
+        }*/
+
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+                query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+                query.whereEqualTo(ASSIGNMENT_OBJECT, assignment.getAssignmentUniqueID());
+                ParseObject assignmentToUpdate = null;
+                try {
+                    assignmentToUpdate = query.getFirst();
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+                if (assignmentToUpdate != null) {
+                    assignmentToUpdate.put(ASSIGNMENT_STATUS_KEY, assignment.getAssignmentCompletionState());
+                    if (assignment.getAssignmentCompletionState()) {
+                        Date today = new Date();
+                        assignmentToUpdate.put(ASSIGNMENT_COMPLETED_DATE, today);
+                    }
+                    if (!assignment.getAssignmentNotes().equalsIgnoreCase(null)) {
+                        assignmentToUpdate.put(ASSIGNMENT_NOTES, assignment.getAssignmentNotes());
+                    }
+                    try {
+                        assignmentToUpdate.save();
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        };
+        return runnable;
     }
 
     public Assignment queryStudentAssignmentObject(Assignment assignment){

@@ -82,8 +82,13 @@ public class ClassSpecificFragment extends Fragment {
         parseUserObject = new ParseUserObject();
         studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
             @Override
-            public void hasListOfAssignmentsUpdated(List<Assignment> listOfUpdatedAssignments) {
-                updateAssignmentListView(listOfUpdatedAssignments);
+            public void hasListOfAssignmentsUpdated(final List<Assignment> listOfUpdatedAssignments) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAssignmentListView(listOfUpdatedAssignments);
+                    }
+                });
             }
         });
         Classroom classRoom = getArguments().getParcelable("class");
@@ -162,19 +167,6 @@ public class ClassSpecificFragment extends Fragment {
         listOfAssignments = assignments;
         assignmentListViewAdapter.addAll(listOfAssignments);
         assignmentListViewAdapter.notifyDataSetChanged();
-
-/*
-        parseUserObject = new ParseUserObject();
-        if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
-            List<ParseObject> tempList = studentAssignment.getListOfStudentAssignmentObjects();
-            listOfAssignments = studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
-            assignmentListViewAdapter.addAll(listOfAssignments);
-            assignmentListViewAdapter.notifyDataSetChanged();
-        }
-
-*/
-
-
 
     }
 

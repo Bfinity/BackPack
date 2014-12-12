@@ -79,6 +79,7 @@ public class ParseAssignmentObject {
         Assignment convertedAssignment = new Assignment(assignmentObject.getString(ASSIGNMENT_TITLE_KEY),
                 assignmentObject.getString(ASSIGNMENT_ASSIGN_DATE_KEY), assignmentObject.getString(ASSIGNMENT_DUE_DATE_KEY),
                 assignmentObject.getString(ASSIGNMENT_DIRECTIONS_KEY));
+        convertedAssignment.setAssignmentUniqueID(assignmentObject.getObjectId());
         return convertedAssignment;
     }
 

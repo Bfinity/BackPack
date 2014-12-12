@@ -2,7 +2,6 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -22,8 +21,6 @@ import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +34,6 @@ public class FragmentAssignmentDetail extends Fragment {
     private TextView assigmentAssgnDate;
     private TextView assignmentDueDate;
     private TextView assignmentDetails;
-    private TextView assignmentState;
     private EditText assignmentNotes;
     private ListView assignmentResponses;
     private Assignment assignment;
@@ -53,39 +49,29 @@ public class FragmentAssignmentDetail extends Fragment {
 
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-
-
-
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_assignment_detail, container, false);
         parseAssignmentObject = new ParseAssignmentObject();
         studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
             @Override
-            public void hasListOfAssignmentsUpdated(List<Assignment> listOfUpdatedAssignments) {
-                responseAdapter.addAll(listOfUpdatedAssignments);
-                responseAdapter.notifyDataSetChanged();
+            public void hasListOfAssignmentsUpdated(final List<Assignment> listOfUpdatedAssignments) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        responseAdapter.addAll(listOfUpdatedAssignments);
+                        responseAdapter.notifyDataSetChanged();
+                    }
+                });
             }
         });
 
         currentUser = new ParseUserObject();
         listOfResponses = new ArrayList<Assignment>();
         assignment = getArguments().getParcelable("assignment");
-
-        if(currentUser.getUserType().equalsIgnoreCase("Student")){
-            Assignment studentAssignmentDetail = studentAssignment.queryStudentAssignmentObject(assignment);
-            assignment = studentAssignmentDetail;
-        }
         assignmentTitle = (TextView) rootView.findViewById(R.id.detail_assignment_title);
         assigmentAssgnDate = (TextView) rootView.findViewById(R.id.detail_assignment_assgn_date);
         assignmentDueDate = (TextView) rootView.findViewById(R.id.detail_assignment_due_date);
         assignmentDetails = (TextView) rootView.findViewById(R.id.detail_assignment_details);
- //       assignmentState = (TextView) rootView.findViewById(R.id.detail_assignment_state);
         assignmentStateBox = (CheckBox) rootView.findViewById(R.id.checkBox_state);
         saveChanges = (Button) rootView.findViewById(R.id.btn_save_changes);
         assignmentNotes = (EditText) rootView.findViewById(R.id.assignment_notes);
@@ -100,14 +86,9 @@ public class FragmentAssignmentDetail extends Fragment {
                 if(assignmentStateBox.isChecked()){
                     assignment.isAssignmentCompleted(true);
                 }
-                try { //todo need to consolidate the student assignment query
                     assignment.setAssignmentNotes(assignmentNotes.getText().toString());
-                    ParseObject assignmentObject = parseAssignmentObject.queryAssignmentBasedOnName(assignment);
-
-                    studentAssignment.updateStudentAssignment(assignmentObject, assignment);
-                }catch (ParseException e){
-                    Log.i("assignmentUpdate", e.getMessage());
-                }
+                ParseThreadPool parseThreadPool = new ParseThreadPool();
+                    parseThreadPool.execute(studentAssignment.updateStudentAssignment(assignment));
             }
         });
 
@@ -118,10 +99,8 @@ public class FragmentAssignmentDetail extends Fragment {
         assignmentIsComplete = assignment.getAssignmentCompletionState();
         if(currentUser.getUserType().equalsIgnoreCase("Student")) {
             if (assignmentIsComplete) {
-                //          assignmentState.setText("Done");
                 assignmentStateBox.setChecked(true);
             } else {
-                //         assignmentState.setText("Not Done");
                 assignmentStateBox.setChecked(false);
             }
             assignmentNotes.setText(assignment.getAssignmentNotes());
@@ -130,11 +109,8 @@ public class FragmentAssignmentDetail extends Fragment {
             assignmentResponses = (ListView) rootView.findViewById(R.id.student_response_list);
             responseAdapter = new AssignmentResponseTeacherListViewAdapter(getActivity(), R.layout.list_item_assignment_response, listOfResponses);
             assignmentResponses.setAdapter(responseAdapter);
-         //   listOfResponses = studentAssignment.createListOfStudentResponses(assignment);
             ParseThreadPool parseThreadPool = new ParseThreadPool();
             parseThreadPool.execute(studentAssignment.createListOfStudentResponses(assignment));
-/*            responseAdapter.addAll(listOfResponses);
-            responseAdapter.notifyDataSetChanged();*/
         }
 
         return rootView;

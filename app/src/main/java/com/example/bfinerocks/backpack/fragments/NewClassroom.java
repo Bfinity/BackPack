@@ -44,12 +44,10 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
         enterClassSubject = (EditText) rootView.findViewById(R.id.enter_class_subject);
         enterClassGrade = (NumberPicker) rootView.findViewById(R.id.enter_class_grade);
         createClassButton = (Button) rootView.findViewById(R.id.btn_create_class);
-
         enterClassGrade.setMaxValue(12);
         enterClassGrade.setMinValue(1);
     //    enterClassGrade.setValue(0); //todo create conditional for null value
         enterClassGrade.setOnValueChangedListener(this);
-
         createClassButton.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -58,19 +56,23 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
 
                 classParseObject = new ParseClassSectionObject(new ParseClassObjectInterface() {
                     @Override
-                    public void classListReturned(List<Classroom> classroomList) {
-
-                        if(classroomList.size() > 0) {
-                            ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classroomList;
-                            Bundle bundle = new Bundle();
-                            bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
-                            FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
-                            classSearchFragment.setArguments(bundle);
-                            getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
-                        }
-                        else{
-                            Toast.makeText(getActivity(), "Classroom Not Found", Toast.LENGTH_SHORT).show();
-                        }
+                    public void classListReturned(final List<Classroom> classroomList) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(classroomList.size() > 0) {
+                                    ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classroomList;
+                                    Bundle bundle = new Bundle();
+                                    bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
+                                    FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
+                                    classSearchFragment.setArguments(bundle);
+                                    getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
+                                }
+                                else{
+                                    Toast.makeText(getActivity(), "Classroom Not Found", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                        });
                     }
                 });
                 if(currentUser.getUserType().equalsIgnoreCase("teacher")) {
@@ -82,12 +84,9 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
                     ParseThreadPool threadPool = new ParseThreadPool();
                     threadPool.execute(classParseObject.findClassroomOnParse(classroom));
                 }
-
             }
         });
-
         return rootView;
-
     }
 
     @Override
