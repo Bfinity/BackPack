@@ -8,13 +8,15 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.models.UserModel;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
-import com.parse.ParseUser;
+import com.example.bfinerocks.backpack.parse.ParseUserObject.ParseUserInterface;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by BFineRocks on 12/5/14.
@@ -34,19 +36,54 @@ public class FragmentStudentSearch extends Fragment {
             @Override
             public void onClick(View view) {
 
-                ParseUserObject parseUserObject = new ParseUserObject();
-                try {
-                    ParseUser studentUser = parseUserObject.searchForStudentUser(studentNameEntry.getText().toString(),
-                            studentEmailEntry.getText().toString());
-                    UserModel userModel = parseUserObject.convertParseUserIntoUserModel(studentUser);
+                ParseUserObject parseUserObject = new ParseUserObject(new ParseUserInterface() {
+                    @Override
+                    public void onLogInSuccess(UserModel userModel) {
+
+                    }
+
+                    @Override
+                    public void relationAddedOnParse(boolean relationSuccess) {
+
+                    }
+
+                    @Override
+                    public void onLogInFailure(String result) {
+
+                    }
+
+                    @Override
+                    public void listOfUsersReturned(final List<UserModel> listOfUsers) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                ArrayList<UserModel> studentSearchReturn = (ArrayList<UserModel>) listOfUsers;
+                                Bundle bundle = new Bundle();
+                                bundle.putParcelableArrayList("listOfStudents", studentSearchReturn);
+                                StudentSearchResults studentSearchResults = new StudentSearchResults();
+                                studentSearchResults.setArguments(bundle);
+                                getFragmentManager().beginTransaction()
+                                        .replace(R.id.container, studentSearchResults)
+                                        .addToBackStack("studentSearchResults")
+                                        .commit();
+
+                            }
+                        });
+                    }
+                });
+
+                    ParseThreadPool parseThreadPool = new ParseThreadPool();
+                    parseThreadPool.execute(parseUserObject.searchForStudentUser(studentNameEntry.getText().toString(),
+                             studentEmailEntry.getText().toString()));
+          /*          UserModel userModel = parseUserObject.convertParseUserIntoUserModel(studentUser);
                     Bundle bundle = new Bundle();
                     bundle.putParcelable("UserModel", userModel);
                     StudentDetailFragment studentDetailFragment = new StudentDetailFragment();
                     studentDetailFragment.setArguments(bundle);
                     getFragmentManager().beginTransaction().replace(R.id.container, studentDetailFragment).addToBackStack("studentDetail").commit();
-                }catch(ParseException e){
-                    Toast.makeText(getActivity(), "No Student Found Matching Description", Toast.LENGTH_SHORT);
-                }
+                }catch(ParseException e){*/
+    //                Toast.makeText(getActivity(), "No Student Found Matching Description", Toast.LENGTH_SHORT).show();
+
             }
         });
 

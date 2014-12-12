@@ -65,6 +65,11 @@ public class LogInFragment extends Fragment implements OnClickListener{
             case R.id.btn_done:
                 final ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
                     @Override
+                    public void relationAddedOnParse(boolean relationSuccess) {
+
+                    }
+
+                    @Override
                     public void onLogInSuccess(final UserModel userModel) {
                         getActivity().runOnUiThread(new Runnable() {
                             @Override
@@ -78,8 +83,14 @@ public class LogInFragment extends Fragment implements OnClickListener{
                     }
 
                     @Override
-                    public void onLogInFailure(String result) {
-                        Toast.makeText(getActivity(), "Log In Failed" + "\n" + result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                    public void onLogInFailure(final String result) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Log In Failed" + "\n" + result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
                     }
 
                     @Override

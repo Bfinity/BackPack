@@ -164,7 +164,7 @@ public class ParseStudentAssignmentObject {
         return assignmentFound;
     }
 
-    public Assignment updateAssignmentWithDetailsFromStudent(ParseObject studentAssignment, final Assignment assignment){
+    public Assignment updateAssignmentWithDetailsFromStudent(ParseObject studentAssignment, Assignment assignment){
         try {
             ParseObject parseObject = studentAssignment.getParseUser(STUDENT_USER).fetch();
             assignment.setStudentName(parseObject.getString("fullName"));
@@ -183,6 +183,26 @@ public class ParseStudentAssignmentObject {
             public void run() {
                 ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
                 query.whereEqualTo(STUDENT_USER, ParseUser.getCurrentUser());
+                query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
+                try {
+                    setListOfStudentAssignmentObjects(query.find());
+                }catch (ParseException e){
+                    Log.e("ParseException", e.getMessage());
+                }
+                setListOfStudentAssignmentObjectsForDisplay(getListOfStudentAssignmentObjects());
+            }
+        };
+
+        return runnable;
+    }
+
+    public Runnable createListOfStudentAssignmentObjectsForDisplay(final Classroom classroom, final UserModel student){
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseUserObject object = new ParseUserObject();
+                ParseQuery<ParseObject> query = ParseQuery.getQuery(STUDENT_ASSIGNMENT_OBJECT_KEY);
+                query.whereEqualTo(STUDENT_USER, object.getUserByUID(student));
                 query.whereEqualTo(ASSIGNMENT_CLASSROOM_RELATION, classroom.getClassSectionName());
                 try {
                     setListOfStudentAssignmentObjects(query.find());
@@ -236,7 +256,6 @@ public class ParseStudentAssignmentObject {
     public void setListOfStudentAssignmentObjectsForDisplay(List<ParseObject> listOfParseAssignments){
          ArrayList<Assignment> listOfAssignments = new ArrayList<Assignment>();
          ParseAssignmentObject parseAssignmentObject = new ParseAssignmentObject();
-        ParseThreadPool parseThreadPool = new ParseThreadPool();
         for(int i = 0; i < listOfParseAssignments.size(); i ++){
             ParseObject parseObject = listOfParseAssignments.get(i);
                     try {

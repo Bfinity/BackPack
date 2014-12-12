@@ -48,5 +48,7 @@
     <string name="student_type">Student</string>
     <string name="parent_type">Parent</string>
     <string name="link_search_student">Search For Students</string>
+    <string name="student_add_failure">Unable to add student</string>
+    <string name="student_add_success">Student Added</string>
 
 </resources>

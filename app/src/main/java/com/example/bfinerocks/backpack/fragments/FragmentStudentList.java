@@ -45,6 +45,11 @@ public class FragmentStudentList extends Fragment {
         listOfStudentUsers = new ArrayList<UserModel>();
         parseUserObject = new ParseUserObject(new ParseUserInterface() {
             @Override
+            public void relationAddedOnParse(boolean relationSuccess) {
+
+            }
+
+            @Override
             public void onLogInSuccess(UserModel userModel) {
 
             }

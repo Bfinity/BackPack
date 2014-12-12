@@ -56,6 +56,11 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                 public void onClick(View view) {
                     ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
                         @Override
+                        public void relationAddedOnParse(boolean relationSuccess) {
+
+                        }
+
+                        @Override
                         public void onLogInSuccess(final UserModel userModel) {
                             getActivity().runOnUiThread(new Runnable() {
                                 @Override

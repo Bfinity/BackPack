@@ -13,6 +13,7 @@ import com.parse.ParseObject;
 import com.parse.ParseQuery;
 import com.parse.ParseRelation;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -167,10 +168,24 @@ public class ParseUserObject {
         return userModel;
     }
 
-    public ParseUser searchForStudentUser(String userFullName, String userEmail) throws ParseException{
-        ParseUser parseUserFound = new ParseUser();
-        ParseQuery<ParseUser> query = ParseUser.getQuery();
-        query.whereEqualTo(USER_FULL_NAME, userFullName);
+    public Runnable searchForStudentUser(final String userFullName, final String userEmail) {
+        Runnable runnable = new Runnable() {
+            @Override
+            public void run() {
+                ParseQuery<ParseUser> query = ParseUser.getQuery();
+                query.whereEqualTo(USER_FULL_NAME, userFullName);
+                query.whereEqualTo("email", userEmail);
+                try {
+                    setUserArrayList(query.find());
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+            }
+        };
+        return runnable;
+/*        ParseUser parseUserFound = new ParseUser();
+
         setUserArrayList(query.find());
         for(ParseUser parseUser: getUserArrayList()){
             if(parseUser.getEmail().equals(userEmail)){
@@ -178,13 +193,23 @@ public class ParseUserObject {
             }
         }
 
-        return parseUserFound;
+        return parseUserFound;*/
     }
 
-    public void addParentStudentRelationship(UserModel userModel) throws ParseException{
+    public void addParentStudentRelationship(UserModel userModel){
         ParseRelation<ParseUser> relation = ParseUser.getCurrentUser().getRelation(PARENT_RELATION);
         relation.add(getUserByUID(userModel));
-        ParseUser.getCurrentUser().save();
+        ParseUser.getCurrentUser().saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if(e == null){
+                    parseUserInterface.relationAddedOnParse(true);
+                }
+                else{
+                    parseUserInterface.relationAddedOnParse(false);
+                }
+            }
+        });
     }
 
     public ParseUser getUserByUID(UserModel userModel){
@@ -215,6 +240,7 @@ public class ParseUserObject {
         public void onLogInSuccess(UserModel userModel);
         public void onLogInFailure(String result);
         public void listOfUsersReturned(List<UserModel> listOfUsers);
+        public void relationAddedOnParse(boolean relationSuccess);
     }
 
 
