@@ -27,7 +27,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 12/1/14.
  */
-public class FragmentStudentList extends Fragment {
+public class StudentListViewFragment extends Fragment {
     ListView studentListView;
     StudentListViewAdapter studentListAdapter;
     List<UserModel> listOfStudentUsers;
@@ -132,7 +132,7 @@ public class FragmentStudentList extends Fragment {
                     @Override
                     public void onClick(View view) {
                         getFragmentManager().beginTransaction()
-                                .replace(R.id.container, new FragmentStudentSearch())
+                                .replace(R.id.container, new StudentSearchFragment())
                                 .addToBackStack("studentSearch")
                                 .commit();
                     }

@@ -48,24 +48,6 @@ public class ClassSpecificFragment extends Fragment {
     ParseStudentAssignmentObject studentAssignment;
 
     @Override
-    public void onResume() {
-        super.onResume();
-/*        parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
-            @Override
-            public void hasListUpdated(List<Assignment> listOfAssignments) {
-                updateAssignmentListView();
-            }
-
-            @Override
-            public void hasSingleAssignment(Assignment assignment) {
-
-            }
-        });
-        parseUserObject = new ParseUserObject();*/
-      //  parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
         parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
@@ -106,33 +88,26 @@ public class ClassSpecificFragment extends Fragment {
         addToMyClasses = (Button) rootView.findViewById(R.id.btn_add_class);
         addToMyClasses.setVisibility(View.GONE);
         addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
-
-
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
-
         assignmentList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
-                FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
+                AssignmentDetailFragment assignmentDetailFragment = new AssignmentDetailFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
                 bundle.putParcelable("class", classroomDetail);
-                fragmentAssignmentDetail.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.container, fragmentAssignmentDetail).addToBackStack("assgnDetail").commit();
+                assignmentDetailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, assignmentDetailFragment).addToBackStack("assgnDetail").commit();
             }
         });
-
-
-
-
         addAssignment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateNewAssignment createNewAssignment = new CreateNewAssignment();
-                createNewAssignment.setArguments(getArguments());
-                getFragmentManager().beginTransaction().replace(R.id.container, createNewAssignment)
+                CreateNewAssignmentFragment createNewAssignmentFragment = new CreateNewAssignmentFragment();
+                createNewAssignmentFragment.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, createNewAssignmentFragment)
                         .addToBackStack("createAssignment").commit();
 
             }
@@ -142,9 +117,9 @@ public class ClassSpecificFragment extends Fragment {
         viewStudentsInClass.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentStudentList fragmentStudentList = new FragmentStudentList();
-                fragmentStudentList.setArguments(getArguments());
-                getFragmentManager().beginTransaction().replace(R.id.container, fragmentStudentList)
+                StudentListViewFragment studentListViewFragment = new StudentListViewFragment();
+                studentListViewFragment.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, studentListViewFragment)
                         .addToBackStack("studentList")
                         .commit();
             }
@@ -158,7 +133,6 @@ public class ClassSpecificFragment extends Fragment {
             parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
         }
 
-      //  parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
         return rootView;
     }
 

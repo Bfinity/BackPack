@@ -98,18 +98,6 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
                     }
                 });
-/*                Handler handler = new Handler(Looper.getMainLooper()){
-                    @Override
-                    public void handleMessage(Message msg) {
-                       // super.handleMessage(msg);
-                        Log.i("message", msg.toString());
-                        Bundle bundle = msg.getData();
-                        UserModel userModel = bundle.getParcelable("userModel");
-                        changeOnUserType(userModel);
-                    }
-                };*/
-
-               // ParseUserObject user = new ParseUserObject(handler);
                 ParseThreadPool parseThreadPool = new ParseThreadPool();
                 parseThreadPool.execute(user.signInExistingUser(userName.getText().toString(), password.getText().toString()));
 
@@ -135,7 +123,7 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
     public void transitionToStudentFragment(){
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new FragmentStudentList())
+                    .replace(R.id.container, new StudentListViewFragment())
                     .addToBackStack("studentList")
                     .commit();
     }

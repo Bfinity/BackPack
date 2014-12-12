@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.fragments.LogInFragment;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.firebase.client.Firebase;
 import com.parse.Parse;
 
 
@@ -21,8 +20,6 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Parse.initialize(this, "K7x39gpZ124odhnnoxMGj4B9TzrIoTNZfGRl1djm", "E4kpb79zcWQ63uWaEQFjzH0lLsEhd2QAFD9xfA4O");
-
-        Firebase.setAndroidContext(getApplicationContext());
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new LogInFragment())

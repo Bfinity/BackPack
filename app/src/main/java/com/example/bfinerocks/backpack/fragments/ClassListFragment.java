@@ -88,7 +88,7 @@ public class ClassListFragment extends Fragment{
                 @Override
                 public void onClick(View view) {
                     getFragmentManager().beginTransaction()
-                            .replace(R.id.container, new NewClassroom())
+                            .replace(R.id.container, new ClassroomAddOrSearchFragment())
                             .addToBackStack("createNewClass")
                             .commit();
                 }

@@ -19,7 +19,7 @@ import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 /**
  * Created by BFineRocks on 11/28/14.
  */
-public class CreateNewAssignment extends Fragment {
+public class CreateNewAssignmentFragment extends Fragment {
     private TextView assignmentTitle;
     private TextView assignmentAssignedDate;
     private TextView assignmentDueDate;

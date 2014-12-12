@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 12/1/14.
  */
-public class FragmentClassSearchResults extends Fragment {
+public class ClassSearchResultsFragment extends Fragment {
     TextView classSearchResultLabel;
     ListView classListView;
     TextView addClassText;

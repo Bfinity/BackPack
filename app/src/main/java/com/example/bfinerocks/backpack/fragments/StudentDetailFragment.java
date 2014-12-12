@@ -78,10 +78,10 @@ public class StudentDetailFragment extends Fragment{
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
-                FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
-                fragmentAssignmentDetail.setArguments(bundle);
+                AssignmentDetailFragment assignmentDetailFragment = new AssignmentDetailFragment();
+                assignmentDetailFragment.setArguments(bundle);
                 getFragmentManager().beginTransaction()
-                        .replace(R.id.container, fragmentAssignmentDetail)
+                        .replace(R.id.container, assignmentDetailFragment)
                         .addToBackStack("assignmentDetail")
                         .commit();
             }

@@ -67,7 +67,7 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                                 public void run() {
                                     if(userModel.getUserEnum() == UserTypes.PARENT){
                                         getFragmentManager().beginTransaction()
-                                                .replace(R.id.container, new FragmentStudentSearch())
+                                                .replace(R.id.container, new StudentSearchFragment())
                                                 .addToBackStack("studentSearch")
                                                 .commit();
                                     }
@@ -82,8 +82,13 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
                         }
 
                         @Override
-                        public void onLogInFailure(String result) {
-                            Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                        public void onLogInFailure(final String result) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
                         }
 
                         @Override

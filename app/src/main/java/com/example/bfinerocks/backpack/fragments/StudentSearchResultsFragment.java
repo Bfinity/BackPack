@@ -20,7 +20,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 12/11/14.
  */
-public class StudentSearchResults extends Fragment{
+public class StudentSearchResultsFragment extends Fragment{
         ListView studentListView;
         StudentListViewAdapter studentListAdapter;
         List<UserModel> listOfStudentUsers;

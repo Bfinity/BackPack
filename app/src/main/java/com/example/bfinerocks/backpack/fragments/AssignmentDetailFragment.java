@@ -28,7 +28,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/29/14.
  */
-public class FragmentAssignmentDetail extends Fragment {
+public class AssignmentDetailFragment extends Fragment {
 
     private TextView assignmentTitle;
     private TextView assigmentAssgnDate;

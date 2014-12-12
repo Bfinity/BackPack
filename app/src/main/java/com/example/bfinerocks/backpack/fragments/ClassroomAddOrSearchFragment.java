@@ -25,7 +25,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 11/26/14.
  */
-public class NewClassroom extends Fragment implements OnValueChangeListener{
+public class ClassroomAddOrSearchFragment extends Fragment implements OnValueChangeListener{
 
     private EditText enterClassName;
     private EditText enterClassSubject;
@@ -64,7 +64,7 @@ public class NewClassroom extends Fragment implements OnValueChangeListener{
                                     ArrayList<Classroom> foundClasses = (ArrayList<Classroom>) classroomList;
                                     Bundle bundle = new Bundle();
                                     bundle.putParcelableArrayList("listOfClassesReturned", foundClasses);
-                                    FragmentClassSearchResults classSearchFragment = new FragmentClassSearchResults();
+                                    ClassSearchResultsFragment classSearchFragment = new ClassSearchResultsFragment();
                                     classSearchFragment.setArguments(bundle);
                                     getFragmentManager().beginTransaction().replace(R.id.container, classSearchFragment).commit();
                                 }

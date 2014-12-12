@@ -21,7 +21,7 @@ import java.util.List;
 /**
  * Created by BFineRocks on 12/5/14.
  */
-public class FragmentStudentSearch extends Fragment {
+public class StudentSearchFragment extends Fragment {
 
     EditText studentNameEntry;
     EditText studentEmailEntry;
@@ -60,10 +60,10 @@ public class FragmentStudentSearch extends Fragment {
                                 ArrayList<UserModel> studentSearchReturn = (ArrayList<UserModel>) listOfUsers;
                                 Bundle bundle = new Bundle();
                                 bundle.putParcelableArrayList("listOfStudents", studentSearchReturn);
-                                StudentSearchResults studentSearchResults = new StudentSearchResults();
-                                studentSearchResults.setArguments(bundle);
+                                StudentSearchResultsFragment studentSearchResultsFragment = new StudentSearchResultsFragment();
+                                studentSearchResultsFragment.setArguments(bundle);
                                 getFragmentManager().beginTransaction()
-                                        .replace(R.id.container, studentSearchResults)
+                                        .replace(R.id.container, studentSearchResultsFragment)
                                         .addToBackStack("studentSearchResults")
                                         .commit();
 
@@ -75,15 +75,6 @@ public class FragmentStudentSearch extends Fragment {
                     ParseThreadPool parseThreadPool = new ParseThreadPool();
                     parseThreadPool.execute(parseUserObject.searchForStudentUser(studentNameEntry.getText().toString(),
                              studentEmailEntry.getText().toString()));
-          /*          UserModel userModel = parseUserObject.convertParseUserIntoUserModel(studentUser);
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelable("UserModel", userModel);
-                    StudentDetailFragment studentDetailFragment = new StudentDetailFragment();
-                    studentDetailFragment.setArguments(bundle);
-                    getFragmentManager().beginTransaction().replace(R.id.container, studentDetailFragment).addToBackStack("studentDetail").commit();
-                }catch(ParseException e){*/
-    //                Toast.makeText(getActivity(), "No Student Found Matching Description", Toast.LENGTH_SHORT).show();
-
             }
         });
 
