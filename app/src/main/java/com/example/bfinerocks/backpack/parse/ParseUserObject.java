@@ -1,9 +1,5 @@
 package com.example.bfinerocks.backpack.parse;
 
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
-
 import com.example.bfinerocks.backpack.constants.ParseKeys;
 import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Classroom;
@@ -25,13 +21,10 @@ public class ParseUserObject {
 
     ParseUserInterface parseUserInterface;
     private ParseUser user;
-    private Boolean loginResponse;
     public static final String USER_TYPE_KEY = "userType";
     public static final String USER_FULL_NAME = "fullName";
     public static final String PARENT_RELATION = "studentsRelated";
-    private ArrayList<ParseUser> userArrayList;
     private List<UserModel> listOfUserModels;
-    private Handler mHandler;
 
     public ParseUserObject(){
 
@@ -40,11 +33,6 @@ public class ParseUserObject {
     public ParseUserObject(ParseUserInterface parseUserInterface){
         this.parseUserInterface = parseUserInterface;
     }
-
-    public ParseUserObject(Handler handler){
-        mHandler = handler;
-    }
-
 
     public Runnable createNewParseUser(final String userName, final String password, final String userType,
                                    final String fullName, final String emailAddress){
@@ -119,7 +107,6 @@ public class ParseUserObject {
                 ParseClassSectionObject classSection = new ParseClassSectionObject();
                 ParseObject parseClassObject =  classSection.getParseClassroomObject(classroom);
                 ParseQuery<ParseUser> parseUsers = ParseUser.getQuery();
-             //   parseUsers.whereEqualTo(USER_TYPE_KEY, "Student");
                 parseUsers.whereEqualTo(ParseKeys.CLASSROOM_RELATION_KEY, parseClassObject);
                 try {
                     setUserArrayList(parseUsers.find());
@@ -154,10 +141,6 @@ public class ParseUserObject {
             listOfUserModels.add(userModel);
         }
         parseUserInterface.listOfUsersReturned(listOfUserModels);
-    }
-
-    public ArrayList<ParseUser> getUserArrayList(){
-        return userArrayList;
     }
 
     public UserModel convertParseUserIntoUserModel(ParseUser parseUser){
@@ -215,15 +198,6 @@ public class ParseUserObject {
 
     public void logOutCurrentUser(){
         ParseUser.logOut();
-    }
-
-    public void sendUserModelDataBack(UserModel userModel){
-        Message userModelMessage = new Message();
-        Bundle bundle = new Bundle();
-        bundle.putParcelable("userModel", userModel);
-        userModelMessage.setData(bundle);
-        userModelMessage.setTarget(mHandler);
-        userModelMessage.sendToTarget();
     }
 
     public interface ParseUserInterface{
