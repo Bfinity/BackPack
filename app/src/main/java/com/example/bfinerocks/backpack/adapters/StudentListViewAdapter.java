@@ -8,17 +8,17 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
-import com.parse.ParseUser;
+import com.example.bfinerocks.backpack.models.UserModel;
 
 import java.util.List;
 
 /**
  * Created by BFineRocks on 12/1/14.
  */
-public class StudentListViewAdapter extends ArrayAdapter<ParseUser> {
+public class StudentListViewAdapter extends ArrayAdapter<UserModel> {
 
-    public StudentListViewAdapter(Context context, int resource, List<ParseUser> objects) {
-        super(context, resource, objects);
+    public StudentListViewAdapter(Context context, int resource, List<UserModel> listOfUsers) {
+        super(context, resource, listOfUsers);
     }
 
 
@@ -27,10 +27,10 @@ public class StudentListViewAdapter extends ArrayAdapter<ParseUser> {
     public View getView(int position, View convertView, ViewGroup parent) {
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         View studentListItem = inflater.inflate(R.layout.list_item_student, parent, false);
-        ParseUser parseUser = getItem(position);
+        UserModel user = getItem(position);
 
         TextView titleText = (TextView) studentListItem.findViewById(R.id.student_name);
-        titleText.setText(parseUser.getString("fullName"));
+        titleText.setText(user.getUserFullName());
 
         return studentListItem;
     }

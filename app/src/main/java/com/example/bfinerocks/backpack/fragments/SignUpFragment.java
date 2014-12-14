@@ -16,8 +16,12 @@ import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.constants.UserTypes;
+import com.example.bfinerocks.backpack.models.UserModel;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
+import com.example.bfinerocks.backpack.parse.ParseUserObject.ParseUserInterface;
+
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/21/14.
@@ -50,26 +54,52 @@ public class SignUpFragment extends Fragment implements OnItemSelectedListener {
             btnFinished.setOnClickListener(new OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    ParseUserObject user = new ParseUserObject();
-                    Boolean signUpSuccess = true;
-                    try {
-                        user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType,
-                             edtUserFullName.getText().toString(), edtUserEmail.getText().toString()   );
-                    }catch(ParseException e){
-                        Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ e.getMessage().toUpperCase(), Toast.LENGTH_SHORT).show();
-                        signUpSuccess = false;
-                    }
-                    if(signUpSuccess) {
-                        if(userType.equalsIgnoreCase(UserTypes.PARENT.toString())){
-                            getFragmentManager().beginTransaction()
-                                    .replace(R.id.container, new FragmentStudentSearch())
-                                    .addToBackStack("studentSearch")
-                                    .commit();
+                    ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
+                        @Override
+                        public void relationAddedOnParse(boolean relationSuccess) {
+
                         }
-                        getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
-                                .addToBackStack("classList")
-                                .commit();
-                    }
+
+                        @Override
+                        public void onLogInSuccess(final UserModel userModel) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    if(userModel.getUserEnum() == UserTypes.PARENT){
+                                        getFragmentManager().beginTransaction()
+                                                .replace(R.id.container, new StudentSearchFragment())
+                                                .addToBackStack("studentSearch")
+                                                .commit();
+                                    }
+                                    getFragmentManager().beginTransaction()
+                                            .replace(R.id.container, new ClassListFragment())
+                                            .addToBackStack("classList")
+                                            .commit();
+
+                                }
+                            });
+
+                        }
+
+                        @Override
+                        public void onLogInFailure(final String result) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    Toast.makeText(getActivity(), "Sign Up Failed" +"\n"+ result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void listOfUsersReturned(List<UserModel> listOfUsers) {
+
+                        }
+                    });
+                    ParseThreadPool parseThreadPool = new ParseThreadPool();
+                    parseThreadPool.execute(user.createNewParseUser(edtUserName.getText().toString(), edtUserPassword.getText().toString(), userType,
+                             edtUserFullName.getText().toString(), edtUserEmail.getText().toString()));
+
                 }
             });
 

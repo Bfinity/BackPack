@@ -2,7 +2,6 @@ package com.example.bfinerocks.backpack.fragments;
 
 import android.app.Fragment;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -15,14 +14,16 @@ import android.widget.TextView;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.adapters.AssignmentListViewAdapter;
+import com.example.bfinerocks.backpack.constants.UserTypes;
 import com.example.bfinerocks.backpack.models.Assignment;
 import com.example.bfinerocks.backpack.models.Classroom;
 import com.example.bfinerocks.backpack.parse.ParseAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseAssignmentObject.ParseAssignmentInterface;
 import com.example.bfinerocks.backpack.parse.ParseClassSectionObject;
 import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject;
+import com.example.bfinerocks.backpack.parse.ParseStudentAssignmentObject.ParseStudentAssignmentInterface;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
-import com.parse.ParseObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -47,29 +48,37 @@ public class ClassSpecificFragment extends Fragment {
     ParseStudentAssignmentObject studentAssignment;
 
     @Override
-    public void onResume() {
-        super.onResume();
-        parseAssignmentObject = new ParseAssignmentObject();
-        parseUserObject = new ParseUserObject();
-        parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classroomDetail);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_classroom_specific, container, false);
-        studentAssignment = new ParseStudentAssignmentObject();
+        parseAssignmentObject = new ParseAssignmentObject(new ParseAssignmentInterface() {
+            @Override
+            public void hasListUpdated(final List<Assignment> listOfAssignments) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAssignmentListView(listOfAssignments);
+                    }
+                });
+            }
+        });
+        parseUserObject = new ParseUserObject();
+        studentAssignment = new ParseStudentAssignmentObject(new ParseStudentAssignmentInterface() {
+            @Override
+            public void hasListOfAssignmentsUpdated(final List<Assignment> listOfUpdatedAssignments) {
+                getActivity().runOnUiThread(new Runnable() {
+                    @Override
+                    public void run() {
+                        updateAssignmentListView(listOfUpdatedAssignments);
+                    }
+                });
+            }
+        });
         Classroom classRoom = getArguments().getParcelable("class");
 
         classroomDetail = classRoom;
         listOfAssignments = new ArrayList<Assignment>();
         assignmentList = (ListView) rootView.findViewById(R.id.assignment_list_view);
         classTitle = (TextView) rootView.findViewById(R.id.class_specific_title);
-        classTitle.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                updateAssignmentListView();
-            }
-        });
         classSubject = (TextView) rootView.findViewById(R.id.class_specific_subject);
         classGradeLevel = (TextView) rootView.findViewById(R.id.class_specific_grade);
         classTitle.setText(classRoom.getClassSectionName());
@@ -79,33 +88,26 @@ public class ClassSpecificFragment extends Fragment {
         addToMyClasses = (Button) rootView.findViewById(R.id.btn_add_class);
         addToMyClasses.setVisibility(View.GONE);
         addAssignment = (TextView) rootView.findViewById(R.id.add_assignment);
-
-
         assignmentListViewAdapter = new AssignmentListViewAdapter(getActivity(), R.layout.list_item_assignment, listOfAssignments);
         assignmentList.setAdapter(assignmentListViewAdapter);
-
         assignmentList.setOnItemClickListener(new OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 Assignment assignmentSelected = (Assignment) adapterView.getItemAtPosition(i);
-                FragmentAssignmentDetail fragmentAssignmentDetail = new FragmentAssignmentDetail();
+                AssignmentDetailFragment assignmentDetailFragment = new AssignmentDetailFragment();
                 Bundle bundle = new Bundle();
                 bundle.putParcelable("assignment", assignmentSelected);
                 bundle.putParcelable("class", classroomDetail);
-                fragmentAssignmentDetail.setArguments(bundle);
-                getFragmentManager().beginTransaction().replace(R.id.container, fragmentAssignmentDetail).addToBackStack("assgnDetail").commit();
+                assignmentDetailFragment.setArguments(bundle);
+                getFragmentManager().beginTransaction().replace(R.id.container, assignmentDetailFragment).addToBackStack("assgnDetail").commit();
             }
         });
-
-
-
-
         addAssignment.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                CreateNewAssignment createNewAssignment = new CreateNewAssignment();
-                createNewAssignment.setArguments(getArguments());
-                getFragmentManager().beginTransaction().replace(R.id.container, createNewAssignment)
+                CreateNewAssignmentFragment createNewAssignmentFragment = new CreateNewAssignmentFragment();
+                createNewAssignmentFragment.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, createNewAssignmentFragment)
                         .addToBackStack("createAssignment").commit();
 
             }
@@ -115,54 +117,45 @@ public class ClassSpecificFragment extends Fragment {
         viewStudentsInClass.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
-                FragmentStudentList fragmentStudentList = new FragmentStudentList();
-                fragmentStudentList.setArguments(getArguments());
-                getFragmentManager().beginTransaction().replace(R.id.container, fragmentStudentList)
+                StudentListViewFragment studentListViewFragment = new StudentListViewFragment();
+                studentListViewFragment.setArguments(getArguments());
+                getFragmentManager().beginTransaction().replace(R.id.container, studentListViewFragment)
                         .addToBackStack("studentList")
                         .commit();
             }
         });
         updateViewForStudent();
+        ParseThreadPool parseThreadPool = new ParseThreadPool();
+        if(parseUserObject.getUserTypeEnum().equals(UserTypes.STUDENT)){
+            parseThreadPool.execute(studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classRoom));
+        }
+        else if(parseUserObject.getUserTypeEnum().equals(UserTypes.TEACHER)) {
+            parseThreadPool.execute(parseAssignmentObject.createListOfAssignmentsAssociatedWithClassroom(classRoom));
+        }
 
         return rootView;
     }
 
-    public void updateAssignmentListView(){
+    public void updateAssignmentListView(List<Assignment> assignments){
         assignmentListViewAdapter.clear();
-        listOfAssignments = parseAssignmentObject.getListOfAssignments();
+        listOfAssignments = assignments;
         assignmentListViewAdapter.addAll(listOfAssignments);
         assignmentListViewAdapter.notifyDataSetChanged();
-
-        parseUserObject = new ParseUserObject();
-        if(parseUserObject.getUserType().equalsIgnoreCase("Student")){
-            List<ParseObject> tempList = studentAssignment.getListOfStudentAssignmentObjects();
-            listOfAssignments = studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
-            assignmentListViewAdapter.addAll(listOfAssignments);
-            assignmentListViewAdapter.notifyDataSetChanged();
-        }
-
-
-
 
     }
 
     public void updateViewForStudent(){
         parseUserObject = new ParseUserObject();
-   //     studentAssignment.createListOfStudentAssignmentObjectsForDisplay(classroomDetail);
         if(parseUserObject.getUserType().equalsIgnoreCase("student")){
-            studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-
+            ParseThreadPool parseThreadPool = new ParseThreadPool();
+            parseThreadPool.execute(studentAssignment.addAssignmentsToStudentAssignments(classroomDetail));
                 addToMyClasses.setVisibility(View.VISIBLE);
                 addToMyClasses.setOnClickListener(new OnClickListener() {
                     @Override
                     public void onClick(View view) {
                         parseClassSection = new ParseClassSectionObject();
-                        try {
-                            parseClassSection.addStudentToClassRelation(parseUserObject.getCurrentUser(), classroomDetail);
-                            //      studentAssignment.addAssignmentsToStudentAssignments(classroomDetail);
-                        } catch (ParseException e) {
-                            Log.i("addToList", e.getMessage());
-                        }
+                        ParseThreadPool parseThreadPool = new ParseThreadPool();
+                        parseThreadPool.execute(parseClassSection.addStudentToClassRelation(classroomDetail));
                         getFragmentManager().beginTransaction().replace(R.id.container, new ClassListFragment())
                                 .addToBackStack("myClassList")
                                 .commit();

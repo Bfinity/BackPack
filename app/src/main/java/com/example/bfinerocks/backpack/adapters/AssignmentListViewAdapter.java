@@ -30,11 +30,17 @@ public class AssignmentListViewAdapter extends ArrayAdapter<Assignment> {
             View assignmentItem = inflater.inflate(R.layout.list_item_assignment, parent, false);
             Assignment assignment = getItem(position);
 
-            TextView titleText = (TextView) assignmentItem.findViewById(R.id.assgned_date);
-            titleText.setText(assignment.getAssignmentAssignedDate());
+            TextView assignmentDate = (TextView) assignmentItem.findViewById(R.id.assgned_date);
+            assignmentDate.setText(assignment.getAssignmentAssignedDate());
 
-            TextView gradeLevelText = (TextView) assignmentItem.findViewById(R.id.assignment_title);
-            gradeLevelText.setText(assignment.getAssignmentTitle());
+            TextView assignmentTitle = (TextView) assignmentItem.findViewById(R.id.assignment_title);
+            assignmentTitle.setText(assignment.getAssignmentTitle());
+
+            if(assignment.getAssignmentCompletionState() != null){
+                if(assignment.getAssignmentCompletionState()){
+                    assignmentItem.setBackgroundColor(getContext().getResources().getColor(R.color.green));
+                }
+            }
 
             return assignmentItem;
         }

@@ -12,8 +12,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.bfinerocks.backpack.R;
+import com.example.bfinerocks.backpack.models.UserModel;
+import com.example.bfinerocks.backpack.parse.ParseThreadPool;
 import com.example.bfinerocks.backpack.parse.ParseUserObject;
-import com.parse.ParseException;
+import com.example.bfinerocks.backpack.parse.ParseUserObject.ParseUserInterface;
+
+import java.util.List;
 
 /**
  * Created by BFineRocks on 11/26/14.
@@ -39,8 +43,8 @@ public class LogInFragment extends Fragment implements OnClickListener{
     }
 
 
-    public void changeOnUserType(ParseUserObject currentUser){
-        switch (currentUser.getUserTypeEnum()){
+    public void changeOnUserType(UserModel userModel){
+        switch (userModel.getUserEnum()){
             case TEACHER:
                 transitionToClassFragment();
                 break;
@@ -57,24 +61,45 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
     @Override
     public void onClick(View view) {
-
         switch (view.getId()){
             case R.id.btn_done:
+                final ParseUserObject user = new ParseUserObject(new ParseUserInterface() {
+                    @Override
+                    public void relationAddedOnParse(boolean relationSuccess) {
 
-                ParseUserObject user = new ParseUserObject();
-                Boolean logInSuccessful = true;
-                try {
-                    user.signInExistingUser(userName.getText().toString(), password.getText().toString());
+                    }
 
+                    @Override
+                    public void onLogInSuccess(final UserModel userModel) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                if(userModel != null){
+                                    changeOnUserType(userModel);
+                                }
+                            }
+                        });
 
-                }catch(ParseException e){
-                    Toast.makeText(getActivity(), "Log In Failed" +"\n" + e.getMessage().toUpperCase(), Toast.LENGTH_SHORT).show();
-                    logInSuccessful = false;
-                }
+                    }
 
-                if(logInSuccessful) {
-                    changeOnUserType(user);
-                }
+                    @Override
+                    public void onLogInFailure(final String result) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Toast.makeText(getActivity(), "Log In Failed" + "\n" + result.toUpperCase(), Toast.LENGTH_SHORT).show();
+                            }
+                        });
+
+                    }
+
+                    @Override
+                    public void listOfUsersReturned(List<UserModel> listOfUsers) {
+
+                    }
+                });
+                ParseThreadPool parseThreadPool = new ParseThreadPool();
+                parseThreadPool.execute(user.signInExistingUser(userName.getText().toString(), password.getText().toString()));
 
                 break;
 
@@ -98,7 +123,7 @@ public class LogInFragment extends Fragment implements OnClickListener{
 
     public void transitionToStudentFragment(){
             getFragmentManager().beginTransaction()
-                    .replace(R.id.container, new FragmentStudentList())
+                    .replace(R.id.container, new StudentListViewFragment())
                     .addToBackStack("studentList")
                     .commit();
     }

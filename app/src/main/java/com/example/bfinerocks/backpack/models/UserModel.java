@@ -2,6 +2,8 @@ package com.example.bfinerocks.backpack.models;
 
 import android.os.Parcel;
 
+import com.example.bfinerocks.backpack.constants.UserTypes;
+
 /**
  * Created by BFineRocks on 12/3/14.
  */
@@ -12,6 +14,7 @@ public class UserModel implements android.os.Parcelable {
     private String userFullName;
     private String userType;
     private String userObjectID;
+    private UserTypes userEnum;
 
     public UserModel(String userName, String userEmail, String userFullName, String userType){
         this.userName = userName;
@@ -59,6 +62,24 @@ public class UserModel implements android.os.Parcelable {
     public String getUserObjectID(){
         return userObjectID;
     }
+
+    public void setUserEnum(String stringUserType){
+        if(stringUserType.equalsIgnoreCase("teacher")){
+            this.userEnum = UserTypes.TEACHER;
+        }
+        else if(stringUserType.equalsIgnoreCase("student")){
+            this.userEnum =  UserTypes.STUDENT;
+        }
+        else if(stringUserType.equalsIgnoreCase("parent")){
+            this.userEnum = UserTypes.PARENT;
+        }
+    }
+
+    public UserTypes getUserEnum(){
+        return userEnum;
+    }
+
+
 
 
     @Override

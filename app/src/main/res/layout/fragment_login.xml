@@ -15,6 +15,7 @@
         <Button
             android:id="@+id/btn_done"
             android:text="@string/done"
+            android:layout_margin="@dimen/text_margin"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
 
@@ -26,6 +27,7 @@
         android:id="@+id/signUp_link"
         android:text="@string/signUp"
         android:textSize="@dimen/text_view_size"
+        android:padding="@dimen/text_padding"
         android:layout_alignParentBottom="true"
         android:gravity="center_horizontal"
         android:clickable="true"

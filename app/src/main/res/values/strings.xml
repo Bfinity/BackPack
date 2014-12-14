@@ -3,7 +3,7 @@
 
     <string name="app_name">BackPack</string>
     <string name="hello_world">Hello world!</string>
-    <string name="action_settings">Settings</string>
+    <string name="action_settings">Log Out</string>
     <string name="user_name_request">Enter Your User Name</string>
     <string name="password_request">Enter Your Password</string>
     <string name="user_type_request">Select User Type</string>
@@ -48,5 +48,7 @@
     <string name="student_type">Student</string>
     <string name="parent_type">Parent</string>
     <string name="link_search_student">Search For Students</string>
+    <string name="student_add_failure">Unable to add student</string>
+    <string name="student_add_success">Student Added</string>
 
 </resources>

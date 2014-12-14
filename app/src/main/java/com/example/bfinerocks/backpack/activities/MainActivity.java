@@ -7,21 +7,19 @@ import android.view.MenuItem;
 
 import com.example.bfinerocks.backpack.R;
 import com.example.bfinerocks.backpack.fragments.LogInFragment;
-import com.firebase.client.Firebase;
+import com.example.bfinerocks.backpack.parse.ParseUserObject;
 import com.parse.Parse;
 
 
 public class MainActivity extends Activity {
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Parse.initialize(this, "K7x39gpZ124odhnnoxMGj4B9TzrIoTNZfGRl1djm", "E4kpb79zcWQ63uWaEQFjzH0lLsEhd2QAFD9xfA4O");
-
-
-
-        Firebase.setAndroidContext(getApplicationContext());
         if (savedInstanceState == null) {
             getFragmentManager().beginTransaction()
                     .add(R.id.container, new LogInFragment())
@@ -44,6 +42,11 @@ public class MainActivity extends Activity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
         if (id == R.id.action_settings) {
+            ParseUserObject parseUser = new ParseUserObject();
+            parseUser.logOutCurrentUser();
+            getFragmentManager().beginTransaction()
+                    .replace(R.id.container, new LogInFragment())
+                    .commit();
             return true;
         }
         return super.onOptionsItemSelected(item);
